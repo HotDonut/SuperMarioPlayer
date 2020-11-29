@@ -38,10 +38,12 @@ done = True
 while True:
     if done:
         state = env.reset()
+        print(env.observation_space)
     state, reward, done, info = env.step(4)
     env.render()
     if info['life'] > 0:
         state, reward, done, info = jumpUpSuperHigh(16)
     else:
+        print("Paradigm Shift")
         state, reward, done, info = jumpUpSuperHigh(13)
 env.close()
