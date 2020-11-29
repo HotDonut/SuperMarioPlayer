@@ -1,7 +1,9 @@
 # https://github.com/Kautenja/nes-py
-from nes_py.wrappers import JoypadSpace;
+from nes_py.wrappers import JoypadSpace
 # https://github.com/Kautenja/gym-super-mario-bros
-import gym_super_mario_bros;
+import gym_super_mario_bros
+
+import time
 
 
 COMPLEX_MOVEMENT = [
@@ -30,5 +32,7 @@ while True:
 
     state, reward, done, info = env.step(4)
     env.render()
-    
+    time.sleep(0.01)
+
+    #print("Reward: %d" )
 env.close()
