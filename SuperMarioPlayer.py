@@ -26,6 +26,11 @@ COMPLEX_MOVEMENT = [
 
 def BigJump(env, reward, done, info):
     height = 0
+
+    #print("Prepare!\n")
+    state, reward, done, info = env.step(3)
+    env.render()
+
     while height <= info['y_pos']:
 
         if done:
@@ -35,8 +40,7 @@ def BigJump(env, reward, done, info):
         state, reward, done, info = env.step(4)
         
         env.render()
-        time.sleep(0.02)
-        print("Jump!\n")
+        #print("Jump!\n")
 
     while height != info['y_pos']:
 
@@ -46,8 +50,7 @@ def BigJump(env, reward, done, info):
         height = info['y_pos']
         state, reward, done, info = env.step(3)
         env.render()
-        time.sleep(0.02)
-        print("Wait!\n")
+        #print("Wait!\n")
     return state, reward, done, info
     
 def WeightedRandom(weightArray):
@@ -81,9 +84,7 @@ while True:
         state, reward, done, info = env.step(0)
 
     
-    #print(len(state))
-    #print(len(state[0]))
-    #print(len(state[0][0]))
+    #print(state.shape)
 
     #state, reward, done, info = env.step(WeightedRandom(basicWeights))
     #state, reward, done, info = BigJump(env, reward, done, info)
@@ -94,8 +95,6 @@ while True:
     #    state[192][i] = [0, 0, 0]
     #    state[208][i] = [0, 0, 0]  
     
-    
-
     #newColor = np.array([255, 255, 0])
     #for i in range(len(state)):
     #    for j in range(len(state[i])):
@@ -103,18 +102,15 @@ while True:
     #            state[i][j] = newColor
 
     maskGoomba = (state[194] == goombaColor).all(axis = 1)
+    maskPit = (state[210] == skyColor).all(axis = 1)
     
     if np.any(maskGoomba):
         state, reward, done, info = BigJump(env, reward, done, info)
     else:
-        state, reward, done, info = env.step(WeightedRandom(basicWeights))
-
-    maskPit = (state[210] == skyColor).all(axis = 1)
-    
-    if np.any(maskPit):
-        state, reward, done, info = BigJump(env, reward, done, info)
-    else:
-        state, reward, done, info = env.step(WeightedRandom(basicWeights))
+        if np.any(maskPit):
+            state, reward, done, info = BigJump(env, reward, done, info)
+        else:
+            state, reward, done, info = env.step(WeightedRandom(basicWeights))
 
     env.render()
     time.sleep(0.02)
