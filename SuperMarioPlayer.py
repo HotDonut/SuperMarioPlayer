@@ -3,7 +3,6 @@ from nes_py.wrappers import JoypadSpace
 # https://github.com/Kautenja/gym-super-mario-bros
 import gym_super_mario_bros
 
-
 COMPLEX_MOVEMENT = [
     ['NOOP'],
     ['right'],
@@ -32,6 +31,7 @@ def jumpUpSuperHigh(highUpInTheSky):
     state, reward, done, info = env.step(3)
     env.render()
     return state, reward, done, info
+
 
 done = True
 
