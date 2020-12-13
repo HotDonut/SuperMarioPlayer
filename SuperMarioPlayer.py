@@ -65,8 +65,17 @@ def WeightedRandom(weightArray):
 #Needed for better action distribution
 basicWeights = [0,0,25,10,65,0,0,0,0,0,0,0,0,0]
 
+#Goomba Array [y,x,Farbe]
+goombaArray = np.array([])
+
+#Goomba Augen Array
+goombaEyeArray = np.array([[228, 92, 16], [228, 92, 16], [228, 92, 16],  [240, 208, 176], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [240, 208, 176], [228, 92, 16], [228, 92, 16], [228, 92, 16]])
+
+#Goomba Farben
 #Goomba, boxes and floor have the same color
 goombaColor = np.array([228, 92, 16])
+goombaColorBlack = np.array([0, 0, 0])
+goombaColorBeige = np.array([240, 208, 176])
 
 #Pits and background Sky
 skyColor = np.array([104, 136, 252])
@@ -95,11 +104,9 @@ while True:
     #    state[192][i] = [0, 0, 0]
     #    state[208][i] = [0, 0, 0]  
     
-    #newColor = np.array([255, 255, 0])
-    #for i in range(len(state)):
-    #    for j in range(len(state[i])):
-    #        if np.all(state[i][j] == color):
-    #            state[i][j] = newColor
+
+
+    env.render()
 
     maskGoomba = (state[194] == goombaColor).all(axis = 1)
     maskPit = (state[210] == skyColor).all(axis = 1)
@@ -111,6 +118,13 @@ while True:
             state, reward, done, info = BigJump(env, reward, done, info)
         else:
             state, reward, done, info = env.step(WeightedRandom(basicWeights))
+
+
+    #newColor = np.array([255, 255, 0])
+    #for i in range(len(state)):
+    #    for j in range(len(state[i])):
+    #        if np.all(state[i][j] == [228, 92, 16]):
+    #            state[i][j] = newColor
 
     env.render()
     time.sleep(0.02)
