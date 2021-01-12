@@ -29,6 +29,11 @@ def BigJump(env, reward, done, info):
 
     # print("Prepare!\n")
     state, reward, done, info = env.step(3)
+    newColor = np.array([255, 255, 0])
+    for i in range(len(state)):
+       for j in range(len(state[i])):
+           if np.all(state[i][j] == np.array([0, 168, 0])):
+               state[i][j] = newColor
     env.render()
 
     while height <= info['y_pos']:
@@ -94,12 +99,13 @@ while True:
     #    state[192][i] = [0, 0, 0]
     #    state[208][i] = [0, 0, 0]  
 
-    # newColor = np.array([255, 255, 0])
-    # for i in range(len(state)):
-    #    for j in range(len(state[i])):
-    #        if np.all(state[i][j] == color):
-    #            state[i][j] = newColor
+    newColor = np.array([255, 255, 0])
+    for i in range(len(state)):
+       for j in range(len(state[i])):
+           if np.all(state[i][j] == np.array([0, 168, 0])):
+               state[i][j] = newColor
 
+    env.render()
     maskGoomba = (state[194] == goombaColor).all(axis=1)
     maskPit = (state[210] == skyColor).all(axis=1)
 
@@ -111,6 +117,6 @@ while True:
         else:
             state, reward, done, info = env.step(WeightedRandom(basicWeights))
 
-    env.render()
-    time.sleep(0.02)
+    # env.render()
+    # time.sleep(0.02)
 env.close()
