@@ -89,6 +89,24 @@ class Movement():
             else:
                 return env.step(sm_movement.WeightedRandom(sm_movement.basicWeights))
 
+class Mario2DMap():
+    def __init__(self):
+        self.environment = np.array([[" "]*16]*16)
+
+    def PrintEnvironment(self):
+        erg = "#"*18
+        erg += "\n"
+        for x in self.environment:
+            erg += "#"
+            for y in x:
+                erg += y
+            erg += "#\n"
+        erg += "#"*18
+        erg += "\n"
+        return(erg)
+
+    def ChangeEnvironment(self, x, y, symbol):
+        self.environment[y][x] = symbol
 
 COMPLEX_MOVEMENT = [
     ['NOOP'],
@@ -107,6 +125,7 @@ COMPLEX_MOVEMENT = [
 
 sm_movement = Movement()
 sm_images = Images()
+sm_env = Mario2DMap()
 
 env = gym_super_mario_bros.make('SuperMarioBros-v0').env
 env = JoypadSpace(env, COMPLEX_MOVEMENT)
@@ -159,29 +178,8 @@ while True:
     #Width: 126-Border
 
     
-
-    slicedState = state[30:, 120:]
     #mask = np.zeros(slicedState.shape)
     #state[35:, 130:] = mask
-
-    #Following Code finds Goombas eyes by slicing the array in 1:14:3 array pieces
-    #Seems to be buggy since it only finds the goomba exactly 3 times
-    """
-    #print(slicedState.shape[1])
-    for j in range(slicedState.shape[0]):
-        for i in range((int(slicedState.shape[1]/14))):
-            comparison = sm_images.goombaEyeArray == slicedState[1*j:1*(j+1),14*i:14*(i+1)]
-            exists = comparison.all()
-            if(exists):
-                print('j: '+ str(j) +', i: '+ str(i) + ', found = ' + str(exists))
-                print('Goomba-Array:')
-                print(sm_images.goombaEyeArray)
-                print('Sliced-Array:')
-                print(slicedState[1*j:1*(j+1),14*i:14*(i+1)])
-                print('#################################################################')
-                print('#################################################################')
-                time.sleep(5)
-    """
 
     #Ideales Raster
     #16x16
@@ -194,4 +192,6 @@ while True:
 
     env.render()
     time.sleep(0.02)
+    sm_env.ChangeEnvironment(3,10,'A')
+    print(sm_env.PrintEnvironment())
 env.close()
