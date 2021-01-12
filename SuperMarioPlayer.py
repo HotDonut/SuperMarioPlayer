@@ -299,9 +299,9 @@ while True:
 
     Images.DetectGoomba()
     Images.DetectMario()
-    #Images.DetectQuestionBox()
-    #Images.DetectBlock()
-    #Images.DetectFloor()
+    Images.DetectQuestionBox()
+    Images.DetectBlock()
+    Images.DetectFloor()
 
     env.render()
     # time.sleep(0.02)
