@@ -3,13 +3,12 @@ import random
 import time
 from PIL import Image
 # https://github.com/Kautenja/gym-super-mario-bros
-import gym_super_mario_bros;
-
+import gym_super_mario_bros
 import time
 import random
 import numpy as np
 import cv2
-from nes_py.wrappers import JoypadSpace;
+from nes_py.wrappers import JoypadSpace
 
 
 class Images():
@@ -46,9 +45,9 @@ class Images():
         img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
         return img_gray, img_rgb
 
-    def detectGoomba(self):
+    def detectGoomba(self, debug):
         img_gray, img_rgb = Images.processImage()
-        template = cv2.imread('./goomba.png', 0)
+        template = cv2.imread('goomba.png', 0)
         w, h = template.shape[::-1]
         color = [0, 0, 0]
 
@@ -56,16 +55,18 @@ class Images():
         threshold = 0.5
         loc = np.where(res >= threshold)
         #  print(loc)
-        for pt in zip(*loc[::-1]):
-            # cv2.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0, 0, 255), 2)
-            # print(pt[0], pt[1])
-            state[:, pt[0]] = color
-            state[pt[1], :] = color
-            print(pt[0] / 16, pt[1] / 16)
+        if debug:
+            for pt in zip(*loc[::-1]):
+                # cv2.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0, 0, 255), 2)
+                # print(pt[0], pt[1])
+                state[:, pt[0]] = color
+                state[pt[1], :] = color
+                print(pt[0] / 16, pt[1] / 16)
+        return loc
         # cv2.imwrite('res.png', img_rgb)
         # img.show()
 
-    def detectMario(self):
+    def detectMario(self, debug):
         img_gray, img_rgb = Images.processImage()
         template = cv2.imread('mario.png', 0)
         w, h = template.shape[::-1]
@@ -75,33 +76,62 @@ class Images():
         threshold = 0.8
         loc = np.where(res >= threshold)
         #  print(loc)
-        for pt in zip(*loc[::-1]):
-            # cv2.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0, 0, 255), 2)
-            # print(pt[0], pt[1])
-            state[:, pt[0]] = color
-            state[pt[1], :] = color
+        if debug:
+            for pt in zip(*loc[::-1]):
+                # cv2.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0, 0, 255), 2)
+                # print(pt[0], pt[1])
+                state[:, pt[0]] = color
+                state[pt[1], :] = color
+                print(pt[0] / 16, pt[1] / 16)
+        return loc
         # cv2.imwrite('res.png', img_rgb)
         # img.show()
 
-    def detectQuestionBox(self):
+    def detectQuestionBox(self, debug):
         img_gray, img_rgb = Images.processImage()
         template = cv2.imread('questionbox.png', 0)
         w, h = template.shape[::-1]
         color = [0, 255, 0]
 
+        threshold = 0.9
         res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
-        threshold = 0.6
         loc = np.where(res >= threshold)
-        #  print(loc)
-        for pt in zip(*loc[::-1]):
-            # cv2.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0, 255, 0), 1)
-            # print(pt[0], pt[1])
-            state[:, pt[0]] = color
-            state[pt[1], :] = color
+
+        print(np.ndim(loc))
+        if debug:
+            for pt in zip(*loc[::-1]):
+                # cv2.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0, 255, 0), 1)
+                # print(pt[0], pt[1])
+                state[:, pt[0]] = color
+                state[pt[1], :] = color
+
+        return loc
         # cv2.imwrite('res.png', img_rgb)
         # img.show()
 
-    def detectBlock(self):
+    def detectQuestionBoxlight(self, debug):
+        img_gray, img_rgb = Images.processImage()
+        template = cv2.imread('questionbox_light.png', 0)
+        w, h = template.shape[::-1]
+        color = [0, 255, 0]
+
+        threshold = 0.9
+        res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
+        loc = np.where(res >= threshold)
+
+        print(np.ndim(loc))
+        if debug:
+            for pt in zip(*loc[::-1]):
+                # cv2.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0, 255, 0), 1)
+                # print(pt[0], pt[1])
+                state[:, pt[0]] = color
+                state[pt[1], :] = color
+
+        return loc
+        # cv2.imwrite('res.png', img_rgb)
+        # img.show()
+
+    def detectBlock(self, debug):
         img_gray, img_rgb = Images.processImage()
         template = cv2.imread('block.png', 0)
         w, h = template.shape[::-1]
@@ -111,29 +141,53 @@ class Images():
         threshold = 0.9
         loc = np.where(res >= threshold)
         #  print(loc)
-        for pt in zip(*loc[::-1]):
-            # cv2.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0, 255, 0), 1)
-            # print(pt[0], pt[1])
-            state[:, pt[0]] = color
-            state[pt[1], :] = color
+        if debug:
+            for pt in zip(*loc[::-1]):
+                # cv2.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0, 255, 0), 1)
+                # print(pt[0], pt[1])
+                state[:, pt[0]] = color
+                state[pt[1], :] = color
+        return loc
         # cv2.imwrite('res.png', img_rgb)
         # img.show()
 
-    def detectFloor(self):
+    def detectFloor(self, debug):
         img_gray, img_rgb = Images.processImage()
         template = cv2.imread('floor.png', 0)
         w, h = template.shape[::-1]
         color = [0, 255, 255]
 
         res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
-        threshold = 0.9
+        threshold = 0.80
         loc = np.where(res >= threshold)
         #  print(loc)
-        for pt in zip(*loc[::-1]):
-            # cv2.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0, 255, 0), 1)
-            # print(pt[0], pt[1])
-            state[:, pt[0]] = color
-            state[pt[1], :] = color
+        if debug:
+            for pt in zip(*loc[::-1]):
+                # cv2.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0, 255, 0), 1)
+                # print(pt[0], pt[1])
+                state[:, pt[0]] = color
+                state[pt[1], :] = color
+        return loc
+        # cv2.imwrite('res.png', img_rgb)
+        # img.show()
+
+    def detectPipe(self, debug):
+        img_gray, img_rgb = Images.processImage()
+        template = cv2.imread('pipe.png', 0)
+        w, h = template.shape[::-1]
+        color = [0, 255, 255]
+
+        res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
+        threshold = 0.96
+        loc = np.where(res >= threshold)
+        #  print(loc)
+        if debug:
+            for pt in zip(*loc[::-1]):
+                # cv2.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0, 255, 0), 1)
+                # print(pt[0], pt[1])
+                state[:, pt[0]] = color
+                state[pt[1], :] = color
+        return loc
         # cv2.imwrite('res.png', img_rgb)
         # img.show()
 
@@ -207,7 +261,7 @@ class Mario2DMap():
     def __init__(self):
         self.environment = np.array([[" "] * 16] * 16)
 
-    def PrintEnvironment(self):
+    def printEnvironment(self):
         erg = "#" * 18
         erg += "\n"
         for x in self.environment:
@@ -219,9 +273,32 @@ class Mario2DMap():
         erg += "\n"
         return (erg)
 
-    def ChangeEnvironment(self, x, y, symbol):
-        self.environment[y][x] = symbol
+    def reloadEnvironment(self):
+        self.environment = np.array([[" "] * 16] * 16)
 
+    def changeEnvironment(self, loc, symbol):
+
+
+        for pt in zip(*loc[::-1]):
+            x = int(np.floor(pt[0] / 16))
+            y = int(np.floor(pt[1] / 16))
+            self.environment[y][x] = symbol
+            if symbol == "P":
+                for i in range(y, 15, 1):
+                    self.environment[i][x] = symbol
+                    if x < 15:
+                        self.environment[i][x+1] = symbol
+
+
+
+def clear():
+    # for windows
+    if name == 'nt':
+        _ = system('cls')
+
+        # for mac and linux(here, os.name is 'posix')
+    else:
+        _ = system('clear')
 
 COMPLEX_MOVEMENT = [
     ['NOOP'],
@@ -271,18 +348,23 @@ while True:
 
     # print(state.shape)
 
-    # state, reward, done, info = sm_movement.BadSearchMovement(state, reward, done, info, env)
-    # state, reward, done, info = env.step(sm_movement.WeightedRandom(sm_movement.basicWeights))
-    # state, reward, done, info = sm_movement.BigJump(env, reward, done, info)
+    # state, reward, done, info = sm_movement.badSearchMovement(state, reward, done, info, env)
+    state, reward, done, info = env.step(sm_movement.weightedRandom(sm_movement.basicWeights))
+    # state, reward, done, info = sm_movement.bigJump(env, reward, done, info)
     # state, reward, done, info = env.step(random.randint(0,len(COMPLEX_MOVEMENT)-1))
-    state, reward, done, info = env.step(1)
+    # state, reward, done, info = env.step(1)
 
-    sm_images.detectGoomba()
-    sm_images.detectMario()
-    # sm_images.detectQuestionBox()
-    # sm_images.detectBlock()
-    # sm_images.detectFloor()
+    sm_env.reloadEnvironment()
+    sm_env.changeEnvironment(sm_images.detectQuestionBox(False), "?")
+    sm_env.changeEnvironment(sm_images.detectQuestionBoxlight(False), "?")
+    sm_env.changeEnvironment(sm_images.detectBlock(False), "B")
+    sm_env.changeEnvironment(sm_images.detectFloor(False), "@")
+    sm_env.changeEnvironment(sm_images.detectGoomba(False), "G")
+    sm_env.changeEnvironment(sm_images.detectMario(False), "M")
+    sm_env.changeEnvironment(sm_images.detectPipe(False), "P")
+
+    print(sm_env.printEnvironment())
 
     env.render()
-    # time.sleep(0.02)
+    time.sleep(0.02)
 env.close()
