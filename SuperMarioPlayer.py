@@ -38,8 +38,7 @@ class Images():
     def ProcessImage():
         # converts state (pixel array) to image
         img = Image.fromarray(state, 'RGB')
-        img.save('state.png')
-        img_rgb = cv2.imread('state.png')
+        img_rgb = np.array(img)
         img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
         return img_gray, img_rgb
 
@@ -50,7 +49,7 @@ class Images():
         color = [0, 0, 0]
 
         res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
-        threshold = 0.6
+        threshold = 0.5
         loc = np.where(res >= threshold)
         #  print(loc)
         for pt in zip(*loc[::-1]):
@@ -58,6 +57,7 @@ class Images():
             # print(pt[0], pt[1])
             state[:, pt[0] + 8] = color
             state[pt[1] + 8, :] = color
+            print(pt[0] / 16, pt[1] / 16)
         # cv2.imwrite('res.png', img_rgb)
         # img.show()
 
@@ -68,7 +68,7 @@ class Images():
         color = [255, 0, 0]
 
         res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
-        threshold = 0.9
+        threshold = 0.8
         loc = np.where(res >= threshold)
         #  print(loc)
         for pt in zip(*loc[::-1]):
@@ -246,10 +246,10 @@ while True:
     # print(state.shape)
 
     # state, reward, done, info = sm_movement.BadSearchMovement(state, reward, done, info, env)
-    # state, reward, done, info = env.step(sm_movement.WeightedRandom(sm_movement.basicWeights))
+    state, reward, done, info = env.step(sm_movement.WeightedRandom(sm_movement.basicWeights))
     # state, reward, done, info = sm_movement.BigJump(env, reward, done, info)
     # state, reward, done, info = env.step(random.randint(0,len(COMPLEX_MOVEMENT)-1))
-    state, reward, done, info = env.step(1)
+    # state, reward, done, info = env.step(1)
 
     # for i in range(len(state[0])):
     #    state[192][i] = [0, 0, 0]
@@ -299,9 +299,9 @@ while True:
 
     Images.DetectGoomba()
     Images.DetectMario()
-    Images.DetectQuestionBox()
-    Images.DetectBlock()
-    Images.DetectFloor()
+    #Images.DetectQuestionBox()
+    #Images.DetectBlock()
+    #Images.DetectFloor()
 
     env.render()
     # time.sleep(0.02)
