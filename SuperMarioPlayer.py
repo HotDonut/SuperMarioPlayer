@@ -32,16 +32,17 @@ class Images():
             [[252, 252, 252], [0, 168, 0], [0, 168, 0], [0, 168, 0], [0, 168, 0], [252, 168, 68], [0, 168, 0],
              [252, 252, 252], [252, 252, 252], [252, 168, 68]])
 
-    def ProcessImage():
+    @staticmethod
+    def processImage():
         # converts state (pixel array) to image
         img = Image.fromarray(state, 'RGB')
         img_rgb = np.array(img)
         img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
         return img_gray, img_rgb
 
-    def DetectGoomba():
-        img_gray, img_rgb = Images.ProcessImage()
-        template = cv2.imread('goomba.png', 0)
+    def detectGoomba(self):
+        img_gray, img_rgb = Images.processImage()
+        template = cv2.imread('./goomba.png', 0)
         w, h = template.shape[::-1]
         color = [0, 0, 0]
 
@@ -58,8 +59,8 @@ class Images():
         # cv2.imwrite('res.png', img_rgb)
         # img.show()
 
-    def DetectMario():
-        img_gray, img_rgb = Images.ProcessImage()
+    def detectMario(self):
+        img_gray, img_rgb = Images.processImage()
         template = cv2.imread('mario.png', 0)
         w, h = template.shape[::-1]
         color = [255, 0, 0]
@@ -76,8 +77,8 @@ class Images():
         # cv2.imwrite('res.png', img_rgb)
         # img.show()
 
-    def DetectQuestionBox():
-        img_gray, img_rgb = Images.ProcessImage()
+    def detectQuestionBox(self):
+        img_gray, img_rgb = Images.processImage()
         template = cv2.imread('questionbox.png', 0)
         w, h = template.shape[::-1]
         color = [0, 255, 0]
@@ -94,8 +95,8 @@ class Images():
         # cv2.imwrite('res.png', img_rgb)
         # img.show()
 
-    def DetectBlock():
-        img_gray, img_rgb = Images.ProcessImage()
+    def detectBlock(self):
+        img_gray, img_rgb = Images.processImage()
         template = cv2.imread('block.png', 0)
         w, h = template.shape[::-1]
         color = [0, 255, 0]
@@ -112,8 +113,8 @@ class Images():
         # cv2.imwrite('res.png', img_rgb)
         # img.show()
 
-    def DetectFloor():
-        img_gray, img_rgb = Images.ProcessImage()
+    def detectFloor(self):
+        img_gray, img_rgb = Images.processImage()
         template = cv2.imread('floor.png', 0)
         w, h = template.shape[::-1]
         color = [0, 255, 255]
@@ -143,7 +144,7 @@ class Movement():
         #else 0
         self.basicWeights = [0,0,25,10,65,0,0,0,0,0,0,0,0,0]
 
-    def BigJump(self, env, reward, done, info):
+    def bigJump(self, env, reward, done, info):
         height = 0
 
         #print("Prepare!\n")
@@ -172,7 +173,7 @@ class Movement():
             #print("Wait!\n")
         return state, reward, done, info
 
-    def WeightedRandom(self, weightArray):
+    def weightedRandom(self, weightArray):
 
         listOfValidActionsWithCountOfItemsInferedByWeights = []
 
@@ -181,17 +182,17 @@ class Movement():
 
         return random.choice(listOfValidActionsWithCountOfItemsInferedByWeights)
 
-    def BadSearchMovement(self, state, reward, done, info, env):
+    def badSearchMovement(self, state, reward, done, info, env):
         maskGoomba = (state[194] == self.sm_images.goombaColor).all(axis = 1)
         maskPit = (state[210] == self.sm_images.skyColor).all(axis = 1)
 
         if np.any(maskGoomba):
-            return sm_movement.BigJump(env, reward, done, info)
+            return sm_movement.bigJump(env, reward, done, info)
         else:
             if np.any(maskPit):
-                return sm_movement.BigJump(env, reward, done, info)
+                return sm_movement.bigJump(env, reward, done, info)
             else:
-                return env.step(sm_movement.WeightedRandom(sm_movement.basicWeights))
+                return env.step(sm_movement.weightedRandom(sm_movement.basicWeights))
 
 class Mario2DMap():
     def __init__(self):
@@ -265,31 +266,14 @@ while True:
     #state, reward, done, info = sm_movement.BigJump(env, reward, done, info)
     #state, reward, done, info = env.step(random.randint(0,len(COMPLEX_MOVEMENT)-1))
     state, reward, done, info = env.step(1)
-    
-    #for i in range(len(state[0])):
-    #    state[192][i] = [0, 0, 0]
-    #    state[208][i] = [0, 0, 0]  
-    
-    #newColor = np.array([255, 255, 0])
-    #for i in range(len(state)):
-    #    for j in range(len(state[i])):
-    #        if np.all(state[i][j] == goombaColor):
-    #            state[i][j] = newColor
-    
-    
-    #Area of importance
-    #Height: 36-Border
-    #Width: 126-Border
 
-    
-    #mask = np.zeros(slicedState.shape)
-    #state[35:, 130:] = mask
 
-    Images.DetectGoomba()
-    Images.DetectMario()
-    #Images.DetectQuestionBox()
-    #Images.DetectBlock()
-    #Images.DetectFloor()
+
+    sm_images.detectGoomba()
+    sm_images.detectMario()
+    #sm_images.detectQuestionBox()
+    #sm_images.detectBlock()
+    #sm_images.detectFloor()
 
     env.render()
     # time.sleep(0.02)
