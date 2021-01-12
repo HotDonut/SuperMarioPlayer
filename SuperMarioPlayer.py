@@ -1,11 +1,15 @@
 # https://github.com/Kautenja/nes-py
-from nes_py.wrappers import JoypadSpace;
+import random
+import time
+from PIL import Image
 # https://github.com/Kautenja/gym-super-mario-bros
 import gym_super_mario_bros;
 
 import time
 import random
 import numpy as np
+import cv2
+from nes_py.wrappers import JoypadSpace;
 
 class Images():
 
@@ -23,8 +27,108 @@ class Images():
         #Pipe array
         self.pipeArray = np.array([[0,0,0],[184,248,24],[184,248,24],[184,248,24],[0,168,0],[0,168,0],[184,248,24],[184,248,24],[184,248,24],[184,248,24],[184,248,24],[0,168,0],[184,248,24],[184,248,24]])
 
-        #Koopa array
-        self.koopaShellArray = np.array([[252, 252, 252], [0, 168, 0], [0, 168, 0], [0, 168, 0], [0, 168, 0], [252, 168, 68], [0, 168, 0], [252, 252, 252], [252, 252, 252], [252, 168, 68]])
+        # Koopa array
+        self.koopaShellArray = np.array(
+            [[252, 252, 252], [0, 168, 0], [0, 168, 0], [0, 168, 0], [0, 168, 0], [252, 168, 68], [0, 168, 0],
+             [252, 252, 252], [252, 252, 252], [252, 168, 68]])
+
+    def ProcessImage():
+        # converts state (pixel array) to image
+        img = Image.fromarray(state, 'RGB')
+        img_rgb = np.array(img)
+        img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
+        return img_gray, img_rgb
+
+    def DetectGoomba():
+        img_gray, img_rgb = Images.ProcessImage()
+        template = cv2.imread('goomba.png', 0)
+        w, h = template.shape[::-1]
+        color = [0, 0, 0]
+
+        res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
+        threshold = 0.5
+        loc = np.where(res >= threshold)
+        #  print(loc)
+        for pt in zip(*loc[::-1]):
+            # cv2.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0, 0, 255), 2)
+            # print(pt[0], pt[1])
+            state[:, pt[0]] = color
+            state[pt[1], :] = color
+            print(pt[0] / 16, pt[1] / 16)
+        # cv2.imwrite('res.png', img_rgb)
+        # img.show()
+
+    def DetectMario():
+        img_gray, img_rgb = Images.ProcessImage()
+        template = cv2.imread('mario.png', 0)
+        w, h = template.shape[::-1]
+        color = [255, 0, 0]
+
+        res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
+        threshold = 0.8
+        loc = np.where(res >= threshold)
+        #  print(loc)
+        for pt in zip(*loc[::-1]):
+            # cv2.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0, 0, 255), 2)
+            # print(pt[0], pt[1])
+            state[:, pt[0]] = color
+            state[pt[1], :] = color
+        # cv2.imwrite('res.png', img_rgb)
+        # img.show()
+
+    def DetectQuestionBox():
+        img_gray, img_rgb = Images.ProcessImage()
+        template = cv2.imread('questionbox.png', 0)
+        w, h = template.shape[::-1]
+        color = [0, 255, 0]
+
+        res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
+        threshold = 0.6
+        loc = np.where(res >= threshold)
+        #  print(loc)
+        for pt in zip(*loc[::-1]):
+            # cv2.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0, 255, 0), 1)
+            # print(pt[0], pt[1])
+            state[:, pt[0]] = color
+            state[pt[1], :] = color
+        # cv2.imwrite('res.png', img_rgb)
+        # img.show()
+
+    def DetectBlock():
+        img_gray, img_rgb = Images.ProcessImage()
+        template = cv2.imread('block.png', 0)
+        w, h = template.shape[::-1]
+        color = [0, 255, 0]
+
+        res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
+        threshold = 0.9
+        loc = np.where(res >= threshold)
+        #  print(loc)
+        for pt in zip(*loc[::-1]):
+            # cv2.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0, 255, 0), 1)
+            # print(pt[0], pt[1])
+            state[:, pt[0]] = color
+            state[pt[1], :] = color
+        # cv2.imwrite('res.png', img_rgb)
+        # img.show()
+
+    def DetectFloor():
+        img_gray, img_rgb = Images.ProcessImage()
+        template = cv2.imread('floor.png', 0)
+        w, h = template.shape[::-1]
+        color = [0, 255, 255]
+
+        res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
+        threshold = 0.9
+        loc = np.where(res >= threshold)
+        #  print(loc)
+        for pt in zip(*loc[::-1]):
+            # cv2.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0, 255, 0), 1)
+            # print(pt[0], pt[1])
+            state[:, pt[0]] = color
+            state[pt[1], :] = color
+        # cv2.imwrite('res.png', img_rgb)
+        # img.show()
 
 class Movement():
     
@@ -181,17 +285,12 @@ while True:
     #mask = np.zeros(slicedState.shape)
     #state[35:, 130:] = mask
 
-    #Ideales Raster
-    #16x16
-    #Creating 16x16 fields that need to be tracked
-    color = [0,0,0]
-    for z in range(int(state.shape[0]/16)):
-        state[16*z, :] = color
-        for y in range(int(state.shape[1]/16)):
-            state[:, 16*y] = color
+    Images.DetectGoomba()
+    Images.DetectMario()
+    #Images.DetectQuestionBox()
+    #Images.DetectBlock()
+    #Images.DetectFloor()
 
     env.render()
-    time.sleep(0.02)
-    sm_env.ChangeEnvironment(3,10,'A')
-    print(sm_env.PrintEnvironment())
+    # time.sleep(0.02)
 env.close()
