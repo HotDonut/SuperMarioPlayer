@@ -9,6 +9,7 @@ import random
 import numpy as np
 import cv2
 from nes_py.wrappers import JoypadSpace
+import os
 
 
 class Images():
@@ -93,11 +94,10 @@ class Images():
         w, h = template.shape[::-1]
         color = [0, 255, 0]
 
-        threshold = 0.9
+        threshold = 0.6
         res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
         loc = np.where(res >= threshold)
 
-        print(np.ndim(loc))
         if debug:
             for pt in zip(*loc[::-1]):
                 # cv2.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0, 255, 0), 1)
@@ -115,11 +115,10 @@ class Images():
         w, h = template.shape[::-1]
         color = [0, 255, 0]
 
-        threshold = 0.9
+        threshold = 0.6
         res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
         loc = np.where(res >= threshold)
 
-        print(np.ndim(loc))
         if debug:
             for pt in zip(*loc[::-1]):
                 # cv2.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0, 255, 0), 1)
@@ -262,6 +261,7 @@ class Mario2DMap():
         self.environment = np.array([[" "] * 16] * 16)
 
     def printEnvironment(self):
+        #print('\n' * 20)
         erg = "#" * 18
         erg += "\n"
         for x in self.environment:
@@ -319,7 +319,7 @@ sm_movement = Movement()
 sm_images = Images()
 sm_env = Mario2DMap()
 
-env = gym_super_mario_bros.make('SuperMarioBros-v0').env
+env = gym_super_mario_bros.make('SuperMarioBros-1-2-v0').env
 env = JoypadSpace(env, COMPLEX_MOVEMENT)
 
 done = True
@@ -354,6 +354,7 @@ while True:
     # state, reward, done, info = env.step(random.randint(0,len(COMPLEX_MOVEMENT)-1))
     # state, reward, done, info = env.step(1)
 
+    os.system("cls")
     sm_env.reloadEnvironment()
     sm_env.changeEnvironment(sm_images.detectQuestionBox(False), "?")
     sm_env.changeEnvironment(sm_images.detectQuestionBoxlight(False), "?")
@@ -366,5 +367,5 @@ while True:
     print(sm_env.printEnvironment())
 
     env.render()
-    time.sleep(0.02)
+    #time.sleep(0.02)
 env.close()
