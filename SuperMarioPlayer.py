@@ -1,6 +1,7 @@
 # https://github.com/Kautenja/nes-py
 # https://github.com/Kautenja/gym-super-mario-bros
 import gym_super_mario_bros
+import sys
 import time
 from nes_py.wrappers import JoypadSpace
 import os
@@ -31,8 +32,9 @@ env = gym_super_mario_bros.make('SuperMarioBros-v0').env
 env = JoypadSpace(env, COMPLEX_MOVEMENT)
 
 done = True
-framerate = 1
+framerate = 5
 i = 0
+niceConsoleOutput = True
 
 while True:
     if done:
@@ -69,14 +71,16 @@ while True:
     sm_env.changeEnvironment(sm_images.detectQuestionBoxlight(state, False), "?")
     sm_env.changeEnvironment(sm_images.detectBlock(state, False), "B")
     sm_env.changeEnvironment(sm_images.detectFloor(state, False), "@")
-    sm_env.changeEnvironment(sm_images.detectGoomba(state, True), "G")
-    sm_env.changeEnvironment(sm_images.detectMario(state, True), "M")
+    sm_env.changeEnvironment(sm_images.detectGoomba(state, False), "G")
+    sm_env.changeEnvironment(sm_images.detectMario(state, False), "M")
     sm_env.changeEnvironment(sm_images.detectPipe(state, False), "P")
 
-    # if i == framerate:
-    #   print(sm_env.printEnvironment())
-    #   i = 0
-    print(sm_env.printEnvironment())
+    if i == framerate:
+       sm_env.printEnvironment(niceConsoleOutput)
+       sys.stdout.flush()
+       i = 0
+
+    # print(sm_env.printEnvironment())
 
     # check mario detection debug
     # if sm_env.marioNotFound > 5:
@@ -84,4 +88,5 @@ while True:
 
     env.render()
     #time.sleep(0.02)
+    i = i + 1
 env.close()

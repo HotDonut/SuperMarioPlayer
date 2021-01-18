@@ -1,4 +1,5 @@
 import numpy as np
+import SuperMarioDisplay
 
 class Mario2DMap():
     marioNotFound = 0
@@ -6,8 +7,7 @@ class Mario2DMap():
     def __init__(self):
         self.environment = np.array([[" "] * 16] * 16)
 
-    def printEnvironment(self):
-        #print('\n' * 20)
+    def printEnvironment(self, niceConsoleOutput):
         erg = "#" * (len(self.environment)+2)
         erg += "\n"
         for x in self.environment:
@@ -17,7 +17,10 @@ class Mario2DMap():
             erg += "#\n"
         erg += "#" * (len(self.environment)+2)
         erg += "\n"
-        return (erg)
+        if niceConsoleOutput:
+            SuperMarioDisplay.print_nice(erg)
+        else:
+            print(erg)
 
     def reloadEnvironment(self):
         self.environment = np.array([[" "] * 16] * 16)
