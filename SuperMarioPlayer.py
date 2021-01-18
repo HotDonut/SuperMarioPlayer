@@ -10,7 +10,6 @@ import numpy as np
 import cv2
 from nes_py.wrappers import JoypadSpace
 
-
 class Images():
 
     def __init__(self):
@@ -73,9 +72,13 @@ class Images():
         color = [255, 0, 0]
 
         res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
-        threshold = 0.8
+        threshold = 0.7
         loc = np.where(res >= threshold)
         #  print(loc)
+
+        if len(loc[0]) != 0:
+            loc[0][0] = loc[0][0] - 2
+            loc[1][0] = loc[1][0] - 6
         if debug:
             for pt in zip(*loc[::-1]):
                 # cv2.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0, 0, 255), 2)
@@ -97,7 +100,7 @@ class Images():
         res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
         loc = np.where(res >= threshold)
 
-        print(np.ndim(loc))
+        #print(np.ndim(loc))
         if debug:
             for pt in zip(*loc[::-1]):
                 # cv2.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0, 255, 0), 1)
@@ -119,7 +122,7 @@ class Images():
         res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
         loc = np.where(res >= threshold)
 
-        print(np.ndim(loc))
+        #print(np.ndim(loc))
         if debug:
             for pt in zip(*loc[::-1]):
                 # cv2.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0, 255, 0), 1)
@@ -178,7 +181,7 @@ class Images():
         color = [0, 255, 255]
 
         res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
-        threshold = 0.96
+        threshold = 0.90
         loc = np.where(res >= threshold)
         #  print(loc)
         if debug:
@@ -258,8 +261,11 @@ class Movement():
 
 
 class Mario2DMap():
+    marioNotFound = 0
+
     def __init__(self):
         self.environment = np.array([[" "] * 16] * 16)
+        marioNotFound = 0
 
     def printEnvironment(self):
         erg = "#" * 18
@@ -277,9 +283,10 @@ class Mario2DMap():
         self.environment = np.array([[" "] * 16] * 16)
 
     def changeEnvironment(self, loc, symbol):
-
+        i = 0
 
         for pt in zip(*loc[::-1]):
+            i = i+1
             x = int(np.floor(pt[0] / 16))
             y = int(np.floor(pt[1] / 16))
             self.environment[y][x] = symbol
@@ -288,6 +295,10 @@ class Mario2DMap():
                     self.environment[i][x] = symbol
                     if x < 15:
                         self.environment[i][x+1] = symbol
+
+        if (i == 0):
+            self.marioNotFound = self.marioNotFound + 1
+
 
 
 
@@ -323,6 +334,8 @@ env = gym_super_mario_bros.make('SuperMarioBros-v0').env
 env = JoypadSpace(env, COMPLEX_MOVEMENT)
 
 done = True
+framerate = 1
+i = 0
 
 while True:
     if done:
@@ -360,11 +373,18 @@ while True:
     sm_env.changeEnvironment(sm_images.detectBlock(False), "B")
     sm_env.changeEnvironment(sm_images.detectFloor(False), "@")
     sm_env.changeEnvironment(sm_images.detectGoomba(False), "G")
-    sm_env.changeEnvironment(sm_images.detectMario(False), "M")
     sm_env.changeEnvironment(sm_images.detectPipe(False), "P")
+    sm_env.changeEnvironment(sm_images.detectMario(True), "M")
 
+    #if i == framerate:
+        #print(sm_env.printEnvironment())
+        #i = 0
     print(sm_env.printEnvironment())
-
     env.render()
-    time.sleep(0.02)
+    #time.sleep(0.02)
+    #check mario detection debug
+    #if sm_env.marioNotFound > 5:
+        #print("Error: Mario not found")
+
+
 env.close()
