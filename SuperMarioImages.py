@@ -64,9 +64,13 @@ class Images():
         color = [255, 0, 0]
 
         res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
-        threshold = 0.8
+        threshold = 0.7
         loc = np.where(res >= threshold)
         #  print(loc)
+        # Normalizing detection of mario to top left corner
+        if len(loc[0]) != 0:
+            loc[0][0] = loc[0][0] - 2
+            loc[1][0] = loc[1][0] - 6
         if debug:
             for pt in zip(*loc[::-1]):
                 # cv2.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0, 0, 255), 2)
@@ -84,7 +88,7 @@ class Images():
         w, h = template.shape[::-1]
         color = [0, 255, 0]
 
-        threshold = 0.6
+        threshold = 0.9
         res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
         loc = np.where(res >= threshold)
 
@@ -106,7 +110,7 @@ class Images():
         w, h = template.shape[::-1]
         color = [0, 255, 0]
 
-        threshold = 0.6
+        threshold = 0.9
         res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
         loc = np.where(res >= threshold)
 
@@ -171,7 +175,7 @@ class Images():
         color = [0, 255, 255]
 
         res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
-        threshold = 0.96
+        threshold = 0.90
         loc = np.where(res >= threshold)
         #  print(loc)
         if debug:

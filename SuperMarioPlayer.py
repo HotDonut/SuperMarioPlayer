@@ -31,6 +31,8 @@ env = gym_super_mario_bros.make('SuperMarioBros-v0').env
 env = JoypadSpace(env, COMPLEX_MOVEMENT)
 
 done = True
+framerate = 1
+i = 0
 
 while True:
     if done:
@@ -71,7 +73,14 @@ while True:
     sm_env.changeEnvironment(sm_images.detectMario(state, True), "M")
     sm_env.changeEnvironment(sm_images.detectPipe(state, False), "P")
 
+    # if i == framerate:
+    #   print(sm_env.printEnvironment())
+    #   i = 0
     print(sm_env.printEnvironment())
+
+    # check mario detection debug
+    # if sm_env.marioNotFound > 5:
+    #   print("Error: Mario not found")
 
     env.render()
     #time.sleep(0.02)

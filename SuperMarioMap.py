@@ -1,6 +1,8 @@
 import numpy as np
 
 class Mario2DMap():
+    marioNotFound = 0
+
     def __init__(self):
         self.environment = np.array([[" "] * 16] * 16)
 
@@ -21,6 +23,8 @@ class Mario2DMap():
         self.environment = np.array([[" "] * 16] * 16)
 
     def changeEnvironment(self, loc, symbol):
+        i = 0
+
         for pt in zip(*loc[::-1]):
             x = int(np.floor(pt[0] / 16))
             y = int(np.floor(pt[1] / 16))
@@ -31,3 +35,5 @@ class Mario2DMap():
                     if x < 15:
                         self.environment[i][x+1] = symbol
 
+        if (i == 0):
+            self.marioNotFound = self.marioNotFound + 1
