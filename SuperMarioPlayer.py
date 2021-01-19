@@ -8,7 +8,6 @@ import os
 import SuperMarioImages
 import SuperMarioMovement
 import SuperMarioMap
-import numpy as np
 
 COMPLEX_MOVEMENT = [
     ['NOOP'],
@@ -37,7 +36,7 @@ env = JoypadSpace(env, COMPLEX_MOVEMENT)
 done = True
 framerate = 5
 i = 0
-niceConsoleOutput = True
+niceConsoleOutput = False
 
 while True:
     if done:
