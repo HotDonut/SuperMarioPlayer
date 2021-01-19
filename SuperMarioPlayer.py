@@ -262,14 +262,14 @@ class Mario2DMap():
 
     def printEnvironment(self):
         #print('\n' * 20)
-        erg = "#" * 18
+        erg = "■" * 18
         erg += "\n"
         for x in self.environment:
-            erg += "#"
+            erg += "■"
             for y in x:
                 erg += y
-            erg += "#\n"
-        erg += "#" * 18
+            erg += "■\n"
+        erg += "■" * 18
         erg += "\n"
         return (erg)
 
@@ -283,22 +283,23 @@ class Mario2DMap():
             x = int(np.floor(pt[0] / 16))
             y = int(np.floor(pt[1] / 16))
             self.environment[y][x] = symbol
-            if symbol == "P":
+            if symbol == "▦":
                 for i in range(y, 15, 1):
                     self.environment[i][x] = symbol
                     if x < 15:
                         self.environment[i][x+1] = symbol
 
 
-
 def clear():
     # for windows
-    if name == 'nt':
-        _ = system('cls')
+    
+    if os.name == 'nt':
+        _ = os.system('cls')
 
         # for mac and linux(here, os.name is 'posix')
     else:
-        _ = system('clear')
+        _ = os.system('clear')
+
 
 COMPLEX_MOVEMENT = [
     ['NOOP'],
@@ -319,7 +320,7 @@ sm_movement = Movement()
 sm_images = Images()
 sm_env = Mario2DMap()
 
-env = gym_super_mario_bros.make('SuperMarioBros-1-2-v0').env
+env = gym_super_mario_bros.make('SuperMarioBros-1-1-v0').env
 env = JoypadSpace(env, COMPLEX_MOVEMENT)
 
 done = True
@@ -356,13 +357,13 @@ while True:
 
     os.system("cls")
     sm_env.reloadEnvironment()
-    sm_env.changeEnvironment(sm_images.detectQuestionBox(False), "?")
-    sm_env.changeEnvironment(sm_images.detectQuestionBoxlight(False), "?")
-    sm_env.changeEnvironment(sm_images.detectBlock(False), "B")
-    sm_env.changeEnvironment(sm_images.detectFloor(False), "@")
-    sm_env.changeEnvironment(sm_images.detectGoomba(False), "G")
-    sm_env.changeEnvironment(sm_images.detectMario(False), "M")
-    sm_env.changeEnvironment(sm_images.detectPipe(False), "P")
+    sm_env.changeEnvironment(sm_images.detectQuestionBox(False), "⛋")
+    sm_env.changeEnvironment(sm_images.detectQuestionBoxlight(False), "⛋")
+    sm_env.changeEnvironment(sm_images.detectBlock(False), "▩")
+    sm_env.changeEnvironment(sm_images.detectFloor(False), "▤")
+    sm_env.changeEnvironment(sm_images.detectGoomba(False), "⬒")
+    sm_env.changeEnvironment(sm_images.detectMario(False), "▣")
+    sm_env.changeEnvironment(sm_images.detectPipe(False), "◫")
 
     print(sm_env.printEnvironment())
 
