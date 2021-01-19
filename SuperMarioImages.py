@@ -3,6 +3,13 @@ import numpy as np
 import cv2
 
 class Images():
+    goombaImage = cv2.imread('goomba.png', 0)
+    marioImage = cv2.imread('mario.png', 0)
+    questionBoxImage = cv2.imread('questionbox.png', 0)
+    questionBoxImageLight = cv2.imread('questionbox_light.png', 0)
+    blockImage = cv2.imread('block.png', 0)
+    floorImage = cv2.imread('floor.png', 0)
+    pipeImage  = cv2.imread('pipe.png', 0)
 
     def __init__(self):
         # Goomba, boxes and floor have the same color
@@ -38,11 +45,10 @@ class Images():
 
     def detectGoomba(self, state, debug):
         img_gray, img_rgb = self.processImage(state)
-        template = cv2.imread('goomba.png', 0)
-        w, h = template.shape[::-1]
+        w, h = self.goombaImage.shape[::-1]
         color = [0, 0, 0]
 
-        res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
+        res = cv2.matchTemplate(img_gray, self.goombaImage, cv2.TM_CCOEFF_NORMED)
         threshold = 0.5
         loc = np.where(res >= threshold)
         #  print(loc)
@@ -59,14 +65,17 @@ class Images():
 
     def detectMario(self, state, debug):
         img_gray, img_rgb = self.processImage(state)
-        template = cv2.imread('mario.png', 0)
-        w, h = template.shape[::-1]
+        w, h = self.marioImage.shape[::-1]
         color = [255, 0, 0]
 
-        res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
-        threshold = 0.8
+        res = cv2.matchTemplate(img_gray, self.marioImage, cv2.TM_CCOEFF_NORMED)
+        threshold = 0.7
         loc = np.where(res >= threshold)
         #  print(loc)
+        # Normalizing detection of mario to top left corner
+        if len(loc[0]) != 0:
+            loc[0][0] = loc[0][0] - 2
+            loc[1][0] = loc[1][0] - 6
         if debug:
             for pt in zip(*loc[::-1]):
                 # cv2.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0, 0, 255), 2)
@@ -80,12 +89,11 @@ class Images():
 
     def detectQuestionBox(self, state, debug):
         img_gray, img_rgb = self.processImage(state)
-        template = cv2.imread('questionbox.png', 0)
-        w, h = template.shape[::-1]
+        w, h = self.questionBoxImage.shape[::-1]
         color = [0, 255, 0]
 
-        threshold = 0.6
-        res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
+        threshold = 0.9
+        res = cv2.matchTemplate(img_gray, self.questionBoxImage, cv2.TM_CCOEFF_NORMED)
         loc = np.where(res >= threshold)
 
         if debug:
@@ -102,12 +110,11 @@ class Images():
 
     def detectQuestionBoxlight(self, state, debug):
         img_gray, img_rgb = self.processImage(state)
-        template = cv2.imread('questionbox_light.png', 0)
-        w, h = template.shape[::-1]
+        w, h = self.questionBoxImageLight.shape[::-1]
         color = [0, 255, 0]
 
-        threshold = 0.6
-        res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
+        threshold = 0.9
+        res = cv2.matchTemplate(img_gray, self.questionBoxImageLight, cv2.TM_CCOEFF_NORMED)
         loc = np.where(res >= threshold)
 
         if debug:
@@ -124,11 +131,10 @@ class Images():
 
     def detectBlock(self, state, debug):
         img_gray, img_rgb = self.processImage(state)
-        template = cv2.imread('block.png', 0)
-        w, h = template.shape[::-1]
+        w, h = self.blockImage.shape[::-1]
         color = [0, 255, 0]
 
-        res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
+        res = cv2.matchTemplate(img_gray, self.blockImage, cv2.TM_CCOEFF_NORMED)
         threshold = 0.9
         loc = np.where(res >= threshold)
         #  print(loc)
@@ -145,11 +151,10 @@ class Images():
 
     def detectFloor(self, state, debug):
         img_gray, img_rgb = self.processImage(state)
-        template = cv2.imread('floor.png', 0)
-        w, h = template.shape[::-1]
+        w, h = self.floorImage.shape[::-1]
         color = [0, 255, 255]
 
-        res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
+        res = cv2.matchTemplate(img_gray, self.floorImage, cv2.TM_CCOEFF_NORMED)
         threshold = 0.80
         loc = np.where(res >= threshold)
         #  print(loc)
@@ -166,12 +171,11 @@ class Images():
 
     def detectPipe(self, state, debug):
         img_gray, img_rgb = self.processImage(state)
-        template = cv2.imread('pipe.png', 0)
-        w, h = template.shape[::-1]
+        w, h = self.pipeImage.shape[::-1]
         color = [0, 255, 255]
 
-        res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
-        threshold = 0.96
+        res = cv2.matchTemplate(img_gray, self.pipeImage, cv2.TM_CCOEFF_NORMED)
+        threshold = 0.90
         loc = np.where(res >= threshold)
         #  print(loc)
         if debug:
