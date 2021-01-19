@@ -7,6 +7,7 @@ import os
 import SuperMarioImages
 import SuperMarioMovement
 import SuperMarioMap
+import numpy as np
 
 COMPLEX_MOVEMENT = [
     ['NOOP'],
@@ -29,6 +30,8 @@ sm_env = SuperMarioMap.Mario2DMap()
 
 env = gym_super_mario_bros.make('SuperMarioBros-v0').env
 env = JoypadSpace(env, COMPLEX_MOVEMENT)
+
+
 
 done = True
 
@@ -57,10 +60,11 @@ while True:
     # print(state.shape)
 
     # state, reward, done, info = sm_movement.badSearchMovement(state, reward, done, info, env)
-    state, reward, done, info = env.step(sm_movement.weightedRandom(sm_movement.basicWeights))
+    # state, reward, done, info = env.step(sm_movement.weightedRandom(sm_movement.basicWeights))
     # state, reward, done, info = sm_movement.bigJump(env, reward, done, info)
     # state, reward, done, info = env.step(random.randint(0,len(COMPLEX_MOVEMENT)-1))
     # state, reward, done, info = env.step(1)
+    state, reward, done, info = env.step(sm_movement.goodMovement(sm_env))
 
     sm_env.reloadEnvironment()
     sm_env.changeEnvironment(sm_images.detectQuestionBox(state, False), "?")

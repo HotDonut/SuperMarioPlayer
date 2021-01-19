@@ -66,3 +66,17 @@ class Movement():
                 return self.bigJump(env, reward, done, info)
             else:
                 return env.step(self.weightedRandom(self.basicWeights))
+
+    def goodMovement(self, sm_env):
+        doMove = 1
+        mario = "M"
+        positionMario = np.where(sm_env.environment == mario)
+        positionMarioRow = positionMario[0]
+        positionMarioCole = positionMario[1]
+
+        # if positionMario != None:
+            # doMove = 1
+
+        print(positionMarioRow)
+        print(positionMarioCole)
+        return doMove
