@@ -80,9 +80,9 @@ class Movement():
         # if sm_env.environment[positionMarioRow, positionMarioCole + 1] == "P":
 
         if (sm_env.environment[:, positionMarioCole+1] == "P").any():
-            # if sm_env.environment[positionMarioRow+1, positionMarioCole] == "@":
-                # return 0
-            return self.movementByPipe()
+            if sm_env.environment[positionMarioRow+1, positionMarioCole] == "@":
+                return self.movementByPipe()
+            return 0
 
         # print(positionMarioRow)
         # print(positionMarioCole)
