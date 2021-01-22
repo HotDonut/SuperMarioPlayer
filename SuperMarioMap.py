@@ -30,7 +30,7 @@ class Mario2DMap():
 
         for pt in zip(*loc[::-1]):
             x = int(np.floor(pt[0] / 16))
-            y = int(np.floor(pt[1] / 16))
+            y = int(np.floor((pt[1] / 16)+1))
             self.environment[y][x] = symbol
             if symbol == "P":
                 for i in range(y, 15, 1):

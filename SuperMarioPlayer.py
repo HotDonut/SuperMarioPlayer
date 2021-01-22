@@ -28,15 +28,13 @@ sm_movement = SuperMarioMovement.Movement()
 sm_images = SuperMarioImages.Images()
 sm_env = SuperMarioMap.Mario2DMap()
 
-env = gym_super_mario_bros.make('SuperMarioBros-v0').env
+env = gym_super_mario_bros.make('SuperMarioBros-7-3-v0').env
 env = JoypadSpace(env, COMPLEX_MOVEMENT)
-
-
 
 done = True
 framerate = 5
 i = 0
-niceConsoleOutput = False
+niceConsoleOutput = True
 
 while True:
     if done:
@@ -63,11 +61,11 @@ while True:
     # print(state.shape)
 
     # state, reward, done, info = sm_movement.badSearchMovement(state, reward, done, info, env)
-    # state, reward, done, info = env.step(sm_movement.weightedRandom(sm_movement.basicWeights))
+    state, reward, done, info = env.step(sm_movement.weightedRandom(sm_movement.basicWeights))
     # state, reward, done, info = sm_movement.bigJump(env, reward, done, info)
     # state, reward, done, info = env.step(random.randint(0,len(COMPLEX_MOVEMENT)-1))
     # state, reward, done, info = env.step(1)
-    state, reward, done, info = env.step(sm_movement.goodMovement(sm_env))
+    # state, reward, done, info = env.step(sm_movement.goodMovement(sm_env))
 
     sm_env.reloadEnvironment()
     sm_env.changeEnvironment(sm_images.detectQuestionBox(state, False), "?")
@@ -77,6 +75,8 @@ while True:
     sm_env.changeEnvironment(sm_images.detectGoomba(state, False), "G")
     sm_env.changeEnvironment(sm_images.detectMario(state, False), "M")
     sm_env.changeEnvironment(sm_images.detectPipe(state, False), "P")
+    sm_env.changeEnvironment(sm_images.detectCooper(state, False), "C")
+    sm_env.changeEnvironment(sm_images.detectStairBlock(state, False), "S")
 
     if i == framerate:
        sm_env.printEnvironment(niceConsoleOutput)
