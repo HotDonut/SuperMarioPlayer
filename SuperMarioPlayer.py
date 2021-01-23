@@ -34,7 +34,7 @@ env = JoypadSpace(env, COMPLEX_MOVEMENT)
 done = True
 framerate = 5
 i = 0
-niceConsoleOutput = True
+niceConsoleOutput = False
 
 while True:
     if done:
@@ -75,8 +75,8 @@ while True:
     sm_env.changeEnvironment(sm_images.detectGoomba(state, False), "G")
     sm_env.changeEnvironment(sm_images.detectMario(state, False), "M")
     sm_env.changeEnvironment(sm_images.detectPipe(state, False), "P")
-    sm_env.changeEnvironment(sm_images.detectCooper(state, False), "C")
-    sm_env.changeEnvironment(sm_images.detectStairBlock(state, False), "S")
+    sm_env.changeEnvironment(sm_images.detectCooper(state, True), "C")
+    sm_env.changeEnvironment(sm_images.detectStairBlock(state, True), "S")
 
     if i == framerate:
        sm_env.printEnvironment(niceConsoleOutput)
