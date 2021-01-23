@@ -28,7 +28,7 @@ sm_movement = SuperMarioMovement.Movement()
 sm_images = SuperMarioImages.Images()
 sm_env = SuperMarioMap.Mario2DMap()
 
-env = gym_super_mario_bros.make('SuperMarioBros-7-3-v0').env
+env = gym_super_mario_bros.make('SuperMarioBros-v0').env
 env = JoypadSpace(env, COMPLEX_MOVEMENT)
 
 done = True
