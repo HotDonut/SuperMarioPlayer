@@ -5,6 +5,11 @@ import numpy as np
 
 class Movement():
 
+    positionMarioRow = 0
+    positionMarioCole = 0
+    oldYPositionMario = 16
+    isFalling = False
+
     def __init__(self):
 
         self.sm_images = SuperMarioImages.Images()
@@ -67,30 +72,70 @@ class Movement():
             else:
                 return env.step(self.weightedRandom(self.basicWeights))
 
+    ##
+    # This function search Mario (M) in the Array and saves his position.
+    # Based on the position of Mario, it looks around him and tries too find other objects
+    # @author Florian Weiskirchner
+    #
+    # @param doMove Which move should be used from the COMPLEX_MOVEMENT array
+    # @param charForMario Which Char Mario has in the array
+    # @return doMove gets returned.
+    ##
     def goodMovement(self, sm_env):
-        doMove = 3
-        mario = "M"
-        positionMario = np.where(sm_env.environment == mario)
-        positionMarioRow = positionMario[0]
-        positionMarioCole = positionMario[1]
+        self.oldYPositionMario = self.positionMarioRow
+        doMove = 1                                                                          #marioSearch Funktion machen!!!
+        self.marioSearch(sm_env)
+        self.isFalling = self.checkIfFalling()
 
-        if sm_env.environment[positionMarioRow, positionMarioCole+1] == "G":
+        if sm_env.environment[self.positionMarioRow, self.positionMarioCole+2] == "G":                # eventuell if als Funktion machen
             return self.movementBygoomba()
 
-        # if sm_env.environment[positionMarioRow, positionMarioCole + 1] == "P":
+        # if sm_env.environment[self.positionMarioRow + 1, self.positionMarioCole + 1] == "G":
+            # return self.avoidGoomba()
 
-        if (sm_env.environment[:, positionMarioCole+1] == "P").any():
-            if sm_env.environment[positionMarioRow+1, positionMarioCole] == "@":
-                return self.movementByPipe()
-            return 0
+        # if sm_env.environment[self.positionMarioRow, self.positionMarioCole + 1] == "P":
+            # return self.movementByPipe()
 
+        if sm_env.environment[self.positionMarioRow + 1, self.positionMarioCole] == "P":
+            return self.movementOntopOfPipe()
+
+        if (sm_env.environment[:, self.positionMarioCole+1] == "P").any():
+            return self.movementByPipe()
+        if self.isFalling:
+            doMove = 6
         # print(positionMarioRow)
         # print(positionMarioCole)
         # print(sm_env.environment[positionMarioRow, positionMarioCole])
+        # self.oldYPositionMario = self.positionMarioRow
         return doMove
 
+    def marioSearch(self, sm_env):
+        charForMario = "M"
+        positionMario = np.where(sm_env.environment == charForMario)
+        self.positionMarioRow = positionMario[0]
+        self.positionMarioCole = positionMario[1]
+        return
+
+    def checkIfFalling(self):
+        if self.positionMarioRow > self.oldYPositionMario:
+            print("Mario is Falling")
+            return True
+        return False
+
     def movementBygoomba(self):
-        return 2
+        if self.isFalling:
+            return 0
+        return 2            #Enum oder Kommentar
+
+    def avoidGoomba(self):
+        return 6
 
     def movementByPipe(self):
+        if self.isFalling:
+            return 0
         return 4
+
+    def movementOntopOfPipe(self):
+        if self.isFalling:
+            return 0
+        return 1
