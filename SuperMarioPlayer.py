@@ -28,7 +28,7 @@ sm_movement = SuperMarioMovement.Movement()
 sm_images = SuperMarioImages.Images()
 sm_env = SuperMarioMap.Mario2DMap()
 
-env = gym_super_mario_bros.make('SuperMarioBros-1-1-v0').env
+env = gym_super_mario_bros.make('SuperMarioBros-v0').env
 env = JoypadSpace(env, COMPLEX_MOVEMENT)
 
 done = True
@@ -75,8 +75,8 @@ while True:
     sm_env.changeEnvironment(sm_images.detectGoomba(state, False), "G")
     sm_env.changeEnvironment(sm_images.detectMario(state, False), "M")
     sm_env.changeEnvironment(sm_images.detectPipe(state, False), "P")
-    # sm_env.changeEnvironment(sm_images.detectCooper(state, False), "C")
-    # sm_env.changeEnvironment(sm_images.detectStairBlock(state, False), "S")
+    sm_env.changeEnvironment(sm_images.detectCooper(state, False), "C")
+    sm_env.changeEnvironment(sm_images.detectStairBlock(state, False), "S")
 
     if i == framerate:
        sm_env.printEnvironment(niceConsoleOutput)

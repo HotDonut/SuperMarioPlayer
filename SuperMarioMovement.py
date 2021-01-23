@@ -102,9 +102,13 @@ class Movement():
         if sm_env.environment[self.positionMarioRow, self.positionMarioCole + 1] == "C":
             return self.movementByCooper()
 
+        # check whether the square one column in front and one row below mario is empty in the array
+        # if yes, there is a pit in front of mario, therefore the respective function will be called
         if sm_env.environment[self.positionMarioRow + 1, self.positionMarioCole + 1] == " ":
             return self.movementByPit()
 
+        # check whether the square one column in front and in the same row as mario contains the letter "S" in the array
+        # if yes, there is a stair in front of mario, therefore the respective function will be called
         if sm_env.environment[self.positionMarioRow, self.positionMarioCole + 1] == "S":
             return self.movementByStairs()
 
@@ -221,7 +225,7 @@ class Movement():
 
     ##
     # This method returns the appropriate value for the action that is suited to handling the stairs
-    # which are made up of "Hard Blocks". These stairs only appear in non-Castle levels.
+    # which are made up of "Hard Blocks". These stairs appear levels types, except for Castle levels.
     # @author Emmanuel Najfar
     #
     # @param self obligatory parameter
