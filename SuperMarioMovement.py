@@ -105,10 +105,8 @@ class Movement():
         if sm_env.environment[self.positionMarioRow + 1, self.positionMarioCole + 1] == " ":
             return self.movementByPit()
 
-        if (sm_env.environment[:, self.positionMarioCole+1] == "S").any():
-            if sm_env.environment[self.positionMarioRow+1, self.positionMarioCole] == "@":
-                return self.movementByStairs()
-            return 0
+        if sm_env.environment[self.positionMarioRow, self.positionMarioCole + 1] == "S":
+            return self.movementByStairs()
 
         # if sm_env.environment[self.positionMarioRow + 1, self.positionMarioCole + 1] == "G":
         # return self.avoidGoomba()
