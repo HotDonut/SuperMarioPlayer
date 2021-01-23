@@ -2,6 +2,7 @@ import SuperMarioImages
 import SuperMarioMap
 import random
 import numpy as np
+import EnumMovement
 
 class Movement():
 
@@ -20,6 +21,7 @@ class Movement():
         # jumprunright 65
         # else 0
         self.basicWeights = [0, 0, 25, 10, 65, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        self.movement = EnumMovement.Movement
 
     def bigJump(self, env, reward, done, info):
         height = 0
@@ -83,7 +85,7 @@ class Movement():
     ##
     def goodMovement(self, sm_env):
         self.oldYPositionMario = self.positionMarioRow
-        doMove = 1                                                                          #marioSearch Funktion machen!!!
+        doMove = self.movement.right.value
         self.marioSearch(sm_env)
         self.isFalling = self.checkIfFalling()
 
@@ -101,8 +103,12 @@ class Movement():
 
         if (sm_env.environment[:, self.positionMarioCole+1] == "P").any():
             return self.movementByPipe()
+
+        if sm_env.environment[self.positionMarioRow, self.positionMarioCole + 1] == "C":
+            return self.movementByCooper()
+
         if self.isFalling:
-            doMove = 6
+            doMove = self.movement.left.value
         # print(positionMarioRow)
         # print(positionMarioCole)
         # print(sm_env.environment[positionMarioRow, positionMarioCole])
@@ -124,18 +130,23 @@ class Movement():
 
     def movementBygoomba(self):
         if self.isFalling:
-            return 0
-        return 2            #Enum oder Kommentar
+            return self.movement.NOOP.value
+        return self.movement.rightA.value
 
     def avoidGoomba(self):
-        return 6
+        return self.movement.left.value
 
     def movementByPipe(self):
         if self.isFalling:
-            return 0
-        return 4
+            return self.movement.NOOP.value
+        return self.movement.rightAB.value
 
     def movementOntopOfPipe(self):
         if self.isFalling:
-            return 0
-        return 1
+            return self.movement.NOOP.value
+        return self.movement.right.value
+
+    def movementByCooper(self):
+        if self.isFalling:
+            return self.movement.NOOP.value
+        return self.movement.rightA.value
