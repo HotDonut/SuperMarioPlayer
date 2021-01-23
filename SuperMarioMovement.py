@@ -85,10 +85,13 @@ class Movement():
                 return self.movementByPipe()
             return 0
 
-        if sm_env.environment[positionMarioRow+1, positionMarioCole] == " ":
+        if (sm_env.environment[positionMarioRow+1, positionMarioCole] == " ").any:
             return self.movementByPit()
 
-
+        if (sm_env.environment[:, positionMarioCole+1] == "S").any():
+            if sm_env.environment[positionMarioRow+1, positionMarioCole] == "@":
+                return self.movementByStairs()
+            return 0
         # print(positionMarioRow)
         # print(positionMarioCole)
         # print(sm_env.environment[positionMarioRow, positionMarioCole])
@@ -101,4 +104,7 @@ class Movement():
         return 4
 
     def movementByPit(self):
-        return 3
+        return 4
+
+    def movementByStairs(self):
+        return 2
