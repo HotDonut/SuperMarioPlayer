@@ -218,7 +218,7 @@ class Movement():
     # @author Emmanuel Najfar
     #
     # @param self obligatory parameter
-    # @return   the value that corresponds to the "jumprunright" action
+    # @return the value that corresponds to the "jumprunright" action
     ##
     def movementByPit(self):
         return 4
@@ -229,7 +229,7 @@ class Movement():
     # @author Emmanuel Najfar
     #
     # @param self obligatory parameter
-    # @return   the value that corresponds to the "jumpright" action
+    # @return the value that corresponds to the "jumpright" action
     ##
     def movementByStairs(self):
         return 2
