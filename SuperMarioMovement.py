@@ -137,7 +137,6 @@ class Movement():
     ##
     def checkIfFalling(self):
         if self.positionMarioRow > self.oldYPositionMario:
-            print("Mario is Falling")
             return True
         return False
 
