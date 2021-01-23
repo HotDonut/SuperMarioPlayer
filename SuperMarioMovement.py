@@ -102,6 +102,14 @@ class Movement():
         if sm_env.environment[self.positionMarioRow, self.positionMarioCole + 1] == "C":
             return self.movementByCooper()
 
+        if sm_env.environment[self.positionMarioRow + 1, self.positionMarioCole + 1] == " ":
+            return self.movementByPit()
+
+        if (sm_env.environment[:, self.positionMarioCole+1] == "S").any():
+            if sm_env.environment[self.positionMarioRow+1, self.positionMarioCole] == "@":
+                return self.movementByStairs()
+            return 0
+
         # if sm_env.environment[self.positionMarioRow + 1, self.positionMarioCole + 1] == "G":
         # return self.avoidGoomba()
 
@@ -202,3 +210,24 @@ class Movement():
         if self.isFalling:
             return self.movement.NOOP.value
         return self.movement.rightA.value
+
+    ##
+    # This method returns the appropriate value for the action that is suited to handling a bottomless pit
+    # @author Emmanuel Najfar
+    #
+    # @param self obligatory parameter
+    # @return   the value that corresponds to the "jumprunright" action
+    ##
+    def movementByPit(self):
+        return 4
+
+    ##
+    # This method returns the appropriate value for the action that is suited to handling the stairs
+    # which are made up of "Hard Blocks". These stairs only appear in non-Castle levels.
+    # @author Emmanuel Najfar
+    #
+    # @param self obligatory parameter
+    # @return   the value that corresponds to the "jumpright" action
+    ##
+    def movementByStairs(self):
+        return 2
