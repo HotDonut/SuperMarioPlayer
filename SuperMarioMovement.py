@@ -99,8 +99,25 @@ class Movement():
         if (sm_env.environment[:, self.positionMarioCole+1] == "P").any():
             return self.movementByPipe()
 
-        if sm_env.environment[self.positionMarioRow, self.positionMarioCole + 1] == "C":
+        if sm_env.environment[self.positionMarioRow, self.positionMarioCole + 2] == "C":
             return self.movementByCooper()
+
+        # check whether the square one column in front and one row below mario is empty in the array
+        # if yes, there is a pit in front of mario, therefore the respective function will be called
+        if sm_env.environment[self.positionMarioRow + 1, self.positionMarioCole + 1] == " ":
+            return self.movementByPit()
+
+        # check whether the square in the same row as and one column in front of mario contains
+        # the letter "S" in the array
+        # if yes, there is a stair in front of mario, therefore the respective function will be called
+        if sm_env.environment[self.positionMarioRow, self.positionMarioCole + 1] == "S":
+            return self.movementByAscendingStairs()
+
+        # check whether the square in any row and one column in front of mario contains
+        # the letter "S" in the array
+        # if yes, there is a stair in front of mario, therefore the respective function will be called
+        if (sm_env.environment[:, self.positionMarioCole + 1] == "S").any():
+            return self.movementByDescendingStairs()
 
         # if sm_env.environment[self.positionMarioRow + 1, self.positionMarioCole + 1] == "G":
         # return self.avoidGoomba()
@@ -202,3 +219,39 @@ class Movement():
         if self.isFalling:
             return self.movement.NOOP.value
         return self.movement.rightA.value
+
+    ##
+    # This method returns the appropriate value for the action that is suited to handling a bottomless pit
+    # @author Emmanuel Najfar
+    #
+    # @param self obligatory parameter
+    # @return the value that corresponds to the "jumprunright" action
+    ##
+    def movementByPit(self):
+        return 4
+
+    ##
+    # This method returns the appropriate value for the action that is suited to handling the stairs
+    # which are made up of "Hard Blocks". These stairs appear in all level types, except for Castle levels.
+    # @author Emmanuel Najfar
+    #
+    # @param self obligatory parameter
+    # @return the value that corresponds to the "jumpright" action
+    ##
+    def movementByAscendingStairs(self):
+        if self.isFalling:
+            return 0
+        return 2
+
+    ##
+    # This method returns the appropriate value for the action that is suited to handling the descending stairs
+    # which are made up of "Hard Blocks". These stairs appear in all level types, except for Castle levels.
+    # @author Emmanuel Najfar
+    #
+    # @param self obligatory parameter
+    # @return the value that corresponds to the "jumprunright" action
+    ##
+    def movementByDescendingStairs(self):
+        if self.isFalling:
+            return 0
+        return 4
