@@ -2,8 +2,14 @@ import SuperMarioImages
 import SuperMarioMap
 import random
 import numpy as np
+import EnumMovement
 
 class Movement():
+
+    positionMarioRow = 0
+    positionMarioCole = 0
+    oldYPositionMario = 16
+    isFalling = False
 
     def __init__(self):
 
@@ -15,6 +21,7 @@ class Movement():
         # jumprunright 65
         # else 0
         self.basicWeights = [0, 0, 25, 10, 65, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        self.movement = EnumMovement.Movement
 
     def bigJump(self, env, reward, done, info):
         height = 0
@@ -67,30 +74,132 @@ class Movement():
             else:
                 return env.step(self.weightedRandom(self.basicWeights))
 
+    ##
+    # Based on the position of Mario, this method looks around him and tries too find other objects
+    # @author Florian Weiskirchner
+    #
+    # @param oldYPositionMario is the Y Position from Mario in the last Move
+    # @param doMove Which move should be used from the COMPLEX_MOVEMENT array
+    # @param charForMario Which Char Mario has in the array
+    # @param isFalling is a bool which is true when Mario is falling and false when he is jumping or running
+    # @return doMove gets returned.
+    ##
     def goodMovement(self, sm_env):
-        doMove = 3
-        mario = "M"
-        positionMario = np.where(sm_env.environment == mario)
-        positionMarioRow = positionMario[0]
-        positionMarioCole = positionMario[1]
+        self.oldYPositionMario = self.positionMarioRow
+        doMove = self.movement.right.value
+        self.marioSearch(sm_env)
+        self.isFalling = self.checkIfFalling()
 
-        if sm_env.environment[positionMarioRow, positionMarioCole+1] == "G":
+        if sm_env.environment[self.positionMarioRow, self.positionMarioCole+2] == "G":                # eventuell if als Funktion machen
             return self.movementBygoomba()
 
-        # if sm_env.environment[positionMarioRow, positionMarioCole + 1] == "P":
+        if sm_env.environment[self.positionMarioRow + 1, self.positionMarioCole] == "P":
+            return self.movementOntopOfPipe()
 
-        if (sm_env.environment[:, positionMarioCole+1] == "P").any():
-            if sm_env.environment[positionMarioRow+1, positionMarioCole] == "@":
-                return self.movementByPipe()
-            return 0
+        if (sm_env.environment[:, self.positionMarioCole+1] == "P").any():
+            return self.movementByPipe()
 
-        # print(positionMarioRow)
-        # print(positionMarioCole)
-        # print(sm_env.environment[positionMarioRow, positionMarioCole])
+        if sm_env.environment[self.positionMarioRow, self.positionMarioCole + 1] == "C":
+            return self.movementByCooper()
+
+        # if sm_env.environment[self.positionMarioRow + 1, self.positionMarioCole + 1] == "G":
+        # return self.avoidGoomba()
+
+        # if sm_env.environment[self.positionMarioRow, self.positionMarioCole + 1] == "P":
+        # return self.movementByPipe()
+
+        if self.isFalling:
+            doMove = self.movement.left.value
         return doMove
 
-    def movementBygoomba(self):
-        return 2
+    ##
+    # This function search Mario (M) in the Array and saves his position.
+    # @author Florian Weiskirchner
+    #
+    # @param charForMario Which Char Mario has in the array
+    # @param positionMarioRow Y position of Mario in the array
+    # @param positionMarioCole X position of Mario in the array
+    ##
+    def marioSearch(self, sm_env):
+        charForMario = "M"
+        positionMario = np.where(sm_env.environment == charForMario)
+        self.positionMarioRow = positionMario[0]
+        self.positionMarioCole = positionMario[1]
+        return
 
+    ##
+    # Checks if Mario is falling based on his current Y position and the last Y position
+    # @author Florian Weiskirchner
+    #
+    # @param oldYPositionMario is the Y Position from Mario in the last Move
+    # @param positionMarioRow Y position of Mario in the array
+    # @return True or False for isFalling
+    ##
+    def checkIfFalling(self):
+        if self.positionMarioRow > self.oldYPositionMario:
+            print("Mario is Falling")
+            return True
+        return False
+
+    ##
+    # Movement from Mario when there is a Gommba in front of him
+    # @author Florian Weiskirchner
+    #
+    # @param movement this is a Enum with the movementoptions from COMPLEX_MOVEMENT
+    # @param isFalling is a bool which is true when Mario is falling and false when he is jumping or running
+    # @return a value from movement gets returned
+    ##
+    def movementBygoomba(self):
+        if self.isFalling:
+            return self.movement.NOOP.value
+        return self.movement.rightA.value
+
+    ##
+    # NOT USED
+    # Movement from Mario when there is a Gommba under him and tries to avoid him
+    # @author Florian Weiskirchner
+    #
+    # @param movement this is a Enum with the movementoptions from COMPLEX_MOVEMENT
+    # @return a value from movement gets returned
+    ##
+    # def avoidGoomba(self):
+        # return self.movement.left.value
+
+    ##
+    # Movement from Mario when there is a Pipe in front of him
+    # @author Florian Weiskirchner
+    #
+    # @param movement this is a Enum with the movementoptions from COMPLEX_MOVEMENT
+    # @param isFalling is a bool which is true when Mario is falling and false when he is jumping or running
+    # @return a value from movement gets returned
+    ##
     def movementByPipe(self):
-        return 4
+        if self.isFalling:
+            return self.movement.NOOP.value
+        return self.movement.rightAB.value
+
+    ##
+    # Movement from Mario when he is on a Pipe
+    # @author Florian Weiskirchner
+    #
+    # @param movement this is a Enum with the movementoptions from COMPLEX_MOVEMENT
+    # @param isFalling is a bool which is true when Mario is falling and false when he is jumping or running
+    # @return a value from movement gets returned
+    ##
+    def movementOntopOfPipe(self):
+        if self.isFalling:
+            return self.movement.NOOP.value
+        return self.movement.right.value
+
+    ##
+    # Movement from Mario when there is a Cooper in front of him
+    # @author Florian Weiskirchner
+    #
+    # @param movement this is a Enum with the movementoptions from COMPLEX_MOVEMENT
+    # @param isFalling is a bool which is true when Mario is falling and false when he is jumping or running
+    # @return a value from movement gets returned
+    ##
+    def movementByCooper(self):
+        if self.isFalling:
+            return self.movement.NOOP.value
+        return self.movement.rightA.value
