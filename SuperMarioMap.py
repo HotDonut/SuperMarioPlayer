@@ -10,15 +10,15 @@ import SuperMarioDisplay
 class Mario2DMap():
 
     ##
-    # Constructor that creates an empty 16x16 array
+    # Constructor that creates an empty 15x16 array
     #
     # @author Wolfgang Mair
     ##
     def __init__(self):
-        self.environment = np.array([[" "] * 16] * 16)
+        self.environment = np.array([[" "] * 16] * 15)
 
     ##
-    # This method prints the simplified version of the game which is saved in a 16x16 array
+    # This method prints the simplified version of the game which is saved in a 15x16 array
     #
     # @author Wolfgang Mair, Lukas Geyrhofer
     # @param niceConsoleOutput A boolean parameter which makes the output prettier for windows systems
@@ -27,7 +27,7 @@ class Mario2DMap():
         # Preparing the upper-border of the output
         erg = "#" * (len(self.environment)+2)
         erg += "\n"
-        # Looping through the 16x16 array and printing its symbols while also creating a border with # symbols around it
+        # Looping through the 15x16 array and printing its symbols while also creating a border with # symbols around it
         for x in self.environment:
             erg += "#"
             for y in x:
@@ -43,15 +43,15 @@ class Mario2DMap():
             print(erg)
 
     ##
-    # This method resets the simplified version of the game by overwriting it with an empty 16x16 array
+    # This method resets the simplified version of the game by overwriting it with an empty 15x16 array
     #
     # @author Wolfgang Mair
     ##
     def reloadEnvironment(self):
-        self.environment = np.array([[" "] * 16] * 16)
+        self.environment = np.array([[" "] * 16] * 15)
 
     ##
-    # This method changes specific places of the the simplified version of the game which is saved as a 16x16 array
+    # This method changes specific places of the the simplified version of the game which is saved as a 15x16 array
     #
     # @author Wolfgang Mair, Lukas Geyrhofer
     # @param loc A tupel which holds x and y coordinates of elements to be saved into the simplified version of the game
@@ -61,9 +61,9 @@ class Mario2DMap():
 
         # iterate through every x and y coordinates saved in the tuple loc
         for pt in zip(*loc[::-1]):
-            # make the coordinates fit in a 16x16 array
+            # make the coordinates fit in a 15x16 array
             x = int(np.floor(pt[0] / 16))
-            y = int(np.floor((pt[1] / 16)+1))
+            y = int(np.floor((pt[1] / 16)))
             # save on the corresponding array-slot the symbol character
             self.environment[y][x] = symbol
             # if it happens to be a pipe add extra symbols (since only the top-left part gets recognized)
