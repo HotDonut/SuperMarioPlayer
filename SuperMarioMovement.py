@@ -90,12 +90,21 @@ class Movement():
         self.marioSearch(sm_env)
         self.isFalling = self.checkIfFalling()
 
-        if sm_env.environment[self.positionMarioRow, self.positionMarioCole+2] == "G":                # eventuell if als Funktion machen
+        # check whether the square in the same row as and two column in front of mario contains
+        # the letter "G" in the array
+        # if yes, there is a Goomba in front of mario, therefore the respective function will be called
+        if sm_env.environment[self.positionMarioRow, self.positionMarioCole+2] == "G":
             return self.movementBygoomba()
 
+        # check whether the square in one row under and the same column mario contains
+        # the letter "P" in the array
+        # if yes, there is a Pipe under mario, therefore the respective function will be called
         if sm_env.environment[self.positionMarioRow + 1, self.positionMarioCole] == "P":
             return self.movementOntopOfPipe()
 
+        # check whether the square in the any row as and one column in front of mario contains
+        # the letter "P" in the array
+        # if yes, there is a Pipe in front of mario, therefore the respective function will be called
         if (sm_env.environment[:, self.positionMarioCole+1] == "P").any():
             return self.movementByPipe()
 
@@ -118,12 +127,6 @@ class Movement():
         # if yes, there is a stair in front of mario, therefore the respective function will be called
         if (sm_env.environment[:, self.positionMarioCole + 1] == "S").any():
             return self.movementByDescendingStairs()
-
-        # if sm_env.environment[self.positionMarioRow + 1, self.positionMarioCole + 1] == "G":
-        # return self.avoidGoomba()
-
-        # if sm_env.environment[self.positionMarioRow, self.positionMarioCole + 1] == "P":
-        # return self.movementByPipe()
 
         if self.isFalling:
             doMove = self.movement.left.value
@@ -228,7 +231,7 @@ class Movement():
     # @return the value that corresponds to the "jumprunright" action
     ##
     def movementByPit(self):
-        return 4
+        return self.movement.rightAB.value
 
     ##
     # This method returns the appropriate value for the action that is suited to handling the stairs
@@ -240,8 +243,8 @@ class Movement():
     ##
     def movementByAscendingStairs(self):
         if self.isFalling:
-            return 0
-        return 2
+            return self.movement.NOOP.value
+        return self.movement.rightA.value
 
     ##
     # This method returns the appropriate value for the action that is suited to handling the descending stairs
@@ -253,5 +256,5 @@ class Movement():
     ##
     def movementByDescendingStairs(self):
         if self.isFalling:
-            return 0
-        return 4
+            return self.movement.NOOP.value
+        return self.movement.rightAB.value
