@@ -54,12 +54,12 @@ while True:
         state = env.reset()
         state, reward, done, info = env.step(0)
 
-    # state, reward, done, info = sm_movement.badSearchMovement(state, reward, done, info, env)
+    state, reward, done, info = sm_movement.badSearchMovement(state, reward, done, info, env)
     # state, reward, done, info = env.step(sm_movement.weightedRandom(sm_movement.basicWeights))
     # state, reward, done, info = sm_movement.bigJump(env, reward, done, info)
     # state, reward, done, info = env.step(random.randint(0,len(COMPLEX_MOVEMENT)-1))
     # state, reward, done, info = env.step(1)
-    state, reward, done, info = env.step(sm_movement.goodMovement(sm_env))
+    # state, reward, done, info = env.step(sm_movement.goodMovement(sm_env))
 
     sm_env.reloadEnvironment()
     # Detecting for all relevant kind of obstacles

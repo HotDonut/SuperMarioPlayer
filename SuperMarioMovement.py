@@ -4,11 +4,23 @@ import random
 import numpy as np
 import EnumMovement
 
-class Movement():
 
+##
+# This class is responsible for every kind of movement the player makes. It also implements different
+# movement strategies.
+#
+# @author Wolfgang Mair, Florian Weiskirchner, Emmanuel Najfar
+# @version 18. January 2021
+##
+
+class Movement:
+    # The players X coordinate
     positionMarioRow = 0
+    # The players Y coordinate
     positionMarioCole = 0
+    # Value to calculate velocity of the player (falling or rising)
     oldYPositionMario = 16
+    # True if player is falling
     isFalling = False
 
     def __init__(self):
@@ -23,6 +35,16 @@ class Movement():
         self.basicWeights = [0, 0, 25, 10, 65, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.movement = EnumMovement.Movement
 
+    ##
+    # DEPRECATED
+    # This method lets the player jump the highest he can possibly can.
+    # @author Wolfgang Mair
+    #
+    # @param env The current game environment
+    # @param reward Integer which specifies the benefit of an action
+    # @param done Boolean which specifies if the game is finished
+    # @param info Dictionary which contains information about the environment
+    ##
     def bigJump(self, env, reward, done, info):
         height = 0
 
@@ -52,6 +74,13 @@ class Movement():
             # print("Wait!\n")
         return state, reward, done, info
 
+    ##
+    # DEPRECATED
+    # This method chooses random actions for the player based on a weighted array
+    # @author Wolfgang Mair
+    #
+    # @param weightArray Array of weights to all possible actions the player can take
+    ##
     def weightedRandom(self, weightArray):
 
         listOfValidActionsWithCountOfItemsInferedByWeights = []
@@ -62,6 +91,17 @@ class Movement():
 
         return random.choice(listOfValidActionsWithCountOfItemsInferedByWeights)
 
+    ##
+    # DEPRECATED
+    # This method tries to identify Goombas and Pits and avoid them with a big jump
+    # @author Wolfgang Mair
+    #
+    # @param state State array provided by the gym-super-mario-bros class of type ndarray:(240, 256, 3)
+    # @param env The current game environment
+    # @param reward Integer which specifies the benefit of an action
+    # @param done Boolean which specifies if the game is finished
+    # @param info Dictionary which contains information about the environment
+    ##
     def badSearchMovement(self, state, reward, done, info, env):
         maskGoomba = (state[194] == self.sm_images.goombaColor).all(axis=1)
         maskPit = (state[210] == self.sm_images.skyColor).all(axis=1)
@@ -93,7 +133,7 @@ class Movement():
         # check whether the square in the same row as and two column in front of mario contains
         # the letter "G" in the array
         # if yes, there is a Goomba in front of mario, therefore the respective function will be called
-        if sm_env.environment[self.positionMarioRow, self.positionMarioCole+2] == "G":
+        if sm_env.environment[self.positionMarioRow, self.positionMarioCole + 2] == "G":
             return self.movementBygoomba()
 
         # check whether the square in one row under and the same column mario contains
@@ -105,7 +145,7 @@ class Movement():
         # check whether the square in the any row as and one column in front of mario contains
         # the letter "P" in the array
         # if yes, there is a Pipe in front of mario, therefore the respective function will be called
-        if (sm_env.environment[:, self.positionMarioCole+1] == "P").any():
+        if (sm_env.environment[:, self.positionMarioCole + 1] == "P").any():
             return self.movementByPipe()
 
         if sm_env.environment[self.positionMarioRow, self.positionMarioCole + 2] == "C":
@@ -182,7 +222,7 @@ class Movement():
     # @return a value from movement gets returned
     ##
     # def avoidGoomba(self):
-        # return self.movement.left.value
+    # return self.movement.left.value
 
     ##
     # Movement from Mario when there is a Pipe in front of him
