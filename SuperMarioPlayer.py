@@ -8,7 +8,9 @@ import os
 import SuperMarioImages
 import SuperMarioMovement
 import SuperMarioMap
+import SuperMarioDisplay
 
+# List of all possible (rational) inputs the player can make
 COMPLEX_MOVEMENT = [
     ['NOOP'],
     ['right'],
@@ -24,17 +26,28 @@ COMPLEX_MOVEMENT = [
     ['up'],
 ]
 
+# Instantiating Helper Classes
 sm_movement = SuperMarioMovement.Movement()
 sm_images = SuperMarioImages.Images()
 sm_env = SuperMarioMap.Mario2DMap()
 
+# Instantiating Super Mario Bros. environment
 env = gym_super_mario_bros.make('SuperMarioBros-v0').env
 env = JoypadSpace(env, COMPLEX_MOVEMENT)
 
+# Specifies the framerate for the console output. Must be a value >= 0. 0 is maximum framerate.
+# A framerate of e.g. 20 only shows every 20th frame.
+consoleFramerate = 0
+
+# If this flag is set to true console output will be better when using Windows Command Line. Set to False
+# if not using Windows or when not using the Windows Command Line to execute the script.
+niceConsoleOutput = True
+
+if niceConsoleOutput:
+    SuperMarioDisplay.clear_cmd()
+
 done = True
-framerate = 5
 i = 0
-niceConsoleOutput = False
 
 while True:
     if done:
@@ -49,6 +62,7 @@ while True:
     state, reward, done, info = env.step(sm_movement.goodMovement(sm_env))
 
     sm_env.reloadEnvironment()
+    # Detecting for all relevant kind of obstacles
     sm_env.changeEnvironment(sm_images.detectQuestionBox(state, False), "?")
     sm_env.changeEnvironment(sm_images.detectQuestionBoxlight(state, False), "?")
     sm_env.changeEnvironment(sm_images.detectBlock(state, False), "B")
@@ -59,12 +73,12 @@ while True:
     sm_env.changeEnvironment(sm_images.detectCooper(state, False), "C")
     sm_env.changeEnvironment(sm_images.detectStairBlock(state, False), "S")
 
-    if i == framerate:
-       sm_env.printEnvironment(niceConsoleOutput)
-       sys.stdout.flush()
-       i = 0
+    if i == consoleFramerate:
+        sm_env.printEnvironment(niceConsoleOutput)
+        i = 0
 
     env.render()
-    #time.sleep(0.02)
-    i = i + 1
+    # time.sleep(0.02)
+    if consoleFramerate > 0:
+        i = i + 1
 env.close()
