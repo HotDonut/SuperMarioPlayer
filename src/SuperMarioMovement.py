@@ -1,8 +1,9 @@
-import SuperMarioImages
-import SuperMarioMap
 import random
 import numpy as np
-import EnumMovement
+
+import src.SuperMarioImages as SuperMarioImages
+import src.SuperMarioMap as SuperMarioMap
+import src.EnumMovement as EnumMovement
 
 
 ##
@@ -14,6 +15,23 @@ import EnumMovement
 ##
 
 class Movement:
+
+    # List of all possible (rational) inputs the player can make
+    COMPLEX_MOVEMENT = [
+        ['NOOP'],
+        ['right'],
+        ['right', 'A'],
+        ['right', 'B'],
+        ['right', 'A', 'B'],
+        ['A'],
+        ['left'],
+        ['left', 'A'],
+        ['left', 'B'],
+        ['left', 'A', 'B'],
+        ['down'],
+        ['up'],
+    ]
+
     # The players X coordinate
     positionMarioRow = 0
     # The players Y coordinate

@@ -1,5 +1,5 @@
 import numpy as np
-import SuperMarioDisplay
+import src.SuperMarioConsoleDebugWindow as SuperMarioConsoleDebugWindow
 
 ##
 # This class deals with everything related to the simplification and its corresponding representation of the game.
@@ -23,7 +23,7 @@ class Mario2DMap():
     # @author Wolfgang Mair, Lukas Geyrhofer
     # @param niceConsoleOutput A boolean parameter which makes the output prettier for windows systems
     ##
-    def printEnvironment(self, niceConsoleOutput):
+    def printEnvironment(self):
         # Preparing the upper-border of the output
         erg = "#" * (len(self.environment)+2)
         erg += "\n"
@@ -36,11 +36,7 @@ class Mario2DMap():
         erg += "#" * (len(self.environment)+2)
         erg += "\n"
 
-        # when true use another display method more suitable for windows systems
-        if niceConsoleOutput:
-            SuperMarioDisplay.print_nice(erg)
-        else:
-            print(erg)
+        SuperMarioConsoleDebugWindow.debugPrint(erg)
 
     ##
     # This method resets the simplified version of the game by overwriting it with an empty 15x16 array

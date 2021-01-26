@@ -12,40 +12,40 @@ import cv2
 class Images:
     # Loading all template images for later detection on instance creation
     # All images are of size 16x16 except mario.png (6x6) and pipe.png (32x32)
-    goombaImage = cv2.imread('assets/goomba.png', 0)
-    marioImage = cv2.imread('assets/mario.png', 0)
-    questionBoxImage = cv2.imread('assets/questionbox.png', 0)
-    questionBoxImageLight = cv2.imread('assets/questionbox_light.png', 0)
-    blockImage = cv2.imread('assets/block.png', 0)
-    floorImage = cv2.imread('assets/floor.png', 0)
-    pipeImage = cv2.imread('assets/pipe.png', 0)
-    cooperImage = cv2.imread('assets/cooper.png', 0)
-    stairBlockImage = cv2.imread('assets/stairBlock.png', 0)
+    __goombaImage = cv2.imread('assets/goomba.png', 0)
+    __marioImage = cv2.imread('assets/mario.png', 0)
+    __questionBoxImage = cv2.imread('assets/questionbox.png', 0)
+    __questionBoxImageLight = cv2.imread('assets/questionbox_light.png', 0)
+    __blockImage = cv2.imread('assets/block.png', 0)
+    __floorImage = cv2.imread('assets/floor.png', 0)
+    __pipeImage = cv2.imread('assets/pipe.png', 0)
+    __cooperImage = cv2.imread('assets/cooper.png', 0)
+    __stairBlockImage = cv2.imread('assets/stairBlock.png', 0)
 
     def __init__(self):
         # Initializing img_gray and state for later use in detection functions
-        self.img_gray = 0
-        self.state = 0
+        self.__img_gray = 0
+        self.__state = 0
         # Goomba, boxes and floor have the same color
         # cannot be used for value at goombas
-        self.goombaColor = np.array([228, 92, 16])
+        self.__goombaColor = np.array([228, 92, 16])
 
         # Pits and background Sky
-        self.skyColor = np.array([104, 136, 252])
+        self.__skyColor = np.array([104, 136, 252])
 
         # Goomba Eye array
-        self.goombaEyeArray = np.array(
+        self.__goombaEyeArray = np.array(
             [[228, 92, 16], [228, 92, 16], [228, 92, 16], [240, 208, 176], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0],
              [0, 0, 0], [0, 0, 0], [240, 208, 176], [228, 92, 16], [228, 92, 16], [228, 92, 16]])
 
         # Pipe array
-        self.pipeArray = np.array(
+        self.__pipeArray = np.array(
             [[0, 0, 0], [184, 248, 24], [184, 248, 24], [184, 248, 24], [0, 168, 0], [0, 168, 0], [184, 248, 24],
              [184, 248, 24], [184, 248, 24], [184, 248, 24], [184, 248, 24], [0, 168, 0], [184, 248, 24],
              [184, 248, 24]])
 
         # Koopa array
-        self.koopaShellArray = np.array(
+        self.__koopaShellArray = np.array(
             [[252, 252, 252], [0, 168, 0], [0, 168, 0], [0, 168, 0], [0, 168, 0], [252, 168, 68], [0, 168, 0],
              [252, 252, 252], [252, 252, 252], [252, 168, 68]])
 
@@ -53,11 +53,15 @@ class Images:
     # Converts the current state array of the game into an grayscale image to be used for detection
     # by opencv2
     # @author Lukas Geyrhofer
+    # 
+    # @param state State array provided by the gym-super-mario-bros class of type ndarray:(240, 256, 3)
     ##
-    def processImage(self):
+    def processImage(self, state):
+        self.__state = state
+
         # converts state (pixel array) to image
-        img = Image.fromarray(self.state, 'RGB')
-        self.img_gray = cv2.cvtColor(np.array(img), cv2.COLOR_BGR2GRAY)
+        img = Image.fromarray(self.__state, 'RGB')
+        self.__img_gray = cv2.cvtColor(np.array(img), cv2.COLOR_BGR2GRAY)
 
     ##
     # Detects all occurences of a given template image in the given state image, and returns
@@ -72,17 +76,16 @@ class Images:
     # with the corresponding color parameter
     ##
     def detect(self, template, threshold, color, debug):
-        res = cv2.matchTemplate(self.img_gray, template, cv2.TM_CCOEFF_NORMED)
+        res = cv2.matchTemplate(self.__img_gray, template, cv2.TM_CCOEFF_NORMED)
 
         loc = np.where(res >= threshold)
-        #  print(loc)
         if debug:
             for pt in zip(*loc[::-1]):
                 # cv2.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0, 0, 255), 2)
                 # print(pt[0], pt[1])
-                self.state[:, pt[0]] = color
-                self.state[pt[1], :] = color
-                print("Goomba position x:", pt[0] / 16, "Goomba position y:", pt[1] / 16, "\n")
+                self.__state[:, pt[0]] = color
+                self.__state[pt[1], :] = color
+                debugPrint("Goomba position x:", pt[0] / 16, "Goomba position y:", pt[1] / 16, "\n")
         return loc
 
     ##
@@ -90,17 +93,15 @@ class Images:
     # be a small area (due to Mario's different sprites) the returned coordinates have to be normalized to be consistent
     # with the other templates
     # @author Lukas Geyrhofer
-    # @param state State array provided by the gym-super-mario-bros class of type ndarray:(240, 256, 3)
     # @param debug True/False flag to enter debug mode. When enabled marked will be marked
     # red when detected
     ##
-    def detectMario(self, state, debug):
-        self.state = state
-        self.processImage()
+    def detectMario(self, debug):
+        #self.processImage()
         # w, h = self.marioImage.shape[::-1]
         color = [255, 0, 0]
 
-        res = cv2.matchTemplate(self.img_gray, self.marioImage, cv2.TM_CCOEFF_NORMED)
+        res = cv2.matchTemplate(self.__img_gray, self.__marioImage, cv2.TM_CCOEFF_NORMED)
         threshold = 0.7
         loc = np.where(res >= threshold)
         #  print(loc)
@@ -120,17 +121,14 @@ class Images:
     ##
     # Function to detect Goombas
     # @author Lukas Geyrhofer
-    # @param state State array provided by the gym-super-mario-bros class of type ndarray:(240, 256, 3)
     # @param debug True/False flag to enter debug mode. The flag will be be handed on to the detect function.
     # Goombas will be marked by the detect function.
     ##
-    def detectGoomba(self, state, debug):
-        self.state = state
-        self.processImage()
+    def detectGoomba(self, debug):
         color = [0, 0, 0]
         threshold = 0.5
 
-        return self.detect(self.goombaImage, threshold, color, debug)
+        return self.detect(self.__goombaImage, threshold, color, debug)
 
     ##
     # Function to detect Question Boxes
@@ -139,99 +137,79 @@ class Images:
     # @param debug True/False flag to enter debug mode. The flag will be be handed on to the detect function.
     # Question Boxes will be marked by the detect function.
     ##
-    def detectQuestionBox(self, state, debug):
-        self.state = state
-        self.processImage()
+    def detectQuestionBox(self, debug):
         color = [0, 255, 0]
         threshold = 0.9
 
-        return self.detect(self.questionBoxImage, threshold, color, debug)
+        return self.detect(self.__questionBoxImage, threshold, color, debug)
 
     ##
     # Function to detect Question Boxes in blinking state
     # @author Lukas Geyrhofer
-    # @param state State array provided by the gym-super-mario-bros class of type ndarray:(240, 256, 3)
     # @param debug True/False flag to enter debug mode. The flag will be be handed on to the detect function.
     # Blinking Question Boxes will be marked by the detect function.
     ##
-    def detectQuestionBoxlight(self, state, debug):
-        self.state = state
-        self.processImage()
+    def detectQuestionBoxlight(self, debug):
         color = [0, 255, 0]
         threshold = 0.9
 
-        return self.detect(self.questionBoxImageLight, threshold, color, debug)
+        return self.detect(self.__questionBoxImageLight, threshold, color, debug)
 
     ##
     # Function to detect Brick Blocks
     # @author Lukas Geyrhofer
-    # @param state State array provided by the gym-super-mario-bros class of type ndarray:(240, 256, 3)
     # @param debug True/False flag to enter debug mode. The flag will be be handed on to the detect function.
     # Brick Blocks will be marked by the detect function.
     ##
-    def detectBlock(self, state, debug):
-        self.state = state
-        self.processImage()
+    def detectBlock(self, debug):
         color = [0, 255, 0]
         threshold = 0.9
 
-        return self.detect(self.blockImage, threshold, color, debug)
+        return self.detect(self.__blockImage, threshold, color, debug)
 
     ##
     # Function to detect Floor Blocks
     # @author Lukas Geyrhofer
-    # @param state State array provided by the gym-super-mario-bros class of type ndarray:(240, 256, 3)
     # @param debug True/False flag to enter debug mode. The flag will be be handed on to the detect function.
     # Floor Blocks will be marked by the detect function.
     ##
-    def detectFloor(self, state, debug):
-        self.state = state
-        self.processImage()
+    def detectFloor(self, debug):
         color = [0, 255, 255]
         threshold = 0.8
 
-        return self.detect(self.floorImage, threshold, color, debug)
+        return self.detect(self.__floorImage, threshold, color, debug)
     ##
     # Function to detect Pipes
     # @author Lukas Geyrhofer
-    # @param state State array provided by the gym-super-mario-bros class of type ndarray:(240, 256, 3)
     # @param debug True/False flag to enter debug mode. The flag will be be handed on to the detect function.
     # Pipes will be marked by the detect function.
     ##
-    def detectPipe(self, state, debug):
-        self.state = state
-        self.processImage()
+    def detectPipe(self, debug):
         color = [0, 255, 255]
         threshold = 0.9
 
-        return self.detect(self.pipeImage, threshold, color, debug)
+        return self.detect(self.__pipeImage, threshold, color, debug)
 
     ##
     # Function to detect Coopers
     # @author Lukas Geyrhofer
-    # @param state State array provided by the gym-super-mario-bros class of type ndarray:(240, 256, 3)
     # @param debug True/False flag to enter debug mode. The flag will be be handed on to the detect function.
     # Coopers will be marked by the detect function.
     ##
-    def detectCooper(self, state, debug):
-        self.state = state
-        self.processImage()
+    def detectCooper(self, debug):
         color = [0, 100, 255]
         threshold = 0.6
 
-        return self.detect(self.cooperImage, threshold, color, debug)
+        return self.detect(self.__cooperImage, threshold, color, debug)
 
     ##
     # Function to detect Stair Blocks
     # @author Lukas Geyrhofer
-    # @param state State array provided by the gym-super-mario-bros class of type ndarray:(240, 256, 3)
     # @param debug True/False flag to enter debug mode. The flag will be be handed on to the detect function.
     # Stair Blocks will be marked by the detect function.
     ##
-    def detectStairBlock(self, state, debug):
-        self.state = state
-        self.processImage()
+    def detectStairBlock(self, debug):
         color = [100, 100, 255]
         threshold = 0.9
 
-        return self.detect(self.stairBlockImage, threshold, color, debug)
+        return self.detect(self.__stairBlockImage, threshold, color, debug)
