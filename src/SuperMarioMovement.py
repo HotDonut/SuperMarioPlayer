@@ -55,6 +55,9 @@ class Movement:
         self.jumpingStarted = False
         self.jumpingLong = False
 
+        self.jumpingTries = 0
+        self.jumpingFailedBecausePressedToEarly = 4
+
     ##
     # Based on the position of Mario, this method looks around him and tries too find other objects
     # @author Florian Weiskirchner
@@ -67,19 +70,24 @@ class Movement:
     ##
     def move(self):
         self.oldYPositionMario = self.positionMarioRow
-        
         positionMario = np.where(self.map.environment == "M")
         self.positionMarioRow = positionMario[0]
         self.positionMarioCol = positionMario[1]
 
-        try:        
-            backOnTheFloorAfterJump =  (self.notUnderMe(" ") and self.notUnderMe("G") and self.notUnderMe("C") and self.positionMarioRow > self.oldYPositionMario) or (self.underMe("@") or self.underMe("S"))
+        try:
+            if self.jumpingTries == self.jumpingFailedBecausePressedToEarly:
+                self.jumpingTries = 0
+                return self.right()
+
+            backOnTheFloorAfterJump = (self.notUnderMe(" ") and self.notUnderMe("G") and self.notUnderMe(
+                "C") and self.positionMarioRow > self.oldYPositionMario) or (self.underMe("@") or self.underMe("S"))
             if backOnTheFloorAfterJump:
                 self.jumpingStarted = False
-            elif  self.underMe("G"):
+            elif self.underMe("G"):
                 return self.jumpShort()
 
             if self.jumpingStarted:
+                self.jumpingTries = 0
                 if self.jumpingLong:
                     return self.jumpLong()
                 else:
@@ -91,31 +99,37 @@ class Movement:
             # the letter "P" in the array
             # if yes, there is a Pipe under mario, therefore the respective function will be called
             if self.underMe("P"):
+                self.jumpingTries = self.jumpingTries + 1
                 return self.jumpShort()
 
             # check whether the square in the any row as and one column in front of mario contains
             # the letter "P" in the array
             # if yes, there is a Pipe in front of mario, therefore the respective function will be called
-            #if (map.environment[:, self.positionMarioCol + 1] == "P").any():
+            # if (map.environment[:, self.positionMarioCol + 1] == "P").any():
             if self.inFrontOfMeInFullColumn("P", 3):
+                self.jumpingTries = self.jumpingTries + 1
                 return self.jumpLong()
 
             # check whether the square one column in front and one row below mario is empty in the array
             # if yes, there is a pit in front of mario, therefore the respective function will be called
             if self.underMeUpcoming(" "):
+                self.jumpingTries = self.jumpingTries + 1
                 return self.jumpLong()
 
             # check whether the square in any row and one column in front of mario contains
             # the letter "S" in the array
             # if yes, there is a stair in front of mario, therefore the respective function will be called
             if self.inFrontOfMe("S", 3):
+                self.jumpingTries = self.jumpingTries + 1
                 return self.jumpShort()
 
-            #if map.environment[self.positionMarioRow, self.positionMarioCol + 1] == "G" or map.environment[self.positionMarioRow, self.positionMarioCol + 2] == "G":
-            if self.inFrontOfMe("G", 3): # Goomba
+            # if map.environment[self.positionMarioRow, self.positionMarioCol + 1] == "G" or map.environment[self.positionMarioRow, self.positionMarioCol + 2] == "G":
+            if self.inFrontOfMe("G", 3):  # Goomba
+                self.jumpingTries = self.jumpingTries + 1
                 return self.jumpShort()
-            
-            if self.inFrontOfMe("C", 4): # Coopa
+
+            if self.inFrontOfMe("C", 4):  # Coopa
+                self.jumpingTries = self.jumpingTries + 1
                 return self.jumpShort()
 
             return self.right()
@@ -147,7 +161,8 @@ class Movement:
 
     def inFrontOfMeInFullColumn(self, sign, previewLengthX):
         for x in range(0, previewLengthX):
-            if(self.map.environment[:, self.positionMarioCol + x] == sign).any():
+            if sign in self.map.environment[:, self.positionMarioCol + x]:
+                print ("debug")
                 return True
         return False;
 
