@@ -3,11 +3,14 @@ from os import system
 
 from src.SuperMarioConfig import SuperMarioConfig as SuperMarioConfig
 
-class SuperMarioConsoleDebugWindow:
 
-    class COORD(Structure):
-        pass # like noop - no operation
-    COORD._fields_ = [("X", c_short), ("Y", c_short)]
+class COORD(Structure):
+    pass  # like noop - no operation
+
+
+COORD._fields_ = [("X", c_short), ("Y", c_short)]
+
+class SuperMarioConsoleDebugWindow:
 
     def __init__(self):
         # Output Handles to interact with Windows Command Line
@@ -22,7 +25,7 @@ class SuperMarioConsoleDebugWindow:
     # @author Lukas Geyrhofer
     # @param output String which to print to the Command Line
     ##
-    def debugPrint(self,output):
+    def debugPrint(self, output):
         # when true use another display method more suitable for windows systems
         if(SuperMarioConfig.WindowsConsoleOutput):
             c = output.encode("windows-1252")
