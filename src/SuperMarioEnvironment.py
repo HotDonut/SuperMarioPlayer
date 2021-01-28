@@ -32,6 +32,8 @@ class SuperMarioEnvironment:
             if done:
                 state = env.reset()
                 state, reward, done, info = env.step(0)
+                env.render()
+                movement.reset()
 
             # Detecting for all relevant kind of obstacles
             images.processImage(state)
@@ -41,10 +43,10 @@ class SuperMarioEnvironment:
             map.changeMap(images.detectBlock(), "B")
             map.changeMap(images.detectFloor(), "@")
             map.changeMap(images.detectGoomba(), "G")
-            map.changeMap(images.detectMario(), "M")
             map.changeMap(images.detectPipe(), "P")
             map.changeMap(images.detectCooper(), "C")
             map.changeMap(images.detectStairBlock(), "S")
+            map.changeMap(images.detectMario(), "M")
 
             # visualization
             if consoleFrameCount >= SuperMarioConfig.ConsoleFramerate:
@@ -61,7 +63,7 @@ class SuperMarioEnvironment:
 
             # execute action
             calculatedAction = movement.move()
-            debugWindow.debugPrint(map.toString())
+            debugWindow.debugPrint(calculatedAction)
             state, reward, done, info = env.step(calculatedAction)
             
         env.close()

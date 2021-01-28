@@ -3,10 +3,8 @@ from os import system
 
 from src.SuperMarioConfig import SuperMarioConfig as SuperMarioConfig
 
-
 class COORD(Structure):
     pass  # like noop - no operation
-
 
 COORD._fields_ = [("X", c_short), ("Y", c_short)]
 

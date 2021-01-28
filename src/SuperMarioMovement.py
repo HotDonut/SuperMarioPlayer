@@ -3,6 +3,7 @@ import numpy as np
 from enum import Enum
 
 import src.SuperMarioImages as SuperMarioImages
+from src.SuperMarioConfig import SuperMarioConfig as SuperMarioConfig
 
 class ControllerMovement(Enum):
     NOOP = 0
@@ -48,15 +49,16 @@ class Movement:
     def __init__(self, theMap):
         self.map = theMap
 
+        self.reset()
+
+    def reset(self):
         # The players X/Y coordinate
         self.positionMarioRow = 1000 # down there
         self.positionMarioCol = 1000 # down there
         
         self.jumpingStarted = False
         self.jumpingLong = False
-
-        self.jumpingTries = 0
-        self.jumpingFailedBecausePressedToEarly = 4
+        self.leftTheFloorOnce = False
 
     ##
     # Based on the position of Mario, this method looks around him and tries too find other objects
@@ -75,61 +77,46 @@ class Movement:
         self.positionMarioCol = positionMario[1]
 
         try:
-            if self.jumpingTries == self.jumpingFailedBecausePressedToEarly:
-                self.jumpingTries = 0
-                return self.right()
-
-            backOnTheFloorAfterJump = (self.notUnderMe(" ") and self.notUnderMe("G") and self.notUnderMe(
-                "C") and self.positionMarioRow > self.oldYPositionMario) or (self.underMe("@") or self.underMe("S"))
+            backOnTheFloorAfterJump = self.leftTheFloorOnce and (self.underMe("@") or self.underMe("S") or self.underMe("B") or self.underMe("?"))
             if backOnTheFloorAfterJump:
                 self.jumpingStarted = False
-            elif self.underMe("G"):
-                return self.jumpShort()
+                self.leftTheFloorOnce = False
+                return ControllerMovement.NOOP.value # this noop is important, because else you can not jump directly after a long-jump
 
             if self.jumpingStarted:
-                self.jumpingTries = 0
+                self.leftTheFloorOnce = self.leftTheFloorOnce or self.underMe(" ")
                 if self.jumpingLong:
-                    return self.jumpLong()
+                    return ControllerMovement.rightAB.value
                 else:
-                    if self.underMe("G") or self.underMe("C"):
-                        return self.jumpLong()
-                    return self.right()
+                    return ControllerMovement.right.value
 
             # check whether the square in one row under and the same column mario contains
             # the letter "P" in the array
             # if yes, there is a Pipe under mario, therefore the respective function will be called
             if self.underMe("P"):
-                self.jumpingTries = self.jumpingTries + 1
                 return self.jumpShort()
 
             # check whether the square in the any row as and one column in front of mario contains
             # the letter "P" in the array
             # if yes, there is a Pipe in front of mario, therefore the respective function will be called
-            # if (map.environment[:, self.positionMarioCol + 1] == "P").any():
             if self.inFrontOfMeInFullColumn("P", 3):
-                self.jumpingTries = self.jumpingTries + 1
                 return self.jumpLong()
 
             # check whether the square one column in front and one row below mario is empty in the array
             # if yes, there is a pit in front of mario, therefore the respective function will be called
             if self.underMeUpcoming(" "):
-                self.jumpingTries = self.jumpingTries + 1
                 return self.jumpLong()
 
             # check whether the square in any row and one column in front of mario contains
             # the letter "S" in the array
             # if yes, there is a stair in front of mario, therefore the respective function will be called
-            if self.inFrontOfMe("S", 3):
-                self.jumpingTries = self.jumpingTries + 1
+            if self.inFrontOfMe("S", 2):
                 return self.jumpShort()
 
-            # if map.environment[self.positionMarioRow, self.positionMarioCol + 1] == "G" or map.environment[self.positionMarioRow, self.positionMarioCol + 2] == "G":
             if self.inFrontOfMe("G", 3):  # Goomba
-                self.jumpingTries = self.jumpingTries + 1
                 return self.jumpShort()
 
-            if self.inFrontOfMe("C", 4):  # Coopa
-                self.jumpingTries = self.jumpingTries + 1
+            if self.inFrontOfMe("C", 3):  # Coopa
                 return self.jumpShort()
 
             return self.right()
@@ -137,15 +124,19 @@ class Movement:
             return self.doNothing()
 
 
-    def jumpLong(self):
+    def __jumpInternal(self, isLong):
         self.jumpingStarted = True
-        self.jumpingLong = True
-        return ControllerMovement.rightAB.value
+        self.jumpingLong = isLong
+        if isLong:
+            return ControllerMovement.rightA.value
+        else:
+            return ControllerMovement.rightA.value
+
+    def jumpLong(self):
+        return self.__jumpInternal(True)
 
     def jumpShort(self):
-        self.jumpingStarted = True
-        self.jumpingLong = False
-        return ControllerMovement.rightA.value
+        return self.__jumpInternal(False)
 
     def right(self):
         return ControllerMovement.right.value
@@ -162,7 +153,6 @@ class Movement:
     def inFrontOfMeInFullColumn(self, sign, previewLengthX):
         for x in range(0, previewLengthX):
             if sign in self.map.environment[:, self.positionMarioCol + x]:
-                print ("debug")
                 return True
         return False;
 
