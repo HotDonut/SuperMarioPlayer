@@ -127,10 +127,8 @@ class Movement:
     def __jumpInternal(self, isLong):
         self.jumpingStarted = True
         self.jumpingLong = isLong
-        if isLong:
-            return ControllerMovement.rightA.value
-        else:
-            return ControllerMovement.rightA.value
+        return ControllerMovement.rightA.value
+
 
     def jumpLong(self):
         return self.__jumpInternal(True)

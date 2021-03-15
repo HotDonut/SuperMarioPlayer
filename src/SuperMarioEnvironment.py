@@ -63,7 +63,7 @@ class SuperMarioEnvironment:
 
             # execute action
             calculatedAction = movement.move()
-            debugWindow.debugPrint(map.toString())
+            debugWindow.debugPrint(map.toString()+"\n"+"\n"+str(calculatedAction))
             state, reward, done, info = env.step(calculatedAction)
             
         env.close()
