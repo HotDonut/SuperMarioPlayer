@@ -1,9 +1,5 @@
-import random
 import numpy as np
 from enum import Enum
-
-import src.SuperMarioImages as SuperMarioImages
-from src.SuperMarioConfig import SuperMarioConfig as SuperMarioConfig
 
 class ControllerMovement(Enum):
     NOOP = 0

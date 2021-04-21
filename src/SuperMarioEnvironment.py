@@ -1,7 +1,3 @@
-import sys
-import time
-import os
-
 import gym_super_mario_bros
 from nes_py.wrappers import JoypadSpace
 
