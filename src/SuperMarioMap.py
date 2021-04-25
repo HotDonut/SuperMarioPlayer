@@ -20,7 +20,9 @@ class Mario2DMap():
     # This method prints the simplified version of the game which is saved in a 15x16 array
     #
     # @author Wolfgang Mair, Lukas Geyrhofer
-    # @param niceConsoleOutput A boolean parameter which makes the output prettier for windows systems
+    # @param result, array of chars which represents the map
+    #
+    # @return result array
     ##
     def toString(self):
 
