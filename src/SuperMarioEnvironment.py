@@ -11,10 +11,17 @@ class SuperMarioEnvironment:
     
     def startPlayer(self):
 
+        # SuperMarioConfig needs a concrete object to use json encoding/decoding
+        config = SuperMarioConfig()
+        # load config into SuperMarioConfig class variables
+        config.load_config("SuperMarioConfig.json")
+        # create debug config json file (current config)
+        config.write_json_file()
+
         map = SuperMarioMap.Mario2DMap()
         movement = SuperMarioMovement.Movement(map)
         images = SuperMarioImages.Images()
-        debugWindow = SuperMarioConsoleDebugWindow.SuperMarioConsoleDebugWindow();
+        debugWindow = SuperMarioConsoleDebugWindow.SuperMarioConsoleDebugWindow()
 
         # Instantiating Super Mario Bros. environment
         env = JoypadSpace(gym_super_mario_bros.make('SuperMarioBros-v0').env, movement.COMPLEX_MOVEMENT)

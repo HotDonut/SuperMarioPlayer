@@ -1,0 +1,15 @@
+{
+    "WindowsConsoleOutput": true,
+    "ConsoleFramerate": 0,
+    "RenderFramerate": 0,
+    "DebugQuestionBoxDetection": false,
+    "DebugQuestionBoxLightDetection": false,
+    "DebugBlockDetection": false,
+    "DebugFloorDetection": false,
+    "DebugPipeDetection": false,
+    "DebugCooperDetection": false,
+    "DebugStairDetection": false,
+    "DebugMarioDetection": false,
+    "DebugGoombaDetection": false,
+    "JumpingFailedBecausePressedToEarly": 50
+}
