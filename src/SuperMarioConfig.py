@@ -1,12 +1,12 @@
 import json
-
+from os import path
 
 ##
 # This class contains all important configuration information of the game
 # Furthermore it contains functions to convert the configuration into a json file and vice versa
 #
 # @author Wolfgang Mair, Lukas Geyrhofer
-# @version 24. April 2021
+# @version 07. May 2021
 ##
 
 class SuperMarioConfig:
@@ -81,27 +81,35 @@ class SuperMarioConfig:
     # This method loads a configuration from a json file.
     # It then writes the values into the SuperMarioConfig instance it was called from
     # Existing Output will be overwritten
+    # If an error occurs an corresponding text will be printed, the external config file will be ignored and the default values will be used
     #
     # @author Wolfgang Mair
     # @param file_path The string path to the json file
     ##
     def load_config(self, file_path):
 
-        config_text = ""
-        with open(file_path, 'r') as configFile:
-            config_text = configFile.read()
+        if(path.exists(file_path)):
+            config_text = ""
+            with open(file_path, 'r') as configFile:
+                config_text = configFile.read()
 
-        jsonData = json.loads(config_text)
-        SuperMarioConfig.WindowsConsoleOutput = jsonData["WindowsConsoleOutput"]
-        SuperMarioConfig.ConsoleFramerate = jsonData["ConsoleFramerate"]
-        SuperMarioConfig.RenderFramerate = jsonData["RenderFramerate"]
-        SuperMarioConfig.DebugQuestionBoxDetection = jsonData["DebugQuestionBoxDetection"]
-        SuperMarioConfig.DebugQuestionBoxLightDetection = jsonData["DebugQuestionBoxLightDetection"]
-        SuperMarioConfig.DebugBlockDetection = jsonData["DebugBlockDetection"]
-        SuperMarioConfig.DebugFloorDetection = jsonData["DebugFloorDetection"]
-        SuperMarioConfig.DebugPipeDetection = jsonData["DebugPipeDetection"]
-        SuperMarioConfig.DebugCooperDetection = jsonData["DebugCooperDetection"]
-        SuperMarioConfig.DebugStairDetection = jsonData["DebugStairDetection"]
-        SuperMarioConfig.DebugMarioDetection = jsonData["DebugMarioDetection"]
-        SuperMarioConfig.DebugGoombaDetection = jsonData["DebugGoombaDetection"]
-        SuperMarioConfig.JumpingFailedBecausePressedToEarly = jsonData["JumpingFailedBecausePressedToEarly"]
+            try:
+                jsonData = json.loads(config_text)
+                SuperMarioConfig.WindowsConsoleOutput = bool(jsonData["WindowsConsoleOutput"])
+                SuperMarioConfig.ConsoleFramerate = int(jsonData["ConsoleFramerate"])
+                SuperMarioConfig.RenderFramerate = int(jsonData["RenderFramerate"])
+                SuperMarioConfig.DebugQuestionBoxDetection = bool(jsonData["DebugQuestionBoxDetection"])
+                SuperMarioConfig.DebugQuestionBoxLightDetection = bool(jsonData["DebugQuestionBoxLightDetection"])
+                SuperMarioConfig.DebugBlockDetection = bool(jsonData["DebugBlockDetection"])
+                SuperMarioConfig.DebugFloorDetection = bool(jsonData["DebugFloorDetection"])
+                SuperMarioConfig.DebugPipeDetection = bool(jsonData["DebugPipeDetection"])
+                SuperMarioConfig.DebugCooperDetection = bool(jsonData["DebugCooperDetection"])
+                SuperMarioConfig.DebugStairDetection = bool(jsonData["DebugStairDetection"])
+                SuperMarioConfig.DebugMarioDetection = bool(jsonData["DebugMarioDetection"])
+                SuperMarioConfig.DebugGoombaDetection = bool(jsonData["DebugGoombaDetection"])
+                SuperMarioConfig.JumpingFailedBecausePressedToEarly = int(jsonData["JumpingFailedBecausePressedToEarly"])
+            except:
+                print("Config file contained an invalid value for one of the parameters. Using default values to continue.")
+
+        else:
+            print("Config file not found. Using default values to continue.")
