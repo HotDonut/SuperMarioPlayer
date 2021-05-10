@@ -1,120 +1,156 @@
 {
-    "WindowsConsoleOutput": true,
-    "ConsoleFramerate": 0,
-    "RenderFramerate": 0,
-    "JumpingFailedBecausePressedToEarly": 50,
-    "imageAssetsPath": "assets/",
-    "debugAll" : false,
-    "imageDetectionConfiguration": [
-        {
-            "mario": [
-                {
-                    "name": "mario",
-                    "color": "red",
-                    "threshold": 0.7,
-                    "debug": false,
-                    "correctionX": 6,
-                    "correctionY": 2,
-                    "detectionSymbol": "M",
-                    "levelTheme": ["normal", "underground", "castle", "underwater"]
-                }
-            ],
-            "goomba": [
-                {
-                    "name": "goomba",
-                    "color": "brown",
-                    "threshold": 0.5,
-                    "debug": false,
-                    "correctionX": 0,
-                    "correctionY": 0,
-                    "detectionSymbol": "G",
-                    "levelTheme": "normal"
-                }
-            ],
-            "questionBox": [
-                {
-                    "name": "questionBox",
-                    "color": "yellow",
-                    "threshold": 0.9,
-                    "debug": false,
-                    "correctionX": 0,
-                    "correctionY": 0,
-                    "detectionSymbol": "?",
-                    "levelTheme": "normal"
-                }
-            ],
-            "questionBoxLight": [
-                {
-                    "name": "questionBoxLight",
-                    "color": "yellow",
-                    "threshold": 0.9,
-                    "debug": false,
-                    "correctionX": 0,
-                    "correctionY": 0,
-                    "detectionSymbol": "?",
-                    "levelTheme": "normal"
-                }
-            ],
-            "block": [
-                {
-                    "name": "block",
-                    "color": "brown",
-                    "threshold": 0.9,
-                    "debug": false,
-                    "correctionX": 0,
-                    "correctionY": 0,
-                    "detectionSymbol": "B",
-                    "levelTheme": "normal"
-                }
-            ],
-            "floor": [
-                {
-                    "name": "floor",
-                    "color": "green",
-                    "threshold": 0.8,
-                    "debug": false,
-                    "correctionX": 0,
-                    "correctionY": 0,
-                    "detectionSymbol": "@",
-                    "levelTheme": "normal"
-                }
-            ],
-            "pipe": [
-                {
-                    "name": "pipe",
-                    "color": "green",
-                    "threshold": 0.9,
-                    "debug": false,
-                    "correctionX": 0,
-                    "correctionY": 0,
-                    "detectionSymbol": "P",
-                    "levelTheme": "normal"
-                }
-            ],
-            "cooper": [
-                {
-                    "name": "cooper",
-                    "color": "blue",
-                    "threshold": 0.6,
-                    "debug": false,
-                    "correctionX": 0,
-                    "correctionY": 0,
-                    "detectionSymbol": "C",
-                    "levelTheme": "normal"
-                }
-            ],
-            "stairBlock": [
-                {
-                    "name": "stairBlock",
-                    "color": "black",
-                    "threshold": 0.9,
-                    "debug": false,
-                    "correctionX": 0,
-                    "correctionY": 0,
-                    "detectionSymbol": "S",
-                    "levelTheme": "normal"
-                }
-            ]
-        }
-    ]
+  "WindowsConsoleOutput": true,
+  "ConsoleFramerate": 0,
+  "RenderFramerate": 0,
+  "JumpingFailedBecausePressedToEarly": 50,
+  "imageAssetsDirectory": "assets/",
+  "debugAll": false,
+  "themeIdentifier": {
+    "1": {
+      "1": "normal",
+      "2": "underground",
+      "3": "normal",
+      "4": "castle"
+    },
+    "2": {
+      "1": "normal",
+      "2": "underwater",
+      "3": "normal",
+      "4": "castle"
+    },
+    "3": {
+      "1": "normal",
+      "2": "normal",
+      "3": "normal",
+      "4": "castle"
+    },
+    "4": {
+      "1": "normal",
+      "2": "underground",
+      "3": "mushroom",
+      "4": "castle"
+    },
+    "5": {
+      "1": "normal",
+      "2": "normal",
+      "3": "normal",
+      "4": "castle"
+    },
+    "6": {
+      "1": "normal",
+      "2": "normal",
+      "3": "normal",
+      "4": "castle"
+    },
+    "7": {
+      "1": "normal",
+      "2": "underwater",
+      "3": "normal",
+      "4": "castle"
+    },
+    "8": {
+      "1": "normal",
+      "2": "normal",
+      "3": "normal",
+      "4": "castle"
+    }
+  },
+  "imageDetectionConfiguration": {
+    "mario": {
+      "fileName": "mario.png",
+      "color": [255, 0, 0],
+      "threshold": 0.7,
+      "debug": true,
+      "correctionX": 6,
+      "correctionY": 2,
+      "detectionSymbol": "M",
+      "levelTheme": [
+        "normal",
+        "underground",
+        "castle",
+        "underwater",
+        "mushroom"
+      ]
+    },
+    "goomba": {
+      "fileName": "goomba.png",
+      "color": "brown",
+      "threshold": 0.5,
+      "debug": false,
+      "correctionX": 0,
+      "correctionY": 0,
+      "detectionSymbol": "G",
+      "levelTheme": ["normal"]
+    },
+    "questionBox": {
+      "fileName": "questionBox.png",
+      "color": "yellow",
+      "threshold": 0.9,
+      "debug": false,
+      "correctionX": 0,
+      "correctionY": 0,
+      "detectionSymbol": "?",
+      "levelTheme": ["normal"]
+    },
+    "questionBoxLight": {
+      "fileName": "questionBoxLight.png",
+      "color": "yellow",
+      "threshold": 0.9,
+      "debug": false,
+      "correctionX": 0,
+      "correctionY": 0,
+      "detectionSymbol": "?",
+      "levelTheme": ["normal"]
+    },
+    "block": {
+      "fileName": "block.png",
+      "color": "brown",
+      "threshold": 0.9,
+      "debug": false,
+      "correctionX": 0,
+      "correctionY": 0,
+      "detectionSymbol": "B",
+      "levelTheme": ["normal"]
+    },
+    "floor": {
+      "fileName": "floor.png",
+      "color": "green",
+      "threshold": 0.8,
+      "debug": false,
+      "correctionX": 0,
+      "correctionY": 0,
+      "detectionSymbol": "@",
+      "levelTheme": ["normal"]
+    },
+    "pipe": {
+      "fileName": "pipe.png",
+      "color": "green",
+      "threshold": 0.9,
+      "debug": false,
+      "correctionX": 0,
+      "correctionY": 0,
+      "detectionSymbol": "P",
+      "levelTheme": ["normal"]
+    },
+    "cooper": {
+      "fileName": "cooper.png",
+      "color": "blue",
+      "threshold": 0.6,
+      "debug": false,
+      "correctionX": 0,
+      "correctionY": 0,
+      "detectionSymbol": "C",
+      "levelTheme": ["normal"]
+    },
+    "stairBlock": {
+      "fileName": "stairBlock.png",
+      "color": "black",
+      "threshold": 0.9,
+      "debug": false,
+      "correctionX": 0,
+      "correctionY": 0,
+      "detectionSymbol": "S",
+      "levelTheme": ["normal"]
+    }
+  }
 }

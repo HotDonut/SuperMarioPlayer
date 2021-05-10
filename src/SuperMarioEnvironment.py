@@ -20,8 +20,10 @@ class SuperMarioEnvironment:
 
         map = SuperMarioMap.Mario2DMap()
         movement = SuperMarioMovement.Movement(map)
-        images = SuperMarioImages.Images()
+        images = SuperMarioImages.Images(config.imageDetectionConfiguration, config.imageAssetsDirectory)
         debugWindow = SuperMarioConsoleDebugWindow.SuperMarioConsoleDebugWindow()
+
+        images.loadAllAssets()
 
         # Instantiating Super Mario Bros. environment
         env = JoypadSpace(gym_super_mario_bros.make('SuperMarioBros-v0').env, movement.COMPLEX_MOVEMENT)
@@ -38,9 +40,18 @@ class SuperMarioEnvironment:
                 env.render()
                 movement.reset()
 
+            # Debug output for Theme Detection
+
+            currentTheme = config.themeIdentifier[str(info["world"])][str(info["stage"])]
+            # print(currentTheme)
+
             # Detecting for all relevant kind of obstacles
             images.processImage(state)
             map.resetMap(False)
+
+            # detectedAssetsAndCorrespondingSymbol = images.detectOnlyThemeSpecificAssets(currentTheme)
+            # map.changeMapAll(detectedAssetsAndCorrespondingSymbol)
+
             map.changeMap(images.detectQuestionBox(), "?")
             map.changeMap(images.detectQuestionBoxlight(), "?")
             map.changeMap(images.detectBlock(), "B")
@@ -68,5 +79,5 @@ class SuperMarioEnvironment:
             calculatedAction = movement.move()
             debugWindow.debugPrint(map.toString()+"\n"+"\n"+str(calculatedAction))
             state, reward, done, info = env.step(calculatedAction)
-            
+
         env.close()

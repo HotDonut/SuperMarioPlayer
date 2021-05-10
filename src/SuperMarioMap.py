@@ -1,5 +1,6 @@
 import numpy as np
 
+
 ##
 # This class deals with everything related to the simplification and its corresponding representation of the game.
 #
@@ -27,18 +28,18 @@ class Mario2DMap():
     def toString(self):
 
         # Preparing the upper-border of the output
-        result = "#" * (len(self.environment)+2)
+        result = "#" * (len(self.environment) + 2)
         result += "\n"
-        
+
         # Looping through the 15x16 array and printing its symbols while also creating a border with # symbols around it
         for x in self.environment:
             result += "#"
             for y in x:
                 result += y
             result += "#\n"
-        
+
         # Preparing the lower-border of the output
-        result += "#" * (len(self.environment)+2)
+        result += "#" * (len(self.environment) + 2)
         result += "\n"
 
         return result
@@ -50,12 +51,11 @@ class Mario2DMap():
     ##
     def resetMap(self, shouldCreateAnArray=False):
         # https://stackoverflow.com/questions/31498784/performance-difference-between-filling-existing-numpy-array-and-creating-a-new-o
-        if(shouldCreateAnArray):
+        if (shouldCreateAnArray):
             self.environment = np.array([[" "] * 16] * 15)
         else:
-            #self.environment[:] = " "
+            # self.environment[:] = " "
             self.environment.fill(" ")
-            
 
     ##
     # This method changes specific places of the the simplified version of the game which is saved as a 15x16 array
@@ -68,20 +68,49 @@ class Mario2DMap():
 
         # iterate through every x and y coordinates saved in the tuple loc
         for pt in zip(*location[::-1]):
-
+            if symbol == "S":
+                f = open("demofile4txt", "a")
+                string = str(pt[0]) + '  ' + str(pt[1]) + '\n'
+                f.write(string)
+                f.close()
+                # print(pt[0], "  ", pt[1])
             # make the coordinates fit in a 15x16 array
             x = int(np.floor(pt[0] / 16))
             y = int(np.floor((pt[1] / 16)))
-            
+
             # save on the corresponding array-slot the symbol character
             self.environment[y][x] = symbol
-            
+
             # if it happens to be a pipe add extra symbols (since only the top-left part gets recognized)
             if symbol == "P":
                 # add more pipe symbols until you reach the lowest part of the array
                 for i in range(y, 15, 1):
                     self.environment[i][x] = symbol
-                    
+
                     # make the pipe 2 paces wide
                     if x < 15:
-                        self.environment[i][x+1] = symbol
+                        self.environment[i][x + 1] = symbol
+
+    def changeMapAll(self, detectedAssetsAndCorrespondingSymbol):
+
+        for detectionSymbol, location in detectedAssetsAndCorrespondingSymbol.items():
+            for pt in zip(*location[::-1]):
+
+                if detectionSymbol == "S":
+                    f = open("demofile3.txt", "a")
+                    string = str(pt[0]) + '  ' + str(pt[1]) + '\n'
+                    f.write(string)
+                    f.close()
+                    print(pt[0], "  ", pt[1])
+
+                x = int(np.floor(pt[0] / 16))
+                y = int(np.floor(pt[1] / 16))
+
+                self.environment[y][x] = detectionSymbol
+
+                if detectionSymbol == "P":
+                    for i in range(y, 15, 1):
+                        self.environment[i][x] = detectionSymbol
+
+                        if x < 15:
+                            self.environment[i][x + 1] = detectionSymbol

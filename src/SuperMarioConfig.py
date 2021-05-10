@@ -21,17 +21,18 @@ class SuperMarioConfig:
     ConsoleFramerate = 0
     RenderFramerate = 0
     imageDetectionConfiguration = {}
-    imageAssetsPath = "assets/"
+    themeIdentifier = {}
+    imageAssetsDirectory = "assets/"
 
-    # DebugQuestionBoxDetection = False
-    # DebugQuestionBoxLightDetection = False
-    # DebugBlockDetection = False
-    # DebugFloorDetection = False
-    # DebugPipeDetection = False
-    # DebugCooperDetection = False
-    # DebugStairDetection = False
-    # DebugMarioDetection = False
-    # DebugGoombaDetection = False
+    DebugQuestionBoxDetection = False
+    DebugQuestionBoxLightDetection = False
+    DebugBlockDetection = False
+    DebugFloorDetection = False
+    DebugPipeDetection = False
+    DebugCooperDetection = False
+    DebugStairDetection = False
+    DebugMarioDetection = True
+    DebugGoombaDetection = False
 
     JumpingFailedBecausePressedToEarly = 50
 
@@ -96,15 +97,16 @@ class SuperMarioConfig:
             with open(file_path, 'r') as configFile:
                 config_text = configFile.read()
 
-            # try:
+            try:
                 jsonData = json.loads(config_text)
 
                 self.WindowsConsoleOutput = bool(jsonData["WindowsConsoleOutput"])
                 self.ConsoleFramerate = int(jsonData["ConsoleFramerate"])
                 self.RenderFramerate = int(jsonData["RenderFramerate"])
                 self.JumpingFailedBecausePressedToEarly = int(jsonData["JumpingFailedBecausePressedToEarly"])
-                self.imageAssetsPath = jsonData["imageAssetsPath"]
+                self.imageAssetsDirectory = jsonData["imageAssetsDirectory"]
                 self.debugAll = bool(jsonData["debugAll"])
+                self.themeIdentifier = jsonData["themeIdentifier"]
                 self.imageDetectionConfiguration = jsonData["imageDetectionConfiguration"]
 
                 # SuperMarioConfig.DebugQuestionBoxDetection = bool(jsonData["DebugQuestionBoxDetection"])
@@ -117,8 +119,8 @@ class SuperMarioConfig:
                 # SuperMarioConfig.DebugMarioDetection = bool(jsonData["DebugMarioDetection"])
                 # SuperMarioConfig.DebugGoombaDetection = bool(jsonData["DebugGoombaDetection"])
 
-            # except:
-            #     print("Config file contained an invalid value for one of the parameters. Using default values to continue.")
+            except:
+                print("Config file contained an invalid value for one of the parameters. Using default values to continue.")
 
-        # else:
-        #     print("Config file not found. Using default values to continue.")
+        else:
+            print("Config file not found. Using default values to continue.")

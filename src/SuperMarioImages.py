@@ -13,7 +13,7 @@ from src.SuperMarioConfig import SuperMarioConfig as SuperMarioConfig
 
 class Images:
    
-    def __init__(self):
+    def __init__(self, imageDetectionConfiguration, imageAssetsDirectory):
         # Initializing img_gray and state for later use in detection functions
         self.__img_gray = 0
         self.__state = 0
@@ -29,6 +29,18 @@ class Images:
         self.__pipeImage = cv2.imread('assets/pipe.png', 0)
         self.__cooperImage = cv2.imread('assets/cooper.png', 0)
         self.__stairBlockImage = cv2.imread('assets/stairBlock.png', 0)
+        self.__imageDetectionConfiguration = imageDetectionConfiguration
+        self.__imageAssetsDirectory = imageAssetsDirectory
+        self.__AssetsForCV2 = {}
+
+
+    def loadAllAssets(self):
+        for asset in self.__imageDetectionConfiguration:
+            print(self.__imageDetectionConfiguration[asset]["fileName"])
+            fullPathToAsset = self.__imageAssetsDirectory + self.__imageDetectionConfiguration[asset]["fileName"]
+            self.__AssetsForCV2[asset] = cv2.imread(fullPathToAsset, 0)
+
+
 
     ##
     # Converts the current state array of the game into an grayscale image to be used for detection
@@ -37,12 +49,34 @@ class Images:
     # 
     # @param state State array provided by the gym-super-mario-bros class of type ndarray:(240, 256, 3)
     ##
+
     def processImage(self, state):
         self.__state = state
 
         # converts state (pixel array) to image
         img = Image.fromarray(self.__state, 'RGB')
         self.__img_gray = cv2.cvtColor(np.array(img), cv2.COLOR_BGR2GRAY)
+
+    def detectOnlyThemeSpecificAssets(self, currentTheme):
+        detectedAssets = {}
+        for asset in self.__imageDetectionConfiguration:
+            assetData = self.__imageDetectionConfiguration[asset]
+            for theme in assetData["levelTheme"]:
+                if theme == currentTheme:
+                    resemblanceValue = cv2.matchTemplate(self.__img_gray, self.__AssetsForCV2[asset], cv2.TM_CCOEFF_NORMED)
+                    loc = np.where(resemblanceValue >= assetData["threshold"])
+
+                    if len(loc[0]) != 0:
+                        loc[0][:] = loc[0][:] - assetData["correctionY"]
+                        loc[1][:] = loc[1][:] - assetData["correctionX"]
+
+                    detectedAssets[assetData["detectionSymbol"]] = loc
+
+                    if assetData["debug"]:
+                        self.writeDebugDataForDetection(loc, assetData["color"])
+
+        return detectedAssets
+
 
     ##
     # Detects all occurences of a given template image in the given state image, and returns
