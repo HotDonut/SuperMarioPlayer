@@ -23,7 +23,7 @@ class Images:
         self.__goombaImage = cv2.imread('assets/goomba.png', 0)
         self.__marioImage = cv2.imread('assets/mario.png', 0)
         self.__questionBoxImage = cv2.imread('assets/questionbox.png', 0)
-        self.__questionBoxImageLight = cv2.imread('assets/questionbox_light.png', 0)
+        self.__questionBoxImageLight = cv2.imread('assets/questionboxLight.png', 0)
         self.__blockImage = cv2.imread('assets/block.png', 0)
         self.__floorImage = cv2.imread('assets/floor.png', 0)
         self.__pipeImage = cv2.imread('assets/pipe.png', 0)
@@ -61,17 +61,17 @@ class Images:
         loc = np.where(res >= threshold)
         
         if debug:
-            writeDebugDataForDetection(loc)
+            self.writeDebugDataForDetection(loc, color)
 
         return loc
 
-    def writeDebugDataForDetection(self, loc):
+    def writeDebugDataForDetection(self, loc, color):
         for pt in zip(*loc[::-1]):
                 # cv2.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0, 0, 255), 2)
                 # print(pt[0], pt[1])
                 self.__state[:, pt[0]] = color
                 self.__state[pt[1], :] = color
-                debugPrint("Object position x:", pt[0] / 16, "Object position y:", pt[1] / 16, "\n")
+                print("Object position x:", pt[0] / 16, "Object position y:", pt[1] / 16, "\n")
 
     ##
     # Specialized detect function for Mario. Since the template for Mario-Detection had to
@@ -93,7 +93,7 @@ class Images:
             loc[1][0] = loc[1][0] - 6
 
         if (SuperMarioConfig.DebugMarioDetection):
-            writeDebugDataForDetection(loc)
+            self.writeDebugDataForDetection(loc, color)
 
         return loc
 

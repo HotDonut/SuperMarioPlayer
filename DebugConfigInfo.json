@@ -2,14 +2,109 @@
     "WindowsConsoleOutput": true,
     "ConsoleFramerate": 0,
     "RenderFramerate": 0,
-    "DebugQuestionBoxDetection": false,
-    "DebugQuestionBoxLightDetection": false,
-    "DebugBlockDetection": false,
-    "DebugFloorDetection": false,
-    "DebugPipeDetection": false,
-    "DebugCooperDetection": false,
-    "DebugStairDetection": false,
-    "DebugMarioDetection": false,
-    "DebugGoombaDetection": false,
-    "JumpingFailedBecausePressedToEarly": 50
+    "JumpingFailedBecausePressedToEarly": 50,
+    "imageAssetsPath": "assets/",
+    "debugAll" : false,
+    "imageDetectionConfiguration": [
+        {
+            "mario": [
+                {
+                    "name": "mario",
+                    "color": "red",
+                    "threshold": 0.7,
+                    "debug": false,
+                    "correctionX": 6,
+                    "correctionY": 2,
+                    "detectionSymbol": "M"
+                }
+            ],
+            "goomba": [
+                {
+                    "name": "goomba",
+                    "color": "brown",
+                    "threshold": 0.5,
+                    "debug": false,
+                    "correctionX": 0,
+                    "correctionY": 0,
+                    "detectionSymbol": "G"
+                }
+            ],
+            "questionBox": [
+                {
+                    "name": "questionBox",
+                    "color": "yellow",
+                    "threshold": 0.9,
+                    "debug": false,
+                    "correctionX": 0,
+                    "correctionY": 0,
+                    "detectionSymbol": "?"
+                }
+            ],
+            "questionBoxLight": [
+                {
+                    "name": "questionBoxLight",
+                    "color": "yellow",
+                    "threshold": 0.9,
+                    "debug": false,
+                    "correctionX": 0,
+                    "correctionY": 0,
+                    "detectionSymbol": "?"
+                }
+            ],
+            "block": [
+                {
+                    "name": "block",
+                    "color": "brown",
+                    "threshold": 0.9,
+                    "debug": false,
+                    "correctionX": 0,
+                    "correctionY": 0,
+                    "detectionSymbol": "B"
+                }
+            ],
+            "floor": [
+                {
+                    "name": "floor",
+                    "color": "green",
+                    "threshold": 0.8,
+                    "debug": false,
+                    "correctionX": 0,
+                    "correctionY": 0,
+                    "detectionSymbol": "@"
+                }
+            ],
+            "pipe": [
+                {
+                    "name": "pipe",
+                    "color": "green",
+                    "threshold": 0.9,
+                    "debug": false,
+                    "correctionX": 0,
+                    "correctionY": 0,
+                    "detectionSymbol": "P"
+                }
+            ],
+            "cooper": [
+                {
+                    "name": "cooper",
+                    "color": "blue",
+                    "threshold": 0.6,
+                    "debug": false,
+                    "correctionX": 0,
+                    "correctionY": 0,
+                    "detectionSymbol": "C"
+                }
+            ],
+            "stairBlock": [
+                {
+                    "name": "stairBlock",
+                    "color": "black",
+                    "threshold": 0.9,
+                    "debug": false,
+                    "correctionX": 0,
+                    "correctionY": 0,
+                    "detectionSymbol": "S"
+                }
+            ]
+        }
 }

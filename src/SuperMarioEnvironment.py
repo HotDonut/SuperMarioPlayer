@@ -16,7 +16,7 @@ class SuperMarioEnvironment:
         # load config into SuperMarioConfig class variables
         config.load_config("SuperMarioConfig.json")
         # create debug config json file (current config)
-        config.write_json_file()
+        # config.write_json_file()
 
         map = SuperMarioMap.Mario2DMap()
         movement = SuperMarioMovement.Movement(map)
