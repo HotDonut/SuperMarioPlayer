@@ -68,12 +68,6 @@ class Mario2DMap():
 
         # iterate through every x and y coordinates saved in the tuple loc
         for pt in zip(*location[::-1]):
-            if symbol == "S":
-                f = open("demofile4txt", "a")
-                string = str(pt[0]) + '  ' + str(pt[1]) + '\n'
-                f.write(string)
-                f.close()
-                # print(pt[0], "  ", pt[1])
             # make the coordinates fit in a 15x16 array
             x = int(np.floor(pt[0] / 16))
             y = int(np.floor((pt[1] / 16)))
@@ -95,13 +89,6 @@ class Mario2DMap():
 
         for detectionSymbol, location in detectedAssetsAndCorrespondingSymbol.items():
             for pt in zip(*location[::-1]):
-
-                if detectionSymbol == "S":
-                    f = open("demofile3.txt", "a")
-                    string = str(pt[0]) + '  ' + str(pt[1]) + '\n'
-                    f.write(string)
-                    f.close()
-                    print(pt[0], "  ", pt[1])
 
                 x = int(np.floor(pt[0] / 16))
                 y = int(np.floor(pt[1] / 16))

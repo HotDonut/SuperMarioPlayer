@@ -31,6 +31,7 @@ class SuperMarioEnvironment:
 
         consoleFrameCount = 0
         renderFrameCount = 0
+        frameCount = 0
         done = True
 
         while True:
@@ -49,18 +50,18 @@ class SuperMarioEnvironment:
             images.processImage(state)
             map.resetMap(False)
 
-            # detectedAssetsAndCorrespondingSymbol = images.detectOnlyThemeSpecificAssets(currentTheme)
-            # map.changeMapAll(detectedAssetsAndCorrespondingSymbol)
+            detectedAssetsAndCorrespondingSymbol = images.detectOnlyThemeSpecificAssets(currentTheme)
+            map.changeMapAll(detectedAssetsAndCorrespondingSymbol)
 
-            map.changeMap(images.detectQuestionBox(), "?")
-            map.changeMap(images.detectQuestionBoxlight(), "?")
-            map.changeMap(images.detectBlock(), "B")
-            map.changeMap(images.detectFloor(), "@")
-            map.changeMap(images.detectGoomba(), "G")
-            map.changeMap(images.detectPipe(), "P")
-            map.changeMap(images.detectCooper(), "C")
-            map.changeMap(images.detectStairBlock(), "S")
-            map.changeMap(images.detectMario(), "M")
+            # map.changeMap(images.detectQuestionBox(), "?")
+            # map.changeMap(images.detectQuestionBoxlight(), "?")
+            # map.changeMap(images.detectBlock(), "B")
+            # map.changeMap(images.detectFloor(), "@")
+            # map.changeMap(images.detectGoomba(), "G")
+            # map.changeMap(images.detectPipe(), "P")
+            # map.changeMap(images.detectCooper(), "C")
+            # map.changeMap(images.detectStairBlock(), "S")
+            # map.changeMap(images.detectMario(), "M")
 
             # visualization
             if consoleFrameCount >= SuperMarioConfig.ConsoleFramerate:
@@ -79,5 +80,13 @@ class SuperMarioEnvironment:
             calculatedAction = movement.move()
             debugWindow.debugPrint(map.toString()+"\n"+"\n"+str(calculatedAction))
             state, reward, done, info = env.step(calculatedAction)
+
+            #debug
+
+            # f = open("MapsNew.txt", "a")
+            # String = "Map at Frame " + str(frameCount) + ":\n\n" + map.toString()
+            # f.write(String)
+            # f.close()
+            # frameCount = frameCount + 1
 
         env.close()

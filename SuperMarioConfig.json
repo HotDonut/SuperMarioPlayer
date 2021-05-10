@@ -56,22 +56,6 @@
     }
   },
   "imageDetectionConfiguration": {
-    "mario": {
-      "fileName": "mario.png",
-      "color": [255, 0, 0],
-      "threshold": 0.7,
-      "debug": true,
-      "correctionX": 6,
-      "correctionY": 2,
-      "detectionSymbol": "M",
-      "levelTheme": [
-        "normal",
-        "underground",
-        "castle",
-        "underwater",
-        "mushroom"
-      ]
-    },
     "goomba": {
       "fileName": "goomba.png",
       "color": "brown",
@@ -151,6 +135,22 @@
       "correctionY": 0,
       "detectionSymbol": "S",
       "levelTheme": ["normal"]
+    },
+    "mario": {
+      "fileName": "mario.png",
+      "color": [255, 0, 0],
+      "threshold": 0.7,
+      "debug": true,
+      "correctionX": 6,
+      "correctionY": 2,
+      "detectionSymbol": "M",
+      "levelTheme": [
+        "normal",
+        "underground",
+        "castle",
+        "underwater",
+        "mushroom"
+      ]
     }
   }
 }
