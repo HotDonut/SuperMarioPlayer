@@ -20,10 +20,13 @@ class SuperMarioConfig:
     # 0 is maximum framerate. A framerate of e.g. 20 only shows every 20th frame.
     ConsoleFramerate = 0
     RenderFramerate = 0
+
+    # Standard values for Images (deprecated)
     imageDetectionConfiguration = {}
     themeIdentifier = {}
     imageAssetsDirectory = "assets/"
 
+    # Standard Debug Values (deprecated)
     DebugQuestionBoxDetection = False
     DebugQuestionBoxLightDetection = False
     DebugBlockDetection = False
@@ -34,6 +37,7 @@ class SuperMarioConfig:
     DebugMarioDetection = True
     DebugGoombaDetection = False
 
+    # Jump Fix Value (deprecated)
     JumpingFailedBecausePressedToEarly = 50
 
     ##
@@ -87,7 +91,7 @@ class SuperMarioConfig:
     # Existing Output will be overwritten
     # If an error occurs an corresponding text will be printed, the external config file will be ignored and the default values will be used
     #
-    # @author Wolfgang Mair
+    # @author Wolfgang Mair, Lukas Geysrhofer
     # @param file_path The string path to the json file
     ##
     def load_config(self, file_path):

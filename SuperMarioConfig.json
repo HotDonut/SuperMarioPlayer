@@ -140,7 +140,7 @@
       "fileName": "mario.png",
       "color": [255, 0, 0],
       "threshold": 0.7,
-      "debug": true,
+      "debug": false,
       "correctionX": 6,
       "correctionY": 2,
       "detectionSymbol": "M",

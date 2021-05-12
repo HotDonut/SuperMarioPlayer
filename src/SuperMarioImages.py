@@ -29,11 +29,17 @@ class Images:
         self.__pipeImage = cv2.imread('assets/pipe.png', 0)
         self.__cooperImage = cv2.imread('assets/cooper.png', 0)
         self.__stairBlockImage = cv2.imread('assets/stairBlock.png', 0)
+
+        # To save Image Data received from SuperMarioConfig (JSON FIle) and ready to use assets for OpenCV2
         self.__imageDetectionConfiguration = imageDetectionConfiguration
         self.__imageAssetsDirectory = imageAssetsDirectory
         self.__AssetsForCV2 = {}
 
-
+    ##
+    # Converts all the assets into a format so that openCV can work with them.
+    # @author Lukas Geyrhofer
+    #
+    ##
     def loadAllAssets(self):
         for asset in self.__imageDetectionConfiguration:
             print(self.__imageDetectionConfiguration[asset]["fileName"])
@@ -56,6 +62,15 @@ class Images:
         # converts state (pixel array) to image
         img = Image.fromarray(self.__state, 'RGB')
         self.__img_gray = cv2.cvtColor(np.array(img), cv2.COLOR_BGR2GRAY)
+
+    ##
+    # Checks for every asset if it is associated with the current theme. If there is a match the function tries
+    # to detect the asset in the current frame. All locations that are found are written into a dictionary as value with the
+    # corresponding detection symbol as key. Returns that dictionary.
+    # @author Lukas Geyrhofer
+    #
+    # @param currentTheme Current Theme detected at the current picture
+    ##
 
     def detectOnlyThemeSpecificAssets(self, currentTheme):
         detectedAssets = {}
@@ -98,6 +113,13 @@ class Images:
             self.writeDebugDataForDetection(loc, color)
 
         return loc
+
+    ##
+    # Colors the y and x axis of the point(s) in loc
+    # @author Lukas Geyrhofer
+    # @param loc Location of the Point which is to mark
+    # @param color Color which shall be used to mark detections in debug mode
+    ##
 
     def writeDebugDataForDetection(self, loc, color):
         for pt in zip(*loc[::-1]):

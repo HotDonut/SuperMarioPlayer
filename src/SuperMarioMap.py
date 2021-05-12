@@ -85,8 +85,14 @@ class Mario2DMap():
                     if x < 15:
                         self.environment[i][x + 1] = symbol
 
-    def changeMapAll(self, detectedAssetsAndCorrespondingSymbol):
 
+    ##
+    # This method receives a dictionary with characters as Key and Locations as value. It sets the character
+    # at the specified location in the string map.
+    # @author Lukas Geyrhofer
+    # @param detectedAssetsAndCorrespondingSymbol
+    ##
+    def changeMapAll(self, detectedAssetsAndCorrespondingSymbol):
         for detectionSymbol, location in detectedAssetsAndCorrespondingSymbol.items():
             for pt in zip(*location[::-1]):
 

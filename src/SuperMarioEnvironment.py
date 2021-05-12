@@ -7,8 +7,9 @@ import src.SuperMarioMap as SuperMarioMap
 import src.SuperMarioConsoleDebugWindow as SuperMarioConsoleDebugWindow
 from src.SuperMarioConfig import SuperMarioConfig as SuperMarioConfig
 
+
 class SuperMarioEnvironment:
-    
+
     def startPlayer(self):
 
         # SuperMarioConfig needs a concrete object to use json encoding/decoding
@@ -41,8 +42,7 @@ class SuperMarioEnvironment:
                 env.render()
                 movement.reset()
 
-            # Debug output for Theme Detection
-
+            # Identify current theme
             currentTheme = config.themeIdentifier[str(info["world"])][str(info["stage"])]
             # print(currentTheme)
 
@@ -78,11 +78,16 @@ class SuperMarioEnvironment:
 
             # execute action
             calculatedAction = movement.move()
-            debugWindow.debugPrint(map.toString()+"\n"+"\n"+str(calculatedAction))
+            debugWindow.debugPrint(map.toString() + "\n" + "\n" + str(calculatedAction))
             state, reward, done, info = env.step(calculatedAction)
 
-            #debug
+            # debug
 
+            # Mario Clips in to the Stairs (debug)
+            # if frameCount == 1368:
+            #     print("")
+
+            # print(frameCount)
             # f = open("MapsNew.txt", "a")
             # String = "Map at Frame " + str(frameCount) + ":\n\n" + map.toString()
             # f.write(String)
