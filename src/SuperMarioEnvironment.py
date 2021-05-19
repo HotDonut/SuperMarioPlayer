@@ -3,6 +3,7 @@ from nes_py.wrappers import JoypadSpace
 
 import src.SuperMarioImages as SuperMarioImages
 import src.SuperMarioMovement as SuperMarioMovement
+import src.SuperMarioMarkov as SuperMarioMarkov
 import src.SuperMarioMap as SuperMarioMap
 import src.SuperMarioConsoleDebugWindow as SuperMarioConsoleDebugWindow
 from src.SuperMarioConfig import SuperMarioConfig as SuperMarioConfig
@@ -23,6 +24,7 @@ class SuperMarioEnvironment:
         movement = SuperMarioMovement.Movement(map)
         images = SuperMarioImages.Images(config.imageDetectionConfiguration, config.imageAssetsDirectory)
         debugWindow = SuperMarioConsoleDebugWindow.SuperMarioConsoleDebugWindow()
+        markovMovement = SuperMarioMarkov.SuperMarioMarkov(map,"Markov_States.txt")
 
         images.loadAllAssets()
 
@@ -77,7 +79,8 @@ class SuperMarioEnvironment:
                 renderFrameCount = renderFrameCount + 1
 
             # execute action
-            calculatedAction = movement.move()
+            calculatedAction = markovMovement.nextStep()
+            #calculatedAction = movement.move()
             debugWindow.debugPrint(map.toString() + "\n" + "\n" + str(calculatedAction))
             state, reward, done, info = env.step(calculatedAction)
 
