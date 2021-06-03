@@ -21,6 +21,8 @@ class SuperMarioMarkov():
         self.markovStateDictionary = {}
         self.markovStateArraySize = 0
         self.readMarkovFile(filePath)
+        self.markovStringOld = ""
+        self.noMovementFrameCount = 0
 
     ##
     # A method that reads all the states and its corresponding movement action into the class from a file
@@ -105,7 +107,11 @@ class SuperMarioMarkov():
     def nextStep(self):
         #Get Mario coordinates
         findMario = np.where(self.map.environment == 'M')
-        #Slice the state around mario into a 3x3 state
+
+        if len(findMario) == 0:
+            return 0
+
+        # Slice the state around mario into a 3x3 state
         state3x3 = self.map.environment[findMario[0][0]-1:findMario[0][0]+2,findMario[1][0]-1:findMario[1][0]+2]
 
         markovString = ""
@@ -114,9 +120,12 @@ class SuperMarioMarkov():
             for character in array:
                 markovString += character
 
+        if self.holdingJumpDirtyFix(markovString):
+            return 1
 
+        self.markovStringOld = markovString
 
-        print(markovString)
+        #print(markovString)
         #sliced array in string form print
         #print(np.array2string(state3x3))
 
@@ -128,4 +137,21 @@ class SuperMarioMarkov():
             return self.markovStateDictionary.get(markovString)
         else:
             #Set to 0 to find unknown states
+            print("unknown state:")
+            print(markovString)
             return 1
+
+    def holdingJumpDirtyFix(self, markovString):
+        # print(self.noMovementFrameCount)
+        if markovString == self.markovStringOld:
+            self.noMovementFrameCount += 1
+            if self.noMovementFrameCount == 20:
+                self.noMovementFrameCount = 0
+                return True
+            else:
+                return False
+        else:
+            self.noMovementFrameCount = 0
+            return False
+
+
