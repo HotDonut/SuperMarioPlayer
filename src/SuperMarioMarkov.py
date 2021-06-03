@@ -28,10 +28,26 @@ class SuperMarioMarkov():
     ##
     def readMarkovFile(self, filePath):
 
-        fileRead = open(filePath, "r")
-        fileContents = fileRead.read()
+        with open(filePath) as fileRead:
+            lines = (line.rstrip() for line in fileRead)
+            lines = list(line for line in lines if line)
 
-        self.markovStateDictionary = ast.literal_eval(fileContents)
+        markovStateString=""
+        action=0
+
+        for line in lines:
+            if "#" in line:
+                self.markovStateDictionary[markovStateString] = action
+                print(markovStateString)
+                print(action)
+                markovStateString = ""
+            else:
+                if "Action" in line:
+                    action = str(line).replace("Action: ", "")
+                    action = int(action)
+                else:
+                    markovStateString += str(line).replace("-", " ")
+
 
         '''
         #Prototype test successful
@@ -92,6 +108,15 @@ class SuperMarioMarkov():
         #Slice the state around mario into a 3x3 state
         state3x3 = self.map.environment[findMario[0][0]-1:findMario[0][0]+2,findMario[1][0]-1:findMario[1][0]+2]
 
+        markovString = ""
+
+        for array in state3x3:
+            for character in array:
+                markovString += character
+
+
+
+        print(markovString)
         #sliced array in string form print
         #print(np.array2string(state3x3))
 
@@ -99,8 +124,8 @@ class SuperMarioMarkov():
         #print(self.markovStateDictionary.get(np.array2string(state3x3)))
 
         #Search for state in dictionary or return default if not
-        if(self.markovStateDictionary.get(np.array2string(state3x3)) != None):
-            return self.markovStateDictionary.get(np.array2string(state3x3))
+        if(self.markovStateDictionary.get(markovString) != None):
+            return self.markovStateDictionary.get(markovString)
         else:
             #Set to 0 to find unknown states
             return 1

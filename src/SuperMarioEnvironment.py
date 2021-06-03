@@ -24,7 +24,7 @@ class SuperMarioEnvironment:
         movement = SuperMarioMovement.Movement(map)
         images = SuperMarioImages.Images(config.imageDetectionConfiguration, config.imageAssetsDirectory)
         debugWindow = SuperMarioConsoleDebugWindow.SuperMarioConsoleDebugWindow()
-        markovMovement = SuperMarioMarkov.SuperMarioMarkov(map,"Markov_States.txt")
+        markovMovement = SuperMarioMarkov.SuperMarioMarkov(map, config.markovStatesPath)
 
         images.loadAllAssets()
 
