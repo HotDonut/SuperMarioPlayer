@@ -26,7 +26,7 @@ class SuperMarioMarkov():
 
     ##
     # A method that reads all the states and its corresponding movement action into the class from a file
-    # @author Wolfgang Mair
+    # @author Wolfgang Mair, Lukas Geyrhofer
     ##
     def readMarkovFile(self, filePath):
 
@@ -38,7 +38,10 @@ class SuperMarioMarkov():
         action=0
 
         for line in lines:
+            print(line)
             if "#" in line:
+                if self.markovStateDictionary.get(markovStateString) != None:
+                    raise Exception("Duplicated Markov State detected:", markovStateString)
                 self.markovStateDictionary[markovStateString] = action
                 print(markovStateString)
                 print(action)
@@ -88,19 +91,8 @@ class SuperMarioMarkov():
         '''
 
     ##
-    # A method that uses the state and its stateDictionary to return its corresponding movement action.
-    # @author Wolfgang Mair
-    #
-    # @param state The current State of the game to be compared to the state Dictionary
-    # @return The movement action that should be used in form of its corresponding index number
-    ##
-    def decision(self, state):
-        keyState = np.array2string(state)
-        return self.markovStateDictionary[keyState]
-
-    ##
     # A method that slices the current state in the map and prepares it for the decision method and returns the corresponding movement action.
-    # @author Wolfgang Mair
+    # @author Wolfgang Mair, Lukas Geyrhofer
     #
     # @return The movement action that should be used in form of its corresponding index number
     ##
@@ -120,6 +112,7 @@ class SuperMarioMarkov():
             for character in array:
                 markovString += character
 
+        # check if Mario is stuck and release jump if he is
         if self.holdingJumpDirtyFix(markovString):
             return 1
 
@@ -141,6 +134,13 @@ class SuperMarioMarkov():
             print(markovString)
             return 1
 
+    ##
+    # Dirty Fix for the "Holding Jump when on the Ground" Problem
+    # @author Lukas Geyrhofer
+    #
+    # @param String of the current sliced state
+    # @return Boolean if Mario is stuck
+    ##
     def holdingJumpDirtyFix(self, markovString):
         # print(self.noMovementFrameCount)
         if markovString == self.markovStringOld:
