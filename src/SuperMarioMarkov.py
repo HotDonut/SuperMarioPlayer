@@ -143,6 +143,13 @@ class SuperMarioMarkov():
 
             return 1
 
+    ##
+    # nicer Debug message for unknown State for different length of strings
+    # @author Florian Weiskirchner
+    #
+    # @param length Length of each line which should be printed
+    # @param markovString String of the unknown State
+    ##
     def printUnknownState(self, length, markovString):
         markovString = str(markovString).replace(" ", "-")
         print("unknown state:")
