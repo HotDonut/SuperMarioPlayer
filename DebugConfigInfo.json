@@ -3,7 +3,7 @@
     "ConsoleFramerate": 0,
     "RenderFramerate": 0,
     "JumpingFailedBecausePressedToEarly": 50,
-    "imageAssetsPath": "assets/",
+    "imageAssetsPath": "old_assets/",
     "debugAll" : false,
     "imageDetectionConfiguration": [
         {
