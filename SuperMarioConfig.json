@@ -4,6 +4,7 @@
   "RenderFramerate": 0,
   "JumpingFailedBecausePressedToEarly": 50,
   "imageAssetsDirectory": "assets/",
+  "markovStatesPath": "Markov_States_new.txt",
   "debugAll": false,
   "themeIdentifier": {
     "1": {
