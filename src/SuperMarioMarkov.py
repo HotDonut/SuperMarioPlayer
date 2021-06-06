@@ -1,6 +1,8 @@
 import numpy as np
+import textwrap
 import ast
 import json
+
 
 ##
 # This class deals with everything related to the simplification and its corresponding representation of the game.
@@ -34,8 +36,8 @@ class SuperMarioMarkov():
             lines = (line.rstrip() for line in fileRead)
             lines = list(line for line in lines if line)
 
-        markovStateString=""
-        action=0
+        markovStateString = ""
+        action = 0
 
         for line in lines:
             print(line)
@@ -52,7 +54,6 @@ class SuperMarioMarkov():
                     action = int(action)
                 else:
                     markovStateString += str(line).replace("-", " ")
-
 
         '''
         #Prototype test successful
@@ -97,14 +98,15 @@ class SuperMarioMarkov():
     # @return The movement action that should be used in form of its corresponding index number
     ##
     def nextStep(self):
-        #Get Mario coordinates
+        # Get Mario coordinates
         findMario = np.where(self.map.environment == 'M')
 
         if len(findMario) == 0:
             return 0
 
         # Slice the state around mario into a 3x3 state
-        state3x3 = self.map.environment[findMario[0][0]-1:findMario[0][0]+2,findMario[1][0]-1:findMario[1][0]+2]
+        state3x3 = self.map.environment[findMario[0][0] - 1:findMario[0][0] + 2,
+                   findMario[1][0] - 1:findMario[1][0] + 2]
 
         markovString = ""
 
@@ -118,21 +120,33 @@ class SuperMarioMarkov():
 
         self.markovStringOld = markovString
 
-        #print(markovString)
-        #sliced array in string form print
-        #print(np.array2string(state3x3))
+        # print(markovString)
+        # sliced array in string form print
+        # print(np.array2string(state3x3))
 
-        #print corresponding movement if found
-        #print(self.markovStateDictionary.get(np.array2string(state3x3)))
+        # print corresponding movement if found
+        # print(self.markovStateDictionary.get(np.array2string(state3x3)))
 
-        #Search for state in dictionary or return default if not
-        if(self.markovStateDictionary.get(markovString) != None):
+        # Search for state in dictionary or return default if not
+        if (self.markovStateDictionary.get(markovString) != None):
             return self.markovStateDictionary.get(markovString)
         else:
-            #Set to 0 to find unknown states
-            print("unknown state:")
-            print(markovString)
+            # Set to 0 to find unknown states
+            if len(markovString) % 3 == 0:
+                self.printUnknownState(3, markovString)
+
+            if len(markovString) % 5 == 0:
+                self.printUnknownState(5, markovString)
+
+            if len(markovString) % 7 == 0:
+                self.printUnknownState(7, markovString)
+
             return 1
+
+    def printUnknownState(self, length, markovString):
+        markovString = str(markovString).replace(" ", "-")
+        print("unknown state:")
+        print(textwrap.fill(markovString, length))
 
     ##
     # Dirty Fix for the "Holding Jump when on the Ground" Problem
@@ -153,5 +167,3 @@ class SuperMarioMarkov():
         else:
             self.noMovementFrameCount = 0
             return False
-
-
