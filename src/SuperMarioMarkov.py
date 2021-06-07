@@ -161,7 +161,7 @@ class SuperMarioMarkov():
     def printUnknownState(self, length, markovString):
         markovString = str(markovString).replace(" ", "-")
         print("unknown state:")
-        print(textwrap.fill(markovString, length))
+        print('\n'.join(markovString[i:i+3] for i in range(0, len(markovString), 3)))
 
     ##
     # Dirty Fix for the "Holding Jump when on the Ground" Problem
