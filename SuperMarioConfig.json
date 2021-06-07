@@ -3,7 +3,7 @@
   "ConsoleFramerate": 0,
   "RenderFramerate": 0,
   "JumpingFailedBecausePressedToEarly": 50,
-  "imageAssetsDirectory": "assets/",
+  "imageAssetsDirectory": "dark_assets/",
   "markovStatesPath": "Markov_States_new.txt",
   "debugAll": false,
   "themeIdentifier": {
