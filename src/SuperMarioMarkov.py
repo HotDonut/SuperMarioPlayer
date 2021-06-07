@@ -1,4 +1,6 @@
 import numpy as np
+import textwrap
+
 
 ##
 # This class deals with everything related to the simplification and its corresponding representation of the game.
@@ -34,8 +36,8 @@ class SuperMarioMarkov():
             lines = (line.rstrip() for line in fileRead)
             lines = list(line for line in lines if line)
 
-        markovStateString=""
-        action=0
+        markovStateString = ""
+        action = 0
 
         for line in lines:
             print(line)
@@ -52,7 +54,6 @@ class SuperMarioMarkov():
                     action = int(action)
                 else:
                     markovStateString += str(line).replace("-", " ")
-
 
         '''
         #Prototype test successful
@@ -99,6 +100,7 @@ class SuperMarioMarkov():
     ##
     def nextStep(self, currentHeight):
         #Get Mario coordinates
+
         findMario = np.where(self.map.environment == 'M')
 
         # len(findMario) is always 2, it has to be checked if either
@@ -107,7 +109,8 @@ class SuperMarioMarkov():
             return 0
 
         # Slice the state around mario into a 3x3 state
-        state3x3 = self.map.environment[findMario[0][0]-1:findMario[0][0]+2,findMario[1][0]-1:findMario[1][0]+2]
+        state3x3 = self.map.environment[findMario[0][0] - 1:findMario[0][0] + 2,
+                   findMario[1][0] - 1:findMario[1][0] + 2]
 
         markovString = ""
 
@@ -125,21 +128,40 @@ class SuperMarioMarkov():
         #Checks if Mario is currently jumping (see updateJumpStatus comments for more information)
         self.updateJumpStatus(currentHeight)
 
-        #print(markovString)
-        #sliced array in string form print
-        #print(np.array2string(state3x3))
+        # print(markovString)
+        # sliced array in string form print
+        # print(np.array2string(state3x3))
 
-        #print corresponding movement if found
-        #print(self.markovStateDictionary.get(np.array2string(state3x3)))
+        # print corresponding movement if found
+        # print(self.markovStateDictionary.get(np.array2string(state3x3)))
 
         #Search for state in dictionary or return default if not
         if self.markovStateDictionary.get(markovString) != None:
             #Jump converter solves perma jump problem (see jumpConverter comments for more information)
             return self.jumpConverter(self.markovStateDictionary.get(markovString),self.marioJumpStatus)
         else:
-            #Set to 0 to find unknown states
-            print("unknown state: [{}]".format(markovString))
+            # Set to 0 to find unknown states
+            if len(markovString) % 3 == 0:
+                self.printUnknownState(3, markovString)
+
+            if len(markovString) % 5 == 0:
+                self.printUnknownState(5, markovString)
+
+            if len(markovString) % 7 == 0:
+                self.printUnknownState(7, markovString)
             return 1
+
+    ##
+    # nicer Debug message for unknown State for different length of strings
+    # @author Florian Weiskirchner
+    #
+    # @param length Length of each line which should be printed
+    # @param markovString String of the unknown State
+    ##
+    def printUnknownState(self, length, markovString):
+        markovString = str(markovString).replace(" ", "-")
+        print("unknown state:")
+        print(textwrap.fill(markovString, length))
 
     ##
     # Dirty Fix for the "Holding Jump when on the Ground" Problem
