@@ -29,7 +29,7 @@ class SuperMarioEnvironment:
         images.loadAllAssets()
 
         # Instantiating Super Mario Bros. environment
-        env = JoypadSpace(gym_super_mario_bros.make('SuperMarioBros-1-2-v0').env, movement.COMPLEX_MOVEMENT)
+        env = JoypadSpace(gym_super_mario_bros.make('SuperMarioBros-v0').env, movement.COMPLEX_MOVEMENT)
         debugWindow.clear()
 
         consoleFrameCount = 0
@@ -79,7 +79,7 @@ class SuperMarioEnvironment:
                 renderFrameCount = renderFrameCount + 1
 
             # execute action
-            calculatedAction = markovMovement.nextStep()
+            calculatedAction = markovMovement.nextStep(info["y_pos"])
             #calculatedAction = movement.move()
             debugWindow.debugPrint(map.toString() + "\n" + "\n" + str(calculatedAction))
             state, reward, done, info = env.step(calculatedAction)
