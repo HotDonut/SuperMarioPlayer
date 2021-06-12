@@ -67,6 +67,16 @@
       "detectionSymbol": "G",
       "levelTheme": ["normal"]
     },
+    "underground_goomba": {
+      "fileName": "underground_goomba.png",
+      "color": "brown",
+      "threshold": 0.8,
+      "debug": false,
+      "correctionX": 0,
+      "correctionY": 0,
+      "detectionSymbol": "G",
+      "levelTheme": ["underground"]
+    },
     "questionBox": {
       "fileName": "questionBox.png",
       "color": "yellow",
@@ -87,6 +97,36 @@
       "detectionSymbol": "?",
       "levelTheme": ["normal"]
     },
+    "underground_questionBox": {
+      "fileName": "underground_questionBox.png",
+      "color": "yellow",
+      "threshold": 0.9,
+      "debug": false,
+      "correctionX": 0,
+      "correctionY": 0,
+      "detectionSymbol": "?",
+      "levelTheme": ["underground"]
+    },
+    "underground_questionBoxLight": {
+      "fileName": "underground_questionBoxLight.png",
+      "color": "yellow",
+      "threshold": 0.9,
+      "debug": false,
+      "correctionX": 0,
+      "correctionY": 0,
+      "detectionSymbol": "?",
+      "levelTheme": ["underground"]
+    },
+    "underground_questionBoxMedium": {
+      "fileName": "underground_questionBoxMedium.png",
+      "color": "yellow",
+      "threshold": 0.9,
+      "debug": false,
+      "correctionX": 0,
+      "correctionY": 0,
+      "detectionSymbol": "?",
+      "levelTheme": ["underground"]
+    },
     "block": {
       "fileName": "block.png",
       "color": "brown",
@@ -96,6 +136,16 @@
       "correctionY": 0,
       "detectionSymbol": "B",
       "levelTheme": ["normal"]
+    },
+    "underground_block": {
+      "fileName": "underground_block.png",
+      "color": "brown",
+      "threshold": 0.9,
+      "debug": false,
+      "correctionX": 0,
+      "correctionY": 0,
+      "detectionSymbol": "B",
+      "levelTheme": ["underground"]
     },
     "floor": {
       "fileName": "floor.png",
@@ -107,6 +157,16 @@
       "detectionSymbol": "@",
       "levelTheme": ["normal"]
     },
+    "underground_floor": {
+      "fileName": "underground_floor.png",
+      "color": "green",
+      "threshold": 0.8,
+      "debug": false,
+      "correctionX": 0,
+      "correctionY": 0,
+      "detectionSymbol": "@",
+      "levelTheme": ["underground"]
+    },
     "pipe": {
       "fileName": "pipe.png",
       "color": "green",
@@ -117,8 +177,18 @@
       "detectionSymbol": "P",
       "levelTheme": ["normal"]
     },
-    "cooper": {
-      "fileName": "cooper.png",
+    "underground_pipe": {
+      "fileName": "underground_pipe.png",
+      "color": "green",
+      "threshold": 0.9,
+      "debug": false,
+      "correctionX": 0,
+      "correctionY": 0,
+      "detectionSymbol": "P",
+      "levelTheme": ["underground"]
+    },
+    "koopa": {
+      "fileName": "koopa.png",
       "color": "blue",
       "threshold": 0.6,
       "debug": false,
@@ -126,6 +196,16 @@
       "correctionY": 0,
       "detectionSymbol": "C",
       "levelTheme": ["normal"]
+    },
+    "underground_koopa": {
+      "fileName": "underground_koopa.png",
+      "color": "blue",
+      "threshold": 0.6,
+      "debug": false,
+      "correctionX": 0,
+      "correctionY": 0,
+      "detectionSymbol": "C",
+      "levelTheme": ["underground"]
     },
     "stairBlock": {
       "fileName": "stairBlock.png",
@@ -136,6 +216,16 @@
       "correctionY": 0,
       "detectionSymbol": "S",
       "levelTheme": ["normal"]
+    },
+    "underground_stairBlock": {
+      "fileName": "underground_stairBlock.png",
+      "color": "black",
+      "threshold": 0.9,
+      "debug": false,
+      "correctionX": 0,
+      "correctionY": 0,
+      "detectionSymbol": "S",
+      "levelTheme": ["underground"]
     },
     "mario": {
       "fileName": "mario.png",
