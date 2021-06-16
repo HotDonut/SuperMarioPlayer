@@ -110,6 +110,7 @@ class SuperMarioConfig:
                 self.JumpingFailedBecausePressedToEarly = int(jsonData["JumpingFailedBecausePressedToEarly"])
                 self.imageAssetsDirectory = jsonData["imageAssetsDirectory"]
                 self.markovStatesPath = jsonData["markovStatesPath"]
+                self.markovStateDimensions = jsonData["markovStateDimensions"]
                 self.debugAll = bool(jsonData["debugAll"])
                 self.themeIdentifier = jsonData["themeIdentifier"]
                 self.imageDetectionConfiguration = jsonData["imageDetectionConfiguration"]

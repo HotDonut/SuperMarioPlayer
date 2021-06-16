@@ -16,11 +16,12 @@ class SuperMarioMarkov():
     #
     # @param theMap A SuperMarioMap object used for the decision method
     ##
-    def __init__(self, theMap, filePath):
+    def __init__(self, theMap, markovStatesPath, markovStateDimensions):
         self.map = theMap
         self.markovStateDictionary = {}
         self.markovStateArraySize = 0
-        self.readMarkovFile(filePath)
+        self.markovStateDimensions = markovStateDimensions
+        self.readMarkovFile(markovStatesPath)
         self.markovStringOld = ""
         self.noMovementFrameCount = 0
         self.marioJumpStatus = 0
@@ -161,7 +162,7 @@ class SuperMarioMarkov():
     def printUnknownState(self, length, markovString):
         markovString = str(markovString).replace(" ", "-")
         print("unknown state:")
-        print('\n'.join(markovString[i:i+3] for i in range(0, len(markovString), 3)))
+        print('\n'.join(markovString[i:i+length] for i in range(0, len(markovString), length)))
 
     ##
     # Dirty Fix for the "Holding Jump when on the Ground" Problem
