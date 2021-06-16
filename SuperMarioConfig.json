@@ -3,7 +3,7 @@
   "ConsoleFramerate": 0,
   "RenderFramerate": 0,
   "JumpingFailedBecausePressedToEarly": 50,
-  "imageAssetsDirectory": "dark_assets/",
+  "imageAssetsDirectory": "assets/",
   "markovStatesPath": "Markov_States_new.txt",
   "debugAll": false,
   "themeIdentifier": {
@@ -65,7 +65,7 @@
       "correctionX": 0,
       "correctionY": 0,
       "detectionSymbol": "G",
-      "levelTheme": ["normal", "underground"]
+      "levelTheme": ["normal"]
     },
     "underground_goomba": {
       "fileName": "underground_goomba.png",
@@ -85,7 +85,7 @@
       "correctionX": 0,
       "correctionY": 0,
       "detectionSymbol": "?",
-      "levelTheme": ["normal", "underground"]
+      "levelTheme": ["normal"]
     },
     "questionBoxLight": {
       "fileName": "questionBoxLight.png",
@@ -95,7 +95,7 @@
       "correctionX": 0,
       "correctionY": 0,
       "detectionSymbol": "?",
-      "levelTheme": ["normal", "underground"]
+      "levelTheme": ["normal"]
     },
     "underground_questionBox": {
       "fileName": "underground_questionBox.png",
@@ -135,7 +135,7 @@
       "correctionX": 0,
       "correctionY": 0,
       "detectionSymbol": "B",
-      "levelTheme": ["normal", "underground"]
+      "levelTheme": ["normal"]
     },
     "underground_block": {
       "fileName": "underground_block.png",
@@ -155,7 +155,7 @@
       "correctionX": 0,
       "correctionY": 0,
       "detectionSymbol": "@",
-      "levelTheme": ["normal", "underground"]
+      "levelTheme": ["normal"]
     },
     "underground_floor": {
       "fileName": "underground_floor.png",
@@ -175,7 +175,7 @@
       "correctionX": 0,
       "correctionY": 0,
       "detectionSymbol": "P",
-      "levelTheme": ["normal", "underground"]
+      "levelTheme": ["normal"]
     },
     "underground_pipe": {
       "fileName": "underground_pipe.png",
@@ -195,7 +195,7 @@
       "correctionX": 0,
       "correctionY": 0,
       "detectionSymbol": "C",
-      "levelTheme": ["normal", "underground"]
+      "levelTheme": ["normal"]
     },
     "underground_koopa": {
       "fileName": "underground_koopa.png",
@@ -215,7 +215,7 @@
       "correctionX": 0,
       "correctionY": 0,
       "detectionSymbol": "S",
-      "levelTheme": ["normal", "underground"]
+      "levelTheme": ["normal"]
     },
     "underground_stairBlock": {
       "fileName": "underground_stairBlock.png",
