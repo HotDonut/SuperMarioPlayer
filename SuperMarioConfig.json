@@ -3,7 +3,7 @@
   "ConsoleFramerate": 0,
   "RenderFramerate": 0,
   "JumpingFailedBecausePressedToEarly": 50,
-  "imageAssetsDirectory": "assets/",
+  "imageAssetsDirectory": "dark_assets/",
   "markovStatesPath": "Markov_States_new.txt",
   "debugAll": false,
   "themeIdentifier": {
@@ -65,7 +65,7 @@
       "correctionX": 0,
       "correctionY": 0,
       "detectionSymbol": "G",
-      "levelTheme": ["normal"]
+      "levelTheme": ["normal", "underground"]
     },
     "questionBox": {
       "fileName": "questionBox.png",
@@ -75,7 +75,7 @@
       "correctionX": 0,
       "correctionY": 0,
       "detectionSymbol": "?",
-      "levelTheme": ["normal"]
+      "levelTheme": ["normal", "underground"]
     },
     "questionBoxLight": {
       "fileName": "questionBoxLight.png",
@@ -85,7 +85,7 @@
       "correctionX": 0,
       "correctionY": 0,
       "detectionSymbol": "?",
-      "levelTheme": ["normal"]
+      "levelTheme": ["normal", "underground"]
     },
     "block": {
       "fileName": "block.png",
@@ -95,7 +95,7 @@
       "correctionX": 0,
       "correctionY": 0,
       "detectionSymbol": "B",
-      "levelTheme": ["normal"]
+      "levelTheme": ["normal", "underground"]
     },
     "floor": {
       "fileName": "floor.png",
@@ -105,7 +105,7 @@
       "correctionX": 0,
       "correctionY": 0,
       "detectionSymbol": "@",
-      "levelTheme": ["normal"]
+      "levelTheme": ["normal", "underground"]
     },
     "pipe": {
       "fileName": "pipe.png",
@@ -115,7 +115,7 @@
       "correctionX": 0,
       "correctionY": 0,
       "detectionSymbol": "P",
-      "levelTheme": ["normal"]
+      "levelTheme": ["normal", "underground"]
     },
     "cooper": {
       "fileName": "cooper.png",
@@ -125,7 +125,7 @@
       "correctionX": 0,
       "correctionY": 0,
       "detectionSymbol": "C",
-      "levelTheme": ["normal"]
+      "levelTheme": ["normal", "underground"]
     },
     "stairBlock": {
       "fileName": "stairBlock.png",
@@ -135,7 +135,7 @@
       "correctionX": 0,
       "correctionY": 0,
       "detectionSymbol": "S",
-      "levelTheme": ["normal"]
+      "levelTheme": ["normal", "underground"]
     },
     "mario": {
       "fileName": "mario.png",
