@@ -6,12 +6,12 @@
   "imageAssetsDirectory": "assets/",
   "markovStatesPath": "Markov_States_new.txt",
   "markovStateDimensions": [
-    [3,3],
+	[7,7],
+    [7,5],
+    [7,3],
     [5,5],
     [5,3],
-    [7,5],
-    [7,7],
-    [7,3]
+    [3,3]
   ],
   "debugAll": false,
   "themeIdentifier": {
