@@ -13,7 +13,7 @@ from src.SuperMarioConfig import SuperMarioConfig as SuperMarioConfig
 
 class Images:
    
-    def __init__(self, imageDetectionConfiguration, imageAssetsDirectory):
+    def __init__(self, imageDetectionConfiguration, imageAssetsDirectory, debugAll):
         # Initializing img_gray and state for later use in detection functions
         self.__img_gray = 0
         self.__state = 0
@@ -34,6 +34,7 @@ class Images:
         self.__imageDetectionConfiguration = imageDetectionConfiguration
         self.__imageAssetsDirectory = imageAssetsDirectory
         self.__AssetsForCV2 = {}
+        self.__debugAll = debugAll
 
     ##
     # Converts all the assets into a format so that openCV can work with them.
@@ -84,11 +85,11 @@ class Images:
                     if len(loc[0]) != 0:
                         loc[0][:] = loc[0][:] - assetData["correctionY"]
                         loc[1][:] = loc[1][:] - assetData["correctionX"]
+                        detectedAssets[assetData["detectionSymbol"]] = loc
 
-                    detectedAssets[assetData["detectionSymbol"]] = loc
-
-                    if assetData["debug"]:
+                    if assetData["debug"] or self.__debugAll:
                         self.writeDebugDataForDetection(loc, assetData["color"])
+
 
         return detectedAssets
 
