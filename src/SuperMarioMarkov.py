@@ -88,15 +88,8 @@ class SuperMarioMarkov():
                 # Return the found MovementAction
                 return self.jumpConverter(self.markovStateDictionary.get(markovString), self.marioJumpStatus)
 
-        # Set to 0 to find unknown states
-        if len(markovString) % 3 == 0:
-            self.printUnknownState(3, markovString)
-
-        if len(markovString) % 5 == 0:
-            self.printUnknownState(5, markovString)
-
-        if len(markovString) % 7 == 0:
-            self.printUnknownState(7, markovString)
+        #print unknown state
+        self.printUnknownState(16,self.convertArrayToDictionaryString(self.map.environment))
         return 1
 
     ##
@@ -219,13 +212,13 @@ class SuperMarioMarkov():
         if stateSizeValues[1] % 2 == 1:
             bigY += 1
 
-        # Check if sliced state would be out of bounds of the map
-        if startValues[0]-smallX < 0 or startValues[1]-smallY < 0 or startValues[0]+bigX > 14 or startValues[1]+bigY > 15:
-            return np.array([])
-
         # Slice the state around the startValues and return the new sliced map-array
-        state = self.map.environment[startValues[0]-smallX : startValues[0]+bigX, startValues[1]-smallY:startValues[1]+bigY]
-        return state
+        try:
+            state = self.map.environment[startValues[0]-smallX : startValues[0]+bigX, startValues[1]-smallY:startValues[1]+bigY]
+            return state
+        # Check if sliced state would be out of bounds of the map
+        except:
+            return np.array([])
 
     ##
     # Method that converts an array to a string that can be used by the StateDictionary as a key
