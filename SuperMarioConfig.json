@@ -105,6 +105,16 @@
       "detectionSymbol": "?",
       "levelTheme": ["normal"]
     },
+    "questionBoxMedium": {
+      "fileName": "questionBoxMedium.png",
+      "color": "yellow",
+      "threshold": 0.9,
+      "debug": false,
+      "correctionX": 0,
+      "correctionY": 0,
+      "detectionSymbol": "?",
+      "levelTheme": ["normal"]
+    },
     "underground_questionBox": {
       "fileName": "underground_questionBox.png",
       "color": "yellow",
@@ -215,6 +225,16 @@
       "detectionSymbol": "C",
       "levelTheme": ["underground"]
     },
+    "underground_shell": {
+      "fileName": "underground_shell.png",
+      "color": "blue",
+      "threshold": 0.6,
+      "debug": false,
+      "correctionX": 0,
+      "correctionY": 0,
+      "detectionSymbol": "U",
+      "levelTheme": ["underground"]
+    },
     "stairBlock": {
       "fileName": "stairBlock.png",
       "color": "black",
@@ -233,6 +253,36 @@
       "correctionX": 0,
       "correctionY": 0,
       "detectionSymbol": "S",
+      "levelTheme": ["underground"]
+    },
+    "underground_coin": {
+      "fileName": "underground_coin.png",
+      "color": "yellow",
+      "threshold": 0.9,
+      "debug": false,
+      "correctionX": 0,
+      "correctionY": 0,
+      "detectionSymbol": "$",
+      "levelTheme": ["underground"]
+    },
+    "underground_coinDark": {
+      "fileName": "underground_coinDark.png",
+      "color": "yellow",
+      "threshold": 0.9,
+      "debug": false,
+      "correctionX": 0,
+      "correctionY": 0,
+      "detectionSymbol": "$",
+      "levelTheme": ["underground"]
+    },
+    "underground_coinLight": {
+      "fileName": "underground_coinLight.png",
+      "color": "yellow",
+      "threshold": 0.9,
+      "debug": false,
+      "correctionX": 0,
+      "correctionY": 0,
+      "detectionSymbol": "$",
       "levelTheme": ["underground"]
     },
     "mario": {
