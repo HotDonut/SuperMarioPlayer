@@ -6,11 +6,13 @@
   "imageAssetsDirectory": "assets/",
   "markovStatesPath": "Markov_States_new.txt",
   "markovStateDimensions": [
-    [14,7],
+    [13,7],
     [5,11],
+	[9,9],
 	[7,7],
     [7,5],
     [7,3],
+	[6,5],
     [6,3],
     [5,9],
     [5,7],
@@ -232,6 +234,26 @@
       "detectionSymbol": "C",
       "levelTheme": ["underground"]
     },
+	"underground_koopa_red": {
+      "fileName": "underground_koopa_red.png",
+      "color": "blue",
+      "threshold": 0.6,
+      "debug": false,
+      "correctionX": 0,
+      "correctionY": -1,
+      "detectionSymbol": "C",
+      "levelTheme": ["underground"]
+    },
+	"underground_reversed_koopa_red": {
+      "fileName": "underground_reversed_koopa_red.png",
+      "color": "blue",
+      "threshold": 0.6,
+      "debug": false,
+      "correctionX": 0,
+      "correctionY": -1,
+      "detectionSymbol": "C",
+      "levelTheme": ["underground"]
+    },
     "underground_shell": {
       "fileName": "underground_shell.png",
       "color": "blue",
@@ -304,6 +326,22 @@
     },
     "mario": {
       "fileName": "mario.png",
+      "color": [255, 0, 0],
+      "threshold": 0.7,
+      "debug": false,
+      "correctionX": 6,
+      "correctionY": 2,
+      "detectionSymbol": "M",
+      "levelTheme": [
+        "normal",
+        "underground",
+        "castle",
+        "underwater",
+        "mushroom"
+      ]
+    },
+	"reversed_mario": {
+      "fileName": "reversed_mario.png",
       "color": [255, 0, 0],
       "threshold": 0.7,
       "debug": false,
