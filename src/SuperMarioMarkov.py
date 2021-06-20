@@ -88,7 +88,7 @@ class SuperMarioMarkov():
             # If
             if self.markovStateDictionary.get(markovString) != None:
                 # Return the found MovementAction
-                print(markovString)
+                # print(markovString)
 
                 if "L" in markovString:
                     return self.markovStateDictionary.get(markovString)
