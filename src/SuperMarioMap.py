@@ -107,3 +107,8 @@ class Mario2DMap():
 
                         if x < 15:
                             self.environment[i][x + 1] = detectionSymbol
+
+                if detectionSymbol == "L":
+                    for i in range(1, 4):
+                        if x + i < 15:
+                            self.environment[y][x + i] = detectionSymbol

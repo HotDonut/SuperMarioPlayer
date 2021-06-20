@@ -6,6 +6,8 @@
   "imageAssetsDirectory": "assets/",
   "markovStatesPath": "Markov_States_new.txt",
   "markovStateDimensions": [
+    [14,7],
+    [5,11],
 	[7,7],
     [7,5],
     [7,3],
@@ -290,9 +292,9 @@
       "detectionSymbol": "$",
       "levelTheme": ["underground"]
     },
-    "underground_liftPart": {
-      "fileName": "underground_liftPart.png",
-      "color": "yellow",
+    "underground_lift": {
+      "fileName": "underground_lift.png",
+      "color": [0, 255, 0],
       "threshold": 0.9,
       "debug": false,
       "correctionX": 0,

@@ -78,6 +78,8 @@ class SuperMarioMarkov():
         # Prepare variables
         markovString = ""
 
+        # self.printUnknownState(16, self.convertArrayToDictionaryString(self.map.environment))
+
         for stateSize in self.markovStateDimensions:
             # Slice the state around mario
             stateSliced = self.sliceState(self.getMarioCoordinates(), stateSize)
@@ -86,6 +88,11 @@ class SuperMarioMarkov():
             # If
             if self.markovStateDictionary.get(markovString) != None:
                 # Return the found MovementAction
+                print(markovString)
+
+                if "L" in markovString:
+                    return self.markovStateDictionary.get(markovString)
+
                 return self.jumpConverter(self.markovStateDictionary.get(markovString), self.marioJumpStatus)
 
         #print unknown state
