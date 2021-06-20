@@ -290,6 +290,16 @@
       "detectionSymbol": "$",
       "levelTheme": ["underground"]
     },
+    "underground_liftPart": {
+      "fileName": "underground_liftPart.png",
+      "color": "yellow",
+      "threshold": 0.9,
+      "debug": false,
+      "correctionX": 0,
+      "correctionY": 0,
+      "detectionSymbol": "L",
+      "levelTheme": ["underground"]
+    },
     "mario": {
       "fileName": "mario.png",
       "color": [255, 0, 0],
