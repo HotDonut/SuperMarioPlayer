@@ -17,18 +17,6 @@ class Images:
         # Initializing img_gray and state for later use in detection functions
         self.__img_gray = 0
         self.__state = 0
-       
-        # Loading all template images for later detection on instance creation
-        # All images are of size 16x16 except mario.png (6x6) and pipe.png (32x32)
-        self.__goombaImage = cv2.imread('assets/goomba.png', 0)
-        self.__marioImage = cv2.imread('assets/mario.png', 0)
-        self.__questionBoxImage = cv2.imread('assets/questionbox.png', 0)
-        self.__questionBoxImageLight = cv2.imread('assets/questionboxLight.png', 0)
-        self.__blockImage = cv2.imread('assets/block.png', 0)
-        self.__floorImage = cv2.imread('assets/floor.png', 0)
-        self.__pipeImage = cv2.imread('assets/pipe.png', 0)
-        self.__cooperImage = cv2.imread('assets/cooper.png', 0)
-        self.__stairBlockImage = cv2.imread('assets/stairBlock.png', 0)
 
         # To save Image Data received from SuperMarioConfig (JSON FIle) and ready to use assets for OpenCV2
         self.__imageDetectionConfiguration = imageDetectionConfiguration
@@ -95,27 +83,6 @@ class Images:
 
 
     ##
-    # Detects all occurences of a given template image in the given state image, and returns
-    # their coordinates (the position of the given template on the screen) using opencv2. The reference point is the
-    # leftmost uppermost pixel of the template
-    # @author Lukas Geyrhofer
-    # @param template Template Image which shall be detected
-    # @param threshold Number with value between 1 and 0. Higher numbers means a lower margin of error during detection,
-    # but may result in no detection at all
-    # @param color Color which shall be used to mark detections in debug mode
-    # @param debug True/False flag to enter debug mode. When enabled the detected entity will be marked
-    # with the corresponding color parameter
-    ##
-    def detect(self, template, threshold, color, debug):
-        res = cv2.matchTemplate(self.__img_gray, template, cv2.TM_CCOEFF_NORMED)
-        loc = np.where(res >= threshold)
-        
-        if debug:
-            self.writeDebugDataForDetection(loc, color)
-
-        return loc
-
-    ##
     # Colors the y and x axis of the point(s) in loc
     # @author Lukas Geyrhofer
     # @param loc Location of the Point which is to mark
@@ -129,123 +96,3 @@ class Images:
                 self.__state[:, pt[0]] = color
                 self.__state[pt[1], :] = color
                 print("Object position x:", pt[0] / 16, "Object position y:", pt[1] / 16, "\n")
-
-    ##
-    # Specialized detect function for Mario. Since the template for Mario-Detection had to
-    # be a small area (due to Mario's different sprites) the returned coordinates have to be normalized to be consistent
-    # with the other templates
-    # @author Lukas Geyrhofer
-    # @param debug True/False flag to enter debug mode. When enabled marked will be marked
-    # red when detected
-    ##
-    def detectMario(self):
-        color = [255, 0, 0]
-        threshold = 0.7
-
-        loc = self.detect(self.__marioImage, threshold, color, False)
-
-        # Normalizing detection of mario to top left corner
-        if len(loc[0]) != 0:
-            loc[0][0] = loc[0][0] - 2
-            loc[1][0] = loc[1][0] - 6
-
-        if (SuperMarioConfig.DebugMarioDetection):
-            self.writeDebugDataForDetection(loc, color)
-
-        return loc
-
-    ##
-    # Function to detect Goombas
-    # @author Lukas Geyrhofer
-    # @param debug True/False flag to enter debug mode. The flag will be be handed on to the detect function.
-    # Goombas will be marked by the detect function.
-    ##
-    def detectGoomba(self):
-        color = [0, 0, 0]
-        threshold = 0.5
-
-        return self.detect(self.__goombaImage, threshold, color, SuperMarioConfig.DebugGoombaDetection)
-
-    ##
-    # Function to detect Question Boxes
-    # @author Lukas Geyrhofer
-    # @param state State array provided by the gym-super-mario-bros class of type ndarray:(240, 256, 3)
-    # @param debug True/False flag to enter debug mode. The flag will be be handed on to the detect function.
-    # Question Boxes will be marked by the detect function.
-    ##
-    def detectQuestionBox(self):
-        color = [0, 255, 0]
-        threshold = 0.9
-
-        return self.detect(self.__questionBoxImage, threshold, color, SuperMarioConfig.DebugQuestionBoxDetection)
-
-    ##
-    # Function to detect Question Boxes in blinking state
-    # @author Lukas Geyrhofer
-    # @param debug True/False flag to enter debug mode. The flag will be be handed on to the detect function.
-    # Blinking Question Boxes will be marked by the detect function.
-    ##
-    def detectQuestionBoxlight(self):
-        color = [0, 255, 0]
-        threshold = 0.9
-
-        return self.detect(self.__questionBoxImageLight, threshold, color, SuperMarioConfig.DebugQuestionBoxLightDetection)
-
-    ##
-    # Function to detect Brick Blocks
-    # @author Lukas Geyrhofer
-    # @param debug True/False flag to enter debug mode. The flag will be be handed on to the detect function.
-    # Brick Blocks will be marked by the detect function.
-    ##
-    def detectBlock(self):
-        color = [0, 255, 0]
-        threshold = 0.9
-
-        return self.detect(self.__blockImage, threshold, color, SuperMarioConfig.DebugBlockDetection)
-
-    ##
-    # Function to detect Floor Blocks
-    # @author Lukas Geyrhofer
-    # @param debug True/False flag to enter debug mode. The flag will be be handed on to the detect function.
-    # Floor Blocks will be marked by the detect function.
-    ##
-    def detectFloor(self):
-        color = [0, 255, 255]
-        threshold = 0.8
-
-        return self.detect(self.__floorImage, threshold, color, SuperMarioConfig.DebugFloorDetection)
-    ##
-    # Function to detect Pipes
-    # @author Lukas Geyrhofer
-    # @param debug True/False flag to enter debug mode. The flag will be be handed on to the detect function.
-    # Pipes will be marked by the detect function.
-    ##
-    def detectPipe(self):
-        color = [0, 255, 255]
-        threshold = 0.9
-
-        return self.detect(self.__pipeImage, threshold, color, SuperMarioConfig.DebugPipeDetection)
-
-    ##
-    # Function to detect Coopers
-    # @author Lukas Geyrhofer
-    # @param debug True/False flag to enter debug mode. The flag will be be handed on to the detect function.
-    # Coopers will be marked by the detect function.
-    ##
-    def detectCooper(self):
-        color = [0, 100, 255]
-        threshold = 0.6
-
-        return self.detect(self.__cooperImage, threshold, color, SuperMarioConfig.DebugCooperDetection)
-
-    ##
-    # Function to detect Stair Blocks
-    # @author Lukas Geyrhofer
-    # @param debug True/False flag to enter debug mode. The flag will be be handed on to the detect function.
-    # Stair Blocks will be marked by the detect function.
-    ##
-    def detectStairBlock(self):
-        color = [100, 100, 255]
-        threshold = 0.9
-
-        return self.detect(self.__stairBlockImage, threshold, color, SuperMarioConfig.DebugStairDetection)

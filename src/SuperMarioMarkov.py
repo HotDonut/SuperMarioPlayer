@@ -75,9 +75,6 @@ class SuperMarioMarkov():
         if marioCoord.size == 0:
             return 0
 
-        # Prepare variables
-        markovString = ""
-
         # self.printUnknownState(16, self.convertArrayToDictionaryString(self.map.environment))
 
         for stateSize in self.markovStateDimensions:

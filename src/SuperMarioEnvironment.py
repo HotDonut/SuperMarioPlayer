@@ -14,16 +14,12 @@ class SuperMarioEnvironment:
     def startPlayer(self):
 
         # SuperMarioConfig needs a concrete object to use json encoding/decoding
-        config = SuperMarioConfig()
-        # load config into SuperMarioConfig class variables
-        config.load_config("SuperMarioConfig.json")
-        # create debug config json file (current config)
-        # config.write_json_file()
+        config = SuperMarioConfig("SuperMarioConfig.json")
 
         map = SuperMarioMap.Mario2DMap()
         movement = SuperMarioMovement.Movement(map)
         images = SuperMarioImages.Images(config.imageDetectionConfiguration, config.imageAssetsDirectory, config.debugAll)
-        debugWindow = SuperMarioConsoleDebugWindow.SuperMarioConsoleDebugWindow()
+        debugWindow = SuperMarioConsoleDebugWindow.SuperMarioConsoleDebugWindow(config.WindowsConsoleOutput)
         markovMovement = SuperMarioMarkov.SuperMarioMarkov(map, config.markovStatesPath, config.markovStateDimensions)
 
         images.loadAllAssets()
@@ -34,7 +30,6 @@ class SuperMarioEnvironment:
 
         consoleFrameCount = 0
         renderFrameCount = 0
-        frameCount = 0
         done = True
 
         while True:
@@ -55,24 +50,14 @@ class SuperMarioEnvironment:
             detectedAssetsAndCorrespondingSymbol = images.detectOnlyThemeSpecificAssets(currentTheme)
             map.changeMapAll(detectedAssetsAndCorrespondingSymbol)
 
-            # map.changeMap(images.detectQuestionBox(), "?")
-            # map.changeMap(images.detectQuestionBoxlight(), "?")
-            # map.changeMap(images.detectBlock(), "B")
-            # map.changeMap(images.detectFloor(), "@")
-            # map.changeMap(images.detectGoomba(), "G")
-            # map.changeMap(images.detectPipe(), "P")
-            # map.changeMap(images.detectCooper(), "C")
-            # map.changeMap(images.detectStairBlock(), "S")
-            # map.changeMap(images.detectMario(), "M")
-
             # visualization
-            if consoleFrameCount >= SuperMarioConfig.ConsoleFramerate:
+            if consoleFrameCount >= config.ConsoleFramerate:
                 debugWindow.debugPrint(map.toString())
                 consoleFrameCount = 0
             else:
                 consoleFrameCount = consoleFrameCount + 1
 
-            if renderFrameCount >= SuperMarioConfig.RenderFramerate:
+            if renderFrameCount >= config.RenderFramerate:
                 env.render()
                 renderFrameCount = 0
             else:
@@ -84,17 +69,5 @@ class SuperMarioEnvironment:
             debugWindow.debugPrint(map.toString() + "\n" + "\n" + str(calculatedAction))
             state, reward, done, info = env.step(calculatedAction)
 
-            # debug
-
-            # Mario Clips in to the Stairs (debug)
-            # if frameCount == 1368:
-            #     print("")
-
-            # print(frameCount)
-            # f = open("MapsNew.txt", "a")
-            # String = "Map at Frame " + str(frameCount) + ":\n\n" + map.toString()
-            # f.write(String)
-            # f.close()
-            # frameCount = frameCount + 1
 
         env.close()

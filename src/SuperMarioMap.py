@@ -57,34 +57,6 @@ class Mario2DMap():
             # self.environment[:] = " "
             self.environment.fill(" ")
 
-    ##
-    # This method changes specific places of the the simplified version of the game which is saved as a 15x16 array
-    #
-    # @author Wolfgang Mair, Lukas Geyrhofer
-    # @param loc A tupel which holds x and y coordinates of elements to be saved into the simplified version of the game
-    # @param symbol A char parameter that defines the symbol in which the elements should be represented
-    ##
-    def changeMap(self, location, symbol):
-
-        # iterate through every x and y coordinates saved in the tuple loc
-        for pt in zip(*location[::-1]):
-            # make the coordinates fit in a 15x16 array
-            x = int(np.floor(pt[0] / 16))
-            y = int(np.floor((pt[1] / 16)))
-
-            # save on the corresponding array-slot the symbol character
-            self.environment[y][x] = symbol
-
-            # if it happens to be a pipe add extra symbols (since only the top-left part gets recognized)
-            if symbol == "P":
-                # add more pipe symbols until you reach the lowest part of the array
-                for i in range(y, 15, 1):
-                    self.environment[i][x] = symbol
-
-                    # make the pipe 2 paces wide
-                    if x < 15:
-                        self.environment[i][x + 1] = symbol
-
 
     ##
     # This method receives a dictionary with characters as Key and Locations as value. It sets the character

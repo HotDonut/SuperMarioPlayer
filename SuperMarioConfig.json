@@ -4,7 +4,7 @@
   "RenderFramerate": 0,
   "JumpingFailedBecausePressedToEarly": 50,
   "imageAssetsDirectory": "assets/",
-  "markovStatesPath": "Markov_States_new.txt",
+  "markovStatesPath": "Markov_States.txt",
   "markovStateDimensions": [
     [13,7],
     [5,11],
@@ -76,7 +76,7 @@
   "imageDetectionConfiguration": {
     "goomba": {
       "fileName": "goomba.png",
-      "color": "brown",
+      "color": [40, 0, 160],
       "threshold": 0.5,
       "debug": false,
       "correctionX": 0,
@@ -86,7 +86,7 @@
     },
     "underground_goomba": {
       "fileName": "underground_goomba.png",
-      "color": "brown",
+      "color": [40, 0, 160],
       "threshold": 0.8,
       "debug": false,
       "correctionX": 0,
@@ -96,7 +96,7 @@
     },
     "questionBox": {
       "fileName": "questionBox.png",
-      "color": "yellow",
+      "color": [40, 80, 160],
       "threshold": 0.9,
       "debug": false,
       "correctionX": 0,
@@ -106,7 +106,7 @@
     },
     "questionBoxLight": {
       "fileName": "questionBoxLight.png",
-      "color": "yellow",
+      "color": [40, 80, 160],
       "threshold": 0.9,
       "debug": false,
       "correctionX": 0,
@@ -116,7 +116,7 @@
     },
     "questionBoxMedium": {
       "fileName": "questionBoxMedium.png",
-      "color": "yellow",
+      "color": [40, 80, 160],
       "threshold": 0.9,
       "debug": false,
       "correctionX": 0,
@@ -126,7 +126,7 @@
     },
     "underground_questionBox": {
       "fileName": "underground_questionBox.png",
-      "color": "yellow",
+      "color": [40, 80, 160],
       "threshold": 0.9,
       "debug": false,
       "correctionX": 0,
@@ -136,7 +136,7 @@
     },
     "underground_questionBoxLight": {
       "fileName": "underground_questionBoxLight.png",
-      "color": "yellow",
+      "color": [40, 80, 160],
       "threshold": 0.9,
       "debug": false,
       "correctionX": 0,
@@ -146,7 +146,7 @@
     },
     "underground_questionBoxMedium": {
       "fileName": "underground_questionBoxMedium.png",
-      "color": "yellow",
+      "color": [40, 80, 160],
       "threshold": 0.9,
       "debug": false,
       "correctionX": 0,
@@ -156,7 +156,7 @@
     },
     "block": {
       "fileName": "block.png",
-      "color": "brown",
+      "color": [0, 0, 0],
       "threshold": 0.9,
       "debug": false,
       "correctionX": 0,
@@ -166,7 +166,7 @@
     },
     "underground_block": {
       "fileName": "underground_block.png",
-      "color": "brown",
+      "color": [0, 0, 0],
       "threshold": 0.9,
       "debug": false,
       "correctionX": 0,
@@ -176,7 +176,7 @@
     },
     "floor": {
       "fileName": "floor.png",
-      "color": "green",
+      "color": [0, 0, 0],
       "threshold": 0.8,
       "debug": false,
       "correctionX": 0,
@@ -186,7 +186,7 @@
     },
     "underground_floor": {
       "fileName": "underground_floor.png",
-      "color": "green",
+      "color": [50, 150, 255],
       "threshold": 0.8,
       "debug": false,
       "correctionX": 0,
@@ -196,7 +196,7 @@
     },
     "pipe": {
       "fileName": "pipe.png",
-      "color": "green",
+      "color": [102, 100, 255],
       "threshold": 0.9,
       "debug": false,
       "correctionX": 0,
@@ -206,7 +206,7 @@
     },
     "underground_pipe": {
       "fileName": "underground_pipe.png",
-      "color": "green",
+      "color": [255, 0, 255],
       "threshold": 0.9,
       "debug": false,
       "correctionX": 0,
@@ -216,7 +216,7 @@
     },
     "koopa": {
       "fileName": "koopa.png",
-      "color": "blue",
+      "color": [0, 0, 255],
       "threshold": 0.6,
       "debug": false,
       "correctionX": 0,
@@ -226,7 +226,7 @@
     },
     "underground_koopa": {
       "fileName": "underground_koopa.png",
-      "color": "blue",
+      "color": [0, 0, 255],
       "threshold": 0.6,
       "debug": false,
       "correctionX": 0,
@@ -236,7 +236,7 @@
     },
 	"underground_koopa_red": {
       "fileName": "underground_koopa_red.png",
-      "color": "blue",
+      "color": [0, 0, 255],
       "threshold": 0.6,
       "debug": false,
       "correctionX": 0,
@@ -246,7 +246,7 @@
     },
 	"underground_reversed_koopa_red": {
       "fileName": "underground_reversed_koopa_red.png",
-      "color": "blue",
+      "color": [0, 0, 255],
       "threshold": 0.6,
       "debug": false,
       "correctionX": 0,
@@ -256,7 +256,7 @@
     },
     "underground_shell": {
       "fileName": "underground_shell.png",
-      "color": "blue",
+      "color": [0, 0, 255],
       "threshold": 0.6,
       "debug": false,
       "correctionX": 0,
@@ -266,7 +266,7 @@
     },
     "stairBlock": {
       "fileName": "stairBlock.png",
-      "color": "black",
+      "color": [255, 255, 0],
       "threshold": 0.9,
       "debug": false,
       "correctionX": 0,
@@ -276,7 +276,7 @@
     },
     "underground_stairBlock": {
       "fileName": "underground_stairBlock.png",
-      "color": "black",
+      "color": [255, 255, 0],
       "threshold": 0.9,
       "debug": false,
       "correctionX": 0,
@@ -286,7 +286,7 @@
     },
     "underground_coin": {
       "fileName": "underground_coin.png",
-      "color": "yellow",
+      "color": [0, 255, 0],
       "threshold": 0.9,
       "debug": false,
       "correctionX": 0,
@@ -296,7 +296,7 @@
     },
     "underground_coinDark": {
       "fileName": "underground_coinDark.png",
-      "color": "yellow",
+      "color": [0, 255, 0],
       "threshold": 0.9,
       "debug": false,
       "correctionX": 0,
@@ -306,7 +306,7 @@
     },
     "underground_coinLight": {
       "fileName": "underground_coinLight.png",
-      "color": "yellow",
+      "color": [0, 255, 0],
       "threshold": 0.9,
       "debug": false,
       "correctionX": 0,
