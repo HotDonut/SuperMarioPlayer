@@ -66,7 +66,7 @@ class SuperMarioEnvironment:
             # execute action
             calculatedAction = markovMovement.nextStep(info["y_pos"])
             #calculatedAction = movement.move()
-            debugWindow.debugPrint(map.toString() + "\n" + "\n" + str(calculatedAction))
+            debugWindow.debugPrint(map.toString() + "\n" + "Calculated Action: " + str(calculatedAction))
             state, reward, done, info = env.step(calculatedAction)
 
 

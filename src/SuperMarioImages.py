@@ -95,4 +95,4 @@ class Images:
                 # print(pt[0], pt[1])
                 self.__state[:, pt[0]] = color
                 self.__state[pt[1], :] = color
-                print("Object position x:", pt[0] / 16, "Object position y:", pt[1] / 16, "\n")
+                # print("Object position x:", pt[0] / 16, "Object position y:", pt[1] / 16, "\n")
