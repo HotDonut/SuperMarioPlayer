@@ -105,7 +105,7 @@ class SuperMarioMarkov():
     ##
     def printUnknownState(self, length, markovString):
         markovString = str(markovString).replace(" ", "-")
-        print("unknown state:")
+        print("\n\n\n Found unknown state (choosing default action):")
         print('\n'.join(markovString[i:i+length] for i in range(0, len(markovString), length)))
 
     ##
