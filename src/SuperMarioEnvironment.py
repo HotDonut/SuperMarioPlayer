@@ -5,6 +5,7 @@ import src.SuperMarioImages as SuperMarioImages
 import src.SuperMarioMovement as SuperMarioMovement
 import src.SuperMarioMarkov as SuperMarioMarkov
 import src.SuperMarioMap as SuperMarioMap
+import src.SuperMarioReinforcedLearning as SuperMarioReinforcedLearning
 import src.SuperMarioConsoleDebugWindow as SuperMarioConsoleDebugWindow
 from src.SuperMarioConfig import SuperMarioConfig as SuperMarioConfig
 
@@ -21,6 +22,7 @@ class SuperMarioEnvironment:
         images = SuperMarioImages.Images(config.imageDetectionConfiguration, config.imageAssetsDirectory, config.debugAll)
         debugWindow = SuperMarioConsoleDebugWindow.SuperMarioConsoleDebugWindow(config.WindowsConsoleOutput)
         markovMovement = SuperMarioMarkov.SuperMarioMarkov(map, config.markovStatesPath, config.markovStateDimensions)
+        reinforcedLearningMovement = SuperMarioReinforcedLearning.SuperMarioReinforcedLearning(map)
 
         images.loadAllAssets()
 
@@ -65,6 +67,7 @@ class SuperMarioEnvironment:
 
             # execute action
             calculatedAction = markovMovement.nextStep(info["y_pos"])
+            reinforcedLearningMovement.transformMap()
             #calculatedAction = movement.move()
             debugWindow.debugPrint(map.toString() + "\n" + "Calculated Action: " + str(calculatedAction))
             state, reward, done, info = env.step(calculatedAction)
