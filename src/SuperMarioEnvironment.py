@@ -33,6 +33,9 @@ class SuperMarioEnvironment:
         consoleFrameCount = 0
         renderFrameCount = 0
         done = True
+        reward = 0
+        calculatedAction = 0
+        learningCycle = 0
 
         while True:
             if done:
@@ -66,11 +69,13 @@ class SuperMarioEnvironment:
                 renderFrameCount = renderFrameCount + 1
 
             # execute action
-            calculatedAction = markovMovement.nextStep(info["y_pos"])
-            reinforcedLearningMovement.transformMap()
+            # calculatedAction = markovMovement.nextStep(info["y_pos"])
+            calculatedAction = reinforcedLearningMovement.nextStep(reward, calculatedAction)
             #calculatedAction = movement.move()
             debugWindow.debugPrint(map.toString() + "\n" + "Calculated Action: " + str(calculatedAction))
+            debugWindow.debugPrint("Hello World")
             state, reward, done, info = env.step(calculatedAction)
+            # print(reward)
 
 
         env.close()
