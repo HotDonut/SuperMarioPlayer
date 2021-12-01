@@ -1,44 +1,55 @@
+import random
 import numpy as np
+import tensorflow as tf
+import cv2
 from tensorflow.keras.models import clone_model
 from tensorflow.keras import Model, Sequential
-from tensorflow.keras.layers import Dense
+from tensorflow.keras.layers import Dense, Conv2D, MaxPooling2D, Flatten
 from tensorflow.keras.optimizers import Adam
+from tensorflow_core.python.keras import regularizers
+
 
 class SuperMarioReinforcedLearning():
-    def __init__(self, theMap):
+    def __init__(self):
         self.lambda_value = 0.9
 
-        self.map = theMap
-        self.transformMap()
         self.inputs = 0
         self.prediction_list_buffer = None
         self.saved_experiences = []
         self.iteriationInCurrentBatch = -1
         self.train_iterations = 0
         self.batchSize = 50
+        self.epsilon = 0.05
 
         self.main_model = Sequential()
-        self.main_model.add(Dense(60, input_dim = 240, activation = "relu"))
-        self.main_model.add(Dense(11)) # linear activation
+        self.main_model.add(Conv2D(32, (3, 3), input_shape=(240, 256, 3), activation="relu", padding="same"))
+        self.main_model.add(Conv2D(64, (3, 3), activation="selu", padding="same"))
+        self.main_model.add(MaxPooling2D(pool_size=(2, 2), padding="same"))
+        self.main_model.add(Flatten())
+        self.main_model.add(Dense(60, activation="relu", kernel_regularizer=regularizers.l2(0.001)))
+        self.main_model.add(Dense(11))# linear activation
         self.main_model.compile(optimizer=Adam(), loss="categorical_crossentropy", metrics=["categorical_accuracy"])
 
         self.target_model = clone_model(self.main_model)
 
 
-    def nextStep(self, reward, action_taken):
+    def nextStep(self, reward, action_taken, picture):
         self.iteriationInCurrentBatch += 1
+        # cropped = picture[0:200,100:200]
+        # converted = cv2.cvtColor(cropped, cv2.COLOR_BGR2GRAY)
+        picture = picture.reshape([-1, 240, 256, 3])
 
         # save current state(input) for later calculations
-        self.inputs_buffer = self.inputs
-
-        # transform string map to numbers for use in the network
-        self.transformMap()
+        self.inputs_buffer = picture
 
         # compute q values
-        prediction_list = self.target_model.predict([self.inputs])
+        prediction_list = self.target_model.predict([picture])
 
-        # get action with highest q value
-        calculated_action = np.argmax(prediction_list)
+        # get action with highest q value or explore
+        if random.uniform(0, 1) < self.epsilon:
+            calculated_action = random.randint(1, 10)
+        else:
+            calculated_action = np.argmax(prediction_list)
 
         # calculate temporal difference for learning
         temporal_difference = self.calculateTemporalDifference(reward, prediction_list[0][calculated_action])
@@ -66,16 +77,13 @@ class SuperMarioReinforcedLearning():
         print("training cycle: ", self.train_iterations)
         self.train_iterations += 1
 
-        inputs = [item[0] for item in self.saved_experiences]
-        predictions = [item[1] for item in self.saved_experiences]
-
-        inputs = np.array(inputs).reshape(50, 240)
-        predictions = np.array(predictions).reshape(50, 11)
+        inputs = np.reshape(np.array([item[0] for item in self.saved_experiences]), (-1, 240, 256, 3))
+        predictions = np.reshape(np.array([item[1] for item in self.saved_experiences]), (-1, 11))
 
         # print(inputs)
         # print(predictions)
 
-        self.main_model.fit(inputs, predictions, epochs=1, verbose=False)
+        self.main_model.fit(inputs, predictions, epochs=10, verbose=False)
         self.saved_experiences = []
 
         if self.train_iterations is 10:
