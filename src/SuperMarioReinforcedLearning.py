@@ -11,8 +11,8 @@ from tensorflow_core.python.keras import regularizers
 
 class SuperMarioReinforcedLearning():
     def __init__(self):
-        np.random.seed(42)
-        tf.random.set_seed(42)
+        np.random.seed(69)
+        tf.random.set_seed(69)
 
         self.lambda_value = 0.9
 
@@ -24,7 +24,6 @@ class SuperMarioReinforcedLearning():
         self.macro_iterations = 0
         self.macro_cycle = 10
         self.batchSize = 100
-        self.save_cycle = 10
         self.epsilon = 0.05
 
 
@@ -83,8 +82,6 @@ class SuperMarioReinforcedLearning():
         if self.train_iterations % self.macro_cycle is 0:
             self.target_model = clone_model(self.main_model)
             self.macro_iterations += 1
-            self.saveNeuralNetwork()
-            print("\nsaving network")
             print("copy weights to target network, macro cycle:", self.macro_iterations)
 
 
@@ -103,20 +100,20 @@ class SuperMarioReinforcedLearning():
         self.target_model = clone_model(self.main_model)
 
     def saveNeuralNetwork(self):
+        print("\nsaving network")
         self.target_model.save('saved_model.h5')
-        file = open("saved_model_stats.txt", "w")
+        file = open("saved_model_stats.txt", "w+")
         file.write(str(self.train_iterations) + "\n" + str(self.macro_iterations))
         file.close()
 
-    def loadNeuralNetwork(self):
-        self.main_model = load_model('saved_model.h5')
+    def loadNeuralNetwork(self, modelpath='saved_model.h5', statspath="saved_model_stats.txt"):
+        self.main_model = load_model(modelpath)
         self.main_model.compile(optimizer=Adam(), loss="mse", metrics=["accuracy"])
         self.main_model.summary()
         self.target_model = clone_model(self.main_model)
-        file = open("saved_model_stats.txt", "r")
-        self.train_iterations = int(file.readline())
-        self.macro_iterations = int(file.readline())
-        pass
+        with open(statspath, "r") as file:
+            self.train_iterations = int(file.readline())
+            self.macro_iterations = int(file.readline())
 
     def deleteNeuralNetwork(self):
         pass

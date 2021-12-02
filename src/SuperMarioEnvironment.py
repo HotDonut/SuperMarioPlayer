@@ -1,5 +1,8 @@
 import gym_super_mario_bros
+import os
 from nes_py.wrappers import JoypadSpace
+import time
+
 
 import datetime
 import src.SuperMarioImages as SuperMarioImages
@@ -37,20 +40,34 @@ class SuperMarioEnvironment:
         reward = 0
         calculatedAction = 0
         learningCycle = 0
-        max_x_pos = 0
-        saveReplay = True
+        max_x_pos = 100
+        watch_replay = False
+        replay_path = os.path.join("best_runs", "12022021-205633_replay.txt")
         replay = []
-        replayName = str(datetime.datetime.now()) + ".txt"
+        now = datetime.datetime.now()
+        runTime = now.strftime("%m%d%Y-%H%M%S")
+        newBest = False
 
 
-        reinforcedLearningMovement.loadNeuralNetwork()
+        if watch_replay:
+            with open(replay_path, "r") as file:
+                for line in file:
+                    calculatedAction = int(line.strip())
+                    env.step(calculatedAction)
+                    env.render()
+                    time.sleep(0.02)
+            return
 
+
+        # reinforcedLearningMovement.loadNeuralNetwork() <- takes last save
+        # reinforcedLearningMovement.loadNeuralNetwork(modelpath="best_runs/12022021-205633_best.h5", statspath="best_runs/12022021-205633_best.txt") <- if you want to load specific save
+
+        # if you want to start a new network
+        # reinforcedLearningMovement.initNeuralNetwork()
+        # reinforcedLearningMovement.saveNeuralNetwork()
+
+        state, reward, done, info = env.step(0)
         while True:
-            if done:
-                state, reward, done, info = env.step(0)
-                env.render()
-                movement.reset()
-
             # if info["x_pos"] > 200:
                 # print("ABC")
 
@@ -91,11 +108,20 @@ class SuperMarioEnvironment:
             state, reward, done, info = env.step(calculatedAction)
             replay.append(calculatedAction)
 
-            if done and info["x_pos"] > max_x_pos:
-                    max_x_pos = info["x_pos"]
-                    for action in replay:
-                        file = open(replayName, "w+")
-                        file.write(str(action) + "\n")
+            if info["x_pos"] > max_x_pos:
+                max_x_pos = info["x_pos"]
+                newBest = True
+
+            if done:
+                if newBest:
+                    newBest = False
+                    with open(os.path.join("best_runs", runTime + "_replay.txt"), "w+") as file:
+                        for action in replay:
+                            file.write(str(action) + "\n")
                     replay.clear()
+                    os.rename("saved_model.h5", os.path.join("best_runs",runTime + "_best.h5"))
+                    os.rename("saved_model_stats.txt", os.path.join("best_runs", runTime + "_best.txt"))
+                reinforcedLearningMovement.saveNeuralNetwork()
+                env.reset()
 
         env.close()
