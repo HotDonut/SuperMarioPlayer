@@ -2,7 +2,7 @@ import random
 import numpy as np
 import tensorflow as tf
 import cv2
-from tensorflow.keras.models import clone_model
+from tensorflow.keras.models import clone_model, load_model
 from tensorflow.keras import Model, Sequential
 from tensorflow.keras.layers import Dense, Conv2D, MaxPooling2D, Flatten
 from tensorflow.keras.optimizers import Adam
@@ -11,26 +11,21 @@ from tensorflow_core.python.keras import regularizers
 
 class SuperMarioReinforcedLearning():
     def __init__(self):
+        np.random.seed(42)
+        tf.random.set_seed(42)
+
         self.lambda_value = 0.9
 
         self.inputs = 0
         self.prediction_list_buffer = None
         self.saved_experiences = []
-        self.iteriationInCurrentBatch = -1
+        self.iteriationInCurrentBatch = 0
         self.train_iterations = 0
-        self.batchSize = 50
+        self.macro_iterations = 0
+        self.macro_cycle = 10
+        self.batchSize = 100
+        self.save_cycle = 10
         self.epsilon = 0.05
-
-        self.main_model = Sequential()
-        self.main_model.add(Conv2D(32, (3, 3), input_shape=(240, 256, 3), activation="relu", padding="same"))
-        self.main_model.add(Conv2D(64, (3, 3), activation="selu", padding="same"))
-        self.main_model.add(MaxPooling2D(pool_size=(2, 2), padding="same"))
-        self.main_model.add(Flatten())
-        self.main_model.add(Dense(60, activation="relu", kernel_regularizer=regularizers.l2(0.001)))
-        self.main_model.add(Dense(11))# linear activation
-        self.main_model.compile(optimizer=Adam(), loss="categorical_crossentropy", metrics=["categorical_accuracy"])
-
-        self.target_model = clone_model(self.main_model)
 
 
     def nextStep(self, reward, action_taken, picture):
@@ -62,8 +57,7 @@ class SuperMarioReinforcedLearning():
 
         self.prediction_list_buffer = prediction_list
 
-        if self.iteriationInCurrentBatch is self.batchSize:
-            self.iteriationInCurrentBatch = 0
+        if self.iteriationInCurrentBatch % self.batchSize is 0:
             self.train()
 
 
@@ -74,7 +68,7 @@ class SuperMarioReinforcedLearning():
         return reward + self.lambda_value * maxQValue
 
     def train(self):
-        print("training cycle: ", self.train_iterations)
+        print("training cycle:", self.train_iterations)
         self.train_iterations += 1
 
         inputs = np.reshape(np.array([item[0] for item in self.saved_experiences]), (-1, 240, 256, 3))
@@ -83,20 +77,45 @@ class SuperMarioReinforcedLearning():
         # print(inputs)
         # print(predictions)
 
-        self.main_model.fit(inputs, predictions, epochs=10, verbose=False)
-        self.saved_experiences = []
+        self.main_model.fit(inputs, predictions, epochs=1, verbose=False)
+        self.saved_experiences.clear()
 
-        if self.train_iterations is 10:
-            self.train_iterations = 0
+        if self.train_iterations % self.macro_cycle is 0:
             self.target_model = clone_model(self.main_model)
-            print("\ncopy to target network")
+            self.macro_iterations += 1
+            self.saveNeuralNetwork()
+            print("\nsaving network")
+            print("copy weights to target network, macro cycle:", self.macro_iterations)
 
 
+    def initNeuralNetwork(self):
+        self.main_model = Sequential()
+        self.main_model.add(Conv2D(64, (16, 16), strides=(4, 4), input_shape=(240, 256, 3), activation="relu", padding="same"))
+        self.main_model.add(MaxPooling2D(pool_size=(4, 4), padding="same"))
+        self.main_model.add(Conv2D(32, (4, 4), strides=(2, 2), activation="selu", padding="same"))
+        self.main_model.add(Flatten())
+        self.main_model.add(Dense(120, activation="relu", kernel_regularizer=regularizers.l2(0.001)))
+        self.main_model.add(Dense(60, activation="relu", kernel_regularizer=regularizers.l2(0.001)))
+        self.main_model.add(Dense(11))  # linear activation
+        self.main_model.compile(optimizer=Adam(), loss="mse", metrics=["accuracy"])
+        self.main_model.summary()
+
+        self.target_model = clone_model(self.main_model)
 
     def saveNeuralNetwork(self):
-        pass
+        self.target_model.save('saved_model.h5')
+        file = open("saved_model_stats.txt", "w")
+        file.write(str(self.train_iterations) + "\n" + str(self.macro_iterations))
+        file.close()
 
     def loadNeuralNetwork(self):
+        self.main_model = load_model('saved_model.h5')
+        self.main_model.compile(optimizer=Adam(), loss="mse", metrics=["accuracy"])
+        self.main_model.summary()
+        self.target_model = clone_model(self.main_model)
+        file = open("saved_model_stats.txt", "r")
+        self.train_iterations = int(file.readline())
+        self.macro_iterations = int(file.readline())
         pass
 
     def deleteNeuralNetwork(self):

@@ -1,6 +1,7 @@
 import gym_super_mario_bros
 from nes_py.wrappers import JoypadSpace
 
+import datetime
 import src.SuperMarioImages as SuperMarioImages
 import src.SuperMarioMovement as SuperMarioMovement
 import src.SuperMarioMarkov as SuperMarioMarkov
@@ -36,13 +37,22 @@ class SuperMarioEnvironment:
         reward = 0
         calculatedAction = 0
         learningCycle = 0
+        max_x_pos = 0
+        saveReplay = True
+        replay = []
+        replayName = str(datetime.datetime.now()) + ".txt"
+
+
+        reinforcedLearningMovement.loadNeuralNetwork()
 
         while True:
             if done:
-                state = env.reset()
                 state, reward, done, info = env.step(0)
                 env.render()
                 movement.reset()
+
+            # if info["x_pos"] > 200:
+                # print("ABC")
 
             # Identify current theme
             # currentTheme = config.themeIdentifier[str(info["world"])][str(info["stage"])]
@@ -77,8 +87,15 @@ class SuperMarioEnvironment:
             #calculatedAction = movement.move()
             # debugWindow.debugPrint(map.toString() + "\n" + "Calculated Action: " + str(calculatedAction))
             # debugWindow.debugPrint("Hello World")
-            state, reward, done, info = env.step(calculatedAction)
             # print(reward)
+            state, reward, done, info = env.step(calculatedAction)
+            replay.append(calculatedAction)
 
+            if done and info["x_pos"] > max_x_pos:
+                    max_x_pos = info["x_pos"]
+                    for action in replay:
+                        file = open(replayName, "w+")
+                        file.write(str(action) + "\n")
+                    replay.clear()
 
         env.close()
