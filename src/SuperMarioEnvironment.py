@@ -41,8 +41,8 @@ class SuperMarioEnvironment:
         calculatedAction = 0
         learningCycle = 0
         max_x_pos = 100
-        watch_replay = False
-        replay_path = os.path.join("best_runs", "12022021-205633_replay.txt")
+        watch_replay = True
+        replay_path = os.path.join("best_runs", "12032021-013205_replay.txt")
         replay = []
         now = datetime.datetime.now()
         runTime = now.strftime("%m%d%Y-%H%M%S")
@@ -55,12 +55,13 @@ class SuperMarioEnvironment:
                     calculatedAction = int(line.strip())
                     env.step(calculatedAction)
                     env.render()
-                    time.sleep(0.02)
+
+            env.reset()
             return
 
 
-        # reinforcedLearningMovement.loadNeuralNetwork() <- takes last save
-        # reinforcedLearningMovement.loadNeuralNetwork(modelpath="best_runs/12022021-205633_best.h5", statspath="best_runs/12022021-205633_best.txt") <- if you want to load specific save
+        reinforcedLearningMovement.loadNeuralNetwork() # <- takes last save
+        # reinforcedLearningMovement.loadNeuralNetwork(modelpath="best_runs/12022021-205633_best.h5", statspath="best_runs/12022021-205633_best.txt") # <- if you want to load specific save
 
         # if you want to start a new network
         # reinforcedLearningMovement.initNeuralNetwork()
@@ -119,8 +120,8 @@ class SuperMarioEnvironment:
                         for action in replay:
                             file.write(str(action) + "\n")
                     replay.clear()
-                    os.rename("saved_model.h5", os.path.join("best_runs",runTime + "_best.h5"))
-                    os.rename("saved_model_stats.txt", os.path.join("best_runs", runTime + "_best.txt"))
+                    os.replace("saved_model.h5", os.path.join("best_runs",runTime + "_best.h5"))
+                    os.replace("saved_model_stats.txt", os.path.join("best_runs", runTime + "_best.txt"))
                 reinforcedLearningMovement.saveNeuralNetwork()
                 env.reset()
 
