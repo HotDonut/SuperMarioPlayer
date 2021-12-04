@@ -2,7 +2,7 @@ import random
 import numpy as np
 import tensorflow as tf
 import cv2
-from tensorflow.keras.models import clone_model, load_model
+from tensorflow.keras.models import clone_model, load_model, save_model
 from tensorflow.keras import Model, Sequential
 from tensorflow.keras.layers import Dense, Conv2D, MaxPooling2D, Flatten
 from tensorflow.keras.optimizers import Adam
@@ -11,10 +11,11 @@ from tensorflow_core.python.keras import regularizers
 
 class SuperMarioReinforcedLearning():
     def __init__(self):
-        np.random.seed(69)
-        tf.random.set_seed(69)
+        np.random.seed(42)
+        tf.random.set_seed(42)
 
         self.lambda_value = 0.9
+        self.learningRate = 0.1
 
         self.inputs = 0
         self.prediction_list_buffer = None
@@ -22,9 +23,9 @@ class SuperMarioReinforcedLearning():
         self.iteriationInCurrentBatch = 0
         self.train_iterations = 0
         self.macro_iterations = 0
-        self.macro_cycle = 10
+        self.macro_cycle = 3
         self.batchSize = 100
-        self.epsilon = 0.05
+        self.epsilon = 0.01
 
 
     def nextStep(self, reward, action_taken, picture):
@@ -39,18 +40,20 @@ class SuperMarioReinforcedLearning():
         # compute q values
         prediction_list = self.target_model.predict([picture])
 
+
         # get action with highest q value or explore
         if random.uniform(0, 1) < self.epsilon:
             calculated_action = random.randint(1, 10)
         else:
             calculated_action = np.argmax(prediction_list)
 
-        # calculate temporal difference for learning
-        temporal_difference = self.calculateTemporalDifference(reward, prediction_list[0][calculated_action])
-
         # save state and outcome with temporal difference for learning
         if self.prediction_list_buffer is not None:
-            self.prediction_list_buffer[0][action_taken] = temporal_difference
+
+            # calculate temporal difference for learning
+            updated_Q_value = self.lossFunction(reward, prediction_list[0][calculated_action])
+
+            self.prediction_list_buffer[0][np.argmax(self.prediction_list_buffer)] = updated_Q_value
             self.saved_experiences.append([self.inputs_buffer, self.prediction_list_buffer])
 
 
@@ -63,8 +66,9 @@ class SuperMarioReinforcedLearning():
 
         return calculated_action
 
-    def calculateTemporalDifference(self, reward, maxQValue):
-        return reward + self.lambda_value * maxQValue
+    def lossFunction(self, reward, maxQValue):
+        # see loss function image in working directory
+        return self.prediction_list_buffer[0][np.argmax(self.prediction_list_buffer)] + self.learningRate * (reward + self.lambda_value * maxQValue - self.prediction_list_buffer[0][np.argmax(self.prediction_list_buffer)])
 
     def train(self):
         print("training cycle:", self.train_iterations)
@@ -86,31 +90,33 @@ class SuperMarioReinforcedLearning():
 
 
     def initNeuralNetwork(self):
-        self.main_model = Sequential()
-        self.main_model.add(Conv2D(64, (16, 16), strides=(4, 4), input_shape=(240, 256, 3), activation="relu", padding="same"))
-        self.main_model.add(MaxPooling2D(pool_size=(4, 4), padding="same"))
-        self.main_model.add(Conv2D(32, (4, 4), strides=(2, 2), activation="selu", padding="same"))
-        self.main_model.add(Flatten())
-        self.main_model.add(Dense(120, activation="relu", kernel_regularizer=regularizers.l2(0.001)))
-        self.main_model.add(Dense(60, activation="relu", kernel_regularizer=regularizers.l2(0.001)))
-        self.main_model.add(Dense(11))  # linear activation
+        self.target_model = Sequential()
+        self.target_model.add(Conv2D(64, (16, 16), strides=(4, 4), input_shape=(240, 256, 3), activation="relu", padding="same"))
+        self.target_model.add(MaxPooling2D(pool_size=(4, 4), padding="same"))
+        self.target_model.add(Conv2D(32, (4, 4), strides=(2, 2), activation="selu", padding="same"))
+        self.target_model.add(Flatten())
+        self.target_model.add(Dense(120, activation="relu", kernel_regularizer=regularizers.l2(0.001)))
+        self.target_model.add(Dense(60, activation="relu", kernel_regularizer=regularizers.l2(0.001)))
+        self.target_model.add(Dense(11))  # linear activation
+        self.target_model.compile(optimizer=Adam(), loss="mse", metrics=["accuracy"])
+        self.target_model.summary()
+
+        self.main_model = clone_model(self.target_model)
         self.main_model.compile(optimizer=Adam(), loss="mse", metrics=["accuracy"])
-        self.main_model.summary()
-
-        self.target_model = clone_model(self.main_model)
-
     def saveNeuralNetwork(self):
         print("\nsaving network")
         self.target_model.save('saved_model.h5')
+        # self.target_model.save_weights("saved_model_weights", save_format="tf")
         file = open("saved_model_stats.txt", "w+")
         file.write(str(self.train_iterations) + "\n" + str(self.macro_iterations))
         file.close()
 
     def loadNeuralNetwork(self, modelpath='saved_model.h5', statspath="saved_model_stats.txt"):
-        self.main_model = load_model(modelpath)
+        self.target_model = load_model(modelpath, compile=True)
+        self.target_model.compile(optimizer=Adam(), loss="mse", metrics=["accuracy"])
+        self.target_model.summary()
+        self.main_model = clone_model(self.target_model)
         self.main_model.compile(optimizer=Adam(), loss="mse", metrics=["accuracy"])
-        self.main_model.summary()
-        self.target_model = clone_model(self.main_model)
         with open(statspath, "r") as file:
             self.train_iterations = int(file.readline())
             self.macro_iterations = int(file.readline())

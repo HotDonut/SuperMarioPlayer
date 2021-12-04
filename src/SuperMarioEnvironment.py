@@ -41,7 +41,7 @@ class SuperMarioEnvironment:
         calculatedAction = 0
         learningCycle = 0
         max_x_pos = 100
-        watch_replay = True
+        watch_replay = False
         replay_path = os.path.join("best_runs", "12032021-013205_replay.txt")
         replay = []
         now = datetime.datetime.now()
@@ -61,7 +61,7 @@ class SuperMarioEnvironment:
 
 
         reinforcedLearningMovement.loadNeuralNetwork() # <- takes last save
-        # reinforcedLearningMovement.loadNeuralNetwork(modelpath="best_runs/12022021-205633_best.h5", statspath="best_runs/12022021-205633_best.txt") # <- if you want to load specific save
+        # reinforcedLearningMovement.loadNeuralNetwork(modelpath="saved_model1.h5", statspath="saved_model_stats1.txt") # <- if you want to load specific save
 
         # if you want to start a new network
         # reinforcedLearningMovement.initNeuralNetwork()
