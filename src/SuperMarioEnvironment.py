@@ -36,6 +36,7 @@ class SuperMarioEnvironment:
 
         consoleFrameCount = 0
         renderFrameCount = 0
+        standingFrameCount = 0 #counts how long mario is stuck
         done = True
         reward = 0
         calculatedAction = 0
@@ -47,6 +48,7 @@ class SuperMarioEnvironment:
         now = datetime.datetime.now()
         runTime = now.strftime("%m%d%Y-%H%M%S")
         newBest = False
+        old_x_pos = 0
 
 
         if watch_replay:
@@ -60,12 +62,12 @@ class SuperMarioEnvironment:
             return
 
 
-        reinforcedLearningMovement.loadNeuralNetwork() # <- takes last save
+        # reinforcedLearningMovement.loadNeuralNetwork() # <- takes last save
         # reinforcedLearningMovement.loadNeuralNetwork(modelpath="saved_model1.h5", statspath="saved_model_stats1.txt") # <- if you want to load specific save
 
         # if you want to start a new network
-        # reinforcedLearningMovement.initNeuralNetwork()
-        # reinforcedLearningMovement.saveNeuralNetwork()
+        reinforcedLearningMovement.initNeuralNetwork()
+        reinforcedLearningMovement.saveNeuralNetwork()
 
         state, reward, done, info = env.step(0)
         while True:
@@ -98,7 +100,7 @@ class SuperMarioEnvironment:
 
             # execute action
             # calculatedAction = markovMovement.nextStep(info["y_pos"])
-            if reward==0:
+            if reward == 0:
                 reward = -1
 
             calculatedAction = reinforcedLearningMovement.nextStep(reward, calculatedAction, state)
@@ -113,6 +115,17 @@ class SuperMarioEnvironment:
                 max_x_pos = info["x_pos"]
                 newBest = True
 
+            if info["x_pos"] == old_x_pos:
+                standingFrameCount = standingFrameCount + 1
+            else:
+                if standingFrameCount != 0:
+                    standingFrameCount = 0
+
+            if standingFrameCount >= 75:
+                standingFrameCount = 0
+                env.reset()
+                print("He dead")
+
             if done:
                 if newBest:
                     newBest = False
@@ -124,5 +137,13 @@ class SuperMarioEnvironment:
                     os.replace("saved_model_stats.txt", os.path.join("best_runs", runTime + "_best.txt"))
                 reinforcedLearningMovement.saveNeuralNetwork()
                 env.reset()
+
+            # print("------------------------")
+            # print("Count: " + str(standingFrameCount))
+            # print("Old x pos: " + str(old_x_pos))
+            # print("X Pos: " + str(info["x_pos"]))
+            # print("------------------------")
+
+            old_x_pos = info["x_pos"]
 
         env.close()
