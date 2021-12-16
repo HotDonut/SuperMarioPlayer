@@ -62,12 +62,12 @@ class SuperMarioEnvironment:
             return
 
 
-        # reinforcedLearningMovement.loadNeuralNetwork() # <- takes last save
+        reinforcedLearningMovement.loadNeuralNetwork() # <- takes last save
         # reinforcedLearningMovement.loadNeuralNetwork(modelpath="saved_model1.h5", statspath="saved_model_stats1.txt") # <- if you want to load specific save
 
         # if you want to start a new network
-        reinforcedLearningMovement.initNeuralNetwork()
-        reinforcedLearningMovement.saveNeuralNetwork()
+        # reinforcedLearningMovement.initNeuralNetwork()
+        # reinforcedLearningMovement.saveNeuralNetwork()
 
         state, reward, done, info = env.step(0)
         while True:
@@ -123,6 +123,7 @@ class SuperMarioEnvironment:
 
             if standingFrameCount >= 75:
                 standingFrameCount = 0
+                reward = -15
                 env.reset()
                 print("He dead")
 
