@@ -124,8 +124,8 @@ class SuperMarioEnvironment:
             if standingFrameCount >= 75:
                 standingFrameCount = 0
                 reward = -15
-                env.reset()
-                print("He dead")
+                done = True
+                # print("He dead")
 
             if done:
                 if newBest:
