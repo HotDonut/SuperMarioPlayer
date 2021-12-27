@@ -12,6 +12,7 @@ import src.SuperMarioMap as SuperMarioMap
 import src.SuperMarioReinforcedLearning as SuperMarioReinforcedLearning
 import src.SuperMarioConsoleDebugWindow as SuperMarioConsoleDebugWindow
 from src.SuperMarioConfig import SuperMarioConfig as SuperMarioConfig
+from src.SuperMarioPlot import SuperMarioPlot
 
 
 class SuperMarioEnvironment:
@@ -49,6 +50,7 @@ class SuperMarioEnvironment:
         runTime = now.strftime("%m%d%Y-%H%M%S")
         newBest = False
         old_x_pos = 0
+        deathCount = 0
 
 
         if watch_replay:
@@ -62,15 +64,25 @@ class SuperMarioEnvironment:
             return
 
 
-        reinforcedLearningMovement.loadNeuralNetwork() # <- takes last save
+        #reinforcedLearningMovement.loadNeuralNetwork() # <- takes last save
         # reinforcedLearningMovement.loadNeuralNetwork(modelpath="saved_model1.h5", statspath="saved_model_stats1.txt") # <- if you want to load specific save
 
         # if you want to start a new network
-        # reinforcedLearningMovement.initNeuralNetwork()
-        # reinforcedLearningMovement.saveNeuralNetwork()
+        reinforcedLearningMovement.initNeuralNetwork()
+        reinforcedLearningMovement.saveNeuralNetwork()
 
         state, reward, done, info = env.step(0)
+
+        superMarioPlot = SuperMarioPlot()
+        oldMacroIterations = reinforcedLearningMovement.macro_iterations
         while True:
+            if reward == -15:
+                deathCount += 1
+
+            if oldMacroIterations != reinforcedLearningMovement.macro_iterations:
+                superMarioPlot.sessionPlot(oldMacroIterations, deathCount)
+                oldMacroIterations = reinforcedLearningMovement.macro_iterations
+                deathCount = 0
             # if info["x_pos"] > 200:
                 # print("ABC")
 
@@ -146,5 +158,4 @@ class SuperMarioEnvironment:
             # print("------------------------")
 
             old_x_pos = info["x_pos"]
-
         env.close()
