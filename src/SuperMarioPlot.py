@@ -14,7 +14,9 @@ class SuperMarioPlot:
 
     def printPlot(self):
         loc, labels = plt.yticks()
-        plt.yticks(np.arange(0, max(loc), step=1))
+        plt.yticks(np.arange(0, max(loc), step=1))  # make sure the y-Axis only shows whole number values
+        loc, labels = plt.xticks()  # make sure the x-Axis shows each x-Value on the axis
+        plt.xticks(np.arange(0, max(loc), step=1))
         plt.xlabel(self.xlabel)
         plt.ylabel(self.ylabel)
         plt.show()
