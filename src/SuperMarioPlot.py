@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 class SuperMarioPlot:
@@ -12,6 +13,8 @@ class SuperMarioPlot:
         self.ylabel = 'y-Achse'
 
     def printPlot(self):
+        loc, labels = plt.yticks()
+        plt.yticks(np.arange(0, max(loc), step=1))
         plt.xlabel(self.xlabel)
         plt.ylabel(self.ylabel)
         plt.show()
@@ -20,7 +23,6 @@ class SuperMarioPlot:
         return
 
     def sessionPlot(self, macroCycleCount, deathCount):
-
         self.macroList.append(macroCycleCount)
         self.deathList.append(deathCount)
         self.count2 += 1
