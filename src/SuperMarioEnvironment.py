@@ -42,7 +42,8 @@ class SuperMarioEnvironment:
         reward = 0
         calculatedAction = 0
         learningCycle = 0
-        max_x_pos = 100
+        max_x_pos_whole_training = 100
+        max_x_pos_run = 0
         watch_replay = False
         replay_path = os.path.join("best_runs", "12032021-013205_replay.txt")
         replay = []
@@ -64,12 +65,12 @@ class SuperMarioEnvironment:
             return
 
 
-        #reinforcedLearningMovement.loadNeuralNetwork() # <- takes last save
+        reinforcedLearningMovement.loadNeuralNetwork() # <- takes last save
         # reinforcedLearningMovement.loadNeuralNetwork(modelpath="saved_model1.h5", statspath="saved_model_stats1.txt") # <- if you want to load specific save
 
         # if you want to start a new network
-        reinforcedLearningMovement.initNeuralNetwork()
-        reinforcedLearningMovement.saveNeuralNetwork()
+        # reinforcedLearningMovement.initNeuralNetwork()
+        # reinforcedLearningMovement.saveNeuralNetwork()
 
         state, reward, done, info = env.step(0)
 
@@ -78,9 +79,11 @@ class SuperMarioEnvironment:
         while True:
             if reward == -15:
                 deathCount += 1
+                max_x_pos_run = 0
+                standingFrameCount = 0
 
             if oldMacroIterations != reinforcedLearningMovement.macro_iterations:
-                superMarioPlot.sessionPlot(oldMacroIterations, deathCount)
+                #superMarioPlot.sessionPlot(oldMacroIterations, deathCount)
                 oldMacroIterations = reinforcedLearningMovement.macro_iterations
                 deathCount = 0
             # if info["x_pos"] > 200:
@@ -123,18 +126,18 @@ class SuperMarioEnvironment:
             state, reward, done, info = env.step(calculatedAction)
             replay.append(calculatedAction)
 
-            if info["x_pos"] > max_x_pos:
-                max_x_pos = info["x_pos"]
+            if info["x_pos"] > max_x_pos_whole_training:
+                max_x_pos_whole_training = info["x_pos"]
                 newBest = True
 
-            if info["x_pos"] == old_x_pos:
-                standingFrameCount = standingFrameCount + 1
-            else:
-                if standingFrameCount != 0:
-                    standingFrameCount = 0
-
-            if standingFrameCount >= 75:
+            if info["x_pos"] > max_x_pos_run:
+                max_x_pos_run = info["x_pos"]
                 standingFrameCount = 0
+            else:
+                standingFrameCount = standingFrameCount + 1
+
+
+            if standingFrameCount >= 200:
                 reward = -15
                 done = True
                 # print("He dead")
@@ -148,6 +151,7 @@ class SuperMarioEnvironment:
                     replay.clear()
                     os.replace("saved_model.h5", os.path.join("best_runs",runTime + "_best.h5"))
                     os.replace("saved_model_stats.txt", os.path.join("best_runs", runTime + "_best.txt"))
+                reinforcedLearningMovement.train()
                 reinforcedLearningMovement.saveNeuralNetwork()
                 env.reset()
 
@@ -157,5 +161,4 @@ class SuperMarioEnvironment:
             # print("X Pos: " + str(info["x_pos"]))
             # print("------------------------")
 
-            old_x_pos = info["x_pos"]
         env.close()
