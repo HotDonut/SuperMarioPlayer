@@ -51,6 +51,7 @@ class SuperMarioEnvironment:
         newBest = False
         old_x_pos = 0
         deathCount = 0
+        bestXperMacroCycle = 0
 
 
         if watch_replay:
@@ -73,16 +74,11 @@ class SuperMarioEnvironment:
 
         state, reward, done, info = env.step(0)
 
-        superMarioPlot = SuperMarioPlot()
+        superMarioPlotDeath = SuperMarioPlot()
+        superMarioPlotBestX = SuperMarioPlot()
         oldMacroIterations = reinforcedLearningMovement.macro_iterations
         while True:
-            if reward == -15:
-                deathCount += 1
 
-            if oldMacroIterations != reinforcedLearningMovement.macro_iterations:
-                superMarioPlot.sessionPlot(oldMacroIterations, deathCount)
-                oldMacroIterations = reinforcedLearningMovement.macro_iterations
-                deathCount = 0
             # if info["x_pos"] > 200:
                 # print("ABC")
 
@@ -138,6 +134,19 @@ class SuperMarioEnvironment:
                 reward = -15
                 done = True
                 # print("He dead")
+
+            if reward == -15:
+                deathCount += 1
+
+            if info["x_pos"] > bestXperMacroCycle:
+                bestXperMacroCycle = info["x_pos"]
+
+            if oldMacroIterations != reinforcedLearningMovement.macro_iterations:
+                superMarioPlotDeath.deathCountPlot(oldMacroIterations, deathCount)
+                superMarioPlotBestX.bestXPlot(oldMacroIterations, bestXperMacroCycle)
+                oldMacroIterations = reinforcedLearningMovement.macro_iterations
+                deathCount = 0
+                bestXperMacroCycle = 0
 
             if done:
                 if newBest:
